@@ -26,6 +26,9 @@ return [
                 ],
             ],
         ],
+        'request'	=>	[
+            'class'	=>	'console\components\Request'
+        ],
     ],
     'params' => $params,
 ];
