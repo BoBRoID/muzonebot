@@ -15,7 +15,13 @@ return [
         'fixture' => [
             'class' => 'yii\console\controllers\FixtureController',
             'namespace' => 'common\fixtures',
-          ],
+        ],
+        'migrate' => [
+            'class' => 'yii\console\controllers\MigrateController',
+            'migrationNamespaces' => [
+                'lajax\translatemanager\migrations\namespaced',
+            ],
+        ],
     ],
     'components' => [
         'log' => [
