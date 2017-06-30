@@ -27,7 +27,7 @@ return [
             ],
         ],
         'request'	=>	[
-            'class'	=>	'console\components\Request'
+            'class'	=>	'yii\console\Request'
         ],
     ],
     'params' => $params,
