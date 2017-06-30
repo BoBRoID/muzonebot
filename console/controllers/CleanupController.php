@@ -6,7 +6,7 @@
  * Time: 13:15
  */
 
-namespace console\commands;
+namespace console\controllers;
 
 
 use common\models\UserToken;
