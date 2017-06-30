@@ -6,12 +6,11 @@
  * Time: 13:15
  */
 
-namespace app\commands;
+namespace console\commands;
 
 
-use app\models\UserToken;
+use common\models\UserToken;
 use yii\console\Controller;
-use yii\db\Query;
 
 class CleanupController extends Controller
 {
