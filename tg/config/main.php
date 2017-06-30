@@ -36,7 +36,7 @@ return [
             ],
         ],
         'request' => [
-            'csrfParam' => '_csrf-backend',
+            'csrfParam' => '_csrf-tg',
         ],
         'log' => [
             'traceLevel' => YII_DEBUG ? 3 : 0,
@@ -56,7 +56,7 @@ return [
             'rules' =>  [
                 '/hook'     =>  'site/hook',
                 '/set'      =>  'site/set',
-                '<action>'  =>  'site/<action>'
+                '/<action>'  =>  'site/<action>'
             ]
         ],
     ],
