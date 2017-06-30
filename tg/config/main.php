@@ -47,6 +47,11 @@ return [
                 ],
             ],
         ],
+        'user' => [
+            'identityClass' => 'frontend\models\User',
+            'enableAutoLogin' => true,
+            'identityCookie' => ['name' => '_identity-backend', 'httpOnly' => true],
+        ],
         'errorHandler' => [
             'errorAction' => 'site/error',
         ],
