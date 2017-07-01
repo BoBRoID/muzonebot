@@ -45,6 +45,8 @@ class User extends ActiveRecord
         $message = $command->getMessage();
         $userID = $botUser = $language_code = null;
 
+        \Yii::trace($message);
+
         if($message){
             $userID = $message->getFrom()->getId();
             $language_code = $message->getFrom()->getLanguageCode();
