@@ -57,8 +57,6 @@ return [
             'enablePrettyUrl' => true,
             'showScriptName' => false,
             'rules' =>  [
-                '/hook'     =>  'site/hook',
-                '/set'      =>  'site/set',
                 '/<action>' =>  'site/<action>',
                 ''          =>  'site/index'
             ]
