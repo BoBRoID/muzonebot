@@ -214,6 +214,6 @@ class SiteController extends Controller
         \Yii::$app->response->format = 'json';
         \Yii::$app->log->targets['debug'] = null;
 
-        return \Yii::$app->user->isGuest ? : Url::current(['language' => \Yii::$app->user->identity->language_code]);
+        return \Yii::$app->user->isGuest ? : Url::to([\Yii::$app->request->referrer, 'language' => \Yii::$app->user->identity->language_code]);
     }
 }

@@ -67,7 +67,7 @@ echo "Done!"
 info "Initailize databases for MySQL"
 mysql -uroot <<< "CREATE USER 'root'@'%'"
 mysql -uroot <<< "GRANT ALL PRIVILEGES ON *.* TO 'root'@'%' WITH GRANT OPTION"
-mysql -uroot <<< "CREATE DATABASE muzone"
+mysql -uroot <<< "CREATE DATABASE `muzone` CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci"
 echo "Done!"
 
 info "Install composer"
