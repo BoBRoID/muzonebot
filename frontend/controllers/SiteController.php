@@ -225,6 +225,6 @@ class SiteController extends Controller
     public function actionIsGuest(){
         \Yii::$app->response->format = 'json';
 
-        return \Yii::$app->user->isGuest ? : Url::to([\Yii::$app->request->referrer, 'language' => \Yii::$app->user->identity->language_code]);
+        return \Yii::$app->user->isGuest;
     }
 }

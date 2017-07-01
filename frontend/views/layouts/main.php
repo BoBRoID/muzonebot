@@ -19,8 +19,8 @@ $('#loginModal').on('shown.bs.modal', function () {
       $.ajax({
         url: '/site/is-guest'
       }).success(function(data){
-          if(data.length){
-              location.href = data;
+          if(data === false){
+              location.reload;
           }
       });
   }, 1000);
