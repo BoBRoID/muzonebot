@@ -46,6 +46,7 @@ return [
         'setCookieValidationKey' => [
             'backend/config/main-local.php',
             'frontend/config/main-local.php',
+            'tg/config/main-local.php',
         ],
     ],
     'Production' => [
@@ -64,6 +65,7 @@ return [
         'setCookieValidationKey' => [
             'backend/config/main-local.php',
             'frontend/config/main-local.php',
+            'tg/config/main-local.php',
         ],
     ],
 ];
