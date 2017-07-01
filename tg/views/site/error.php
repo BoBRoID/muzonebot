@@ -7,21 +7,39 @@
 
 use yii\helpers\Html;
 
+$css = <<<'CSS'
+.nb-error {
+  margin: 0 auto;
+  text-align: center;
+  max-width: 480px;
+  padding: 60px 30px;
+}
+
+.nb-error .error-code {
+  color: #2d353c;
+  font-size: 96px;
+  line-height: 100px;
+}
+
+.nb-error .error-desc {
+  font-size: 12px;
+  color: #647788;
+}
+CSS;
+
+$this->registerCss($css);
+
 $this->title = $name;
 ?>
-<div class="site-error">
+<div class="nb-error">
+    <div class="error-code">404</div>
+    <h3 class="font-bold"><?= Html::encode($this->title) ?></h3>
 
-    <h1><?= Html::encode($this->title) ?></h1>
-
-    <div class="alert alert-danger">
+    <div class="error-desc">
         <?= nl2br(Html::encode($message)) ?>
+        <ul class="list-inline text-center text-sm">
+            <li class="list-inline-item"><a href="#" class="text-muted">Go to App</a>
+            </li>
+        </ul>
     </div>
-
-    <p>
-        The above error occurred while the Web server was processing your request.
-    </p>
-    <p>
-        Please contact us if you think this is a server error. Thank you.
-    </p>
-
 </div>

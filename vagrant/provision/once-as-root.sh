@@ -16,29 +16,38 @@ function info {
 
 info "Provision-script user: `whoami`"
 
-export DEBIAN_FRONTEND=noninteractive
+info "Allocate swap for MySQL 5.6"
+fallocate -l 2048M /swapfile
+chmod 600 /swapfile
+mkswap /swapfile
+swapon /swapfile
+echo '/swapfile none swap defaults 0 0' >> /etc/fstab
+
+info "Configure locales"
+update-locale LC_ALL="C"
+dpkg-reconfigure locales
 
 info "Configure timezone"
-timedatectl set-timezone ${timezone} --no-ask-password
+echo ${timezone} | tee /etc/timezone
+dpkg-reconfigure --frontend noninteractive tzdata
+
+MYSQL_ROOT_PASSWORD=""
 
 info "Prepare root password for MySQL"
-debconf-set-selections <<< "mysql-community-server mysql-community-server/root-pass password \"''\""
-debconf-set-selections <<< "mysql-community-server mysql-community-server/re-root-pass password \"''\""
+debconf-set-selections <<< 'mysql-server-5.7 mysql-server/root_password password password'
+debconf-set-selections <<< 'mysql-server-5.7 mysql-server/root_password_again password password'
 echo "Done!"
 
 info "Update OS software"
 apt-get update
-apt-get upgrade -y
 
 info "Install additional software"
-apt-get install -y php7.0-curl php7.0-cli php7.0-intl php7.0-mysqlnd php7.0-gd php7.0-fpm php7.0-mbstring php7.0-xml unzip nginx mysql-server-5.7
+apt-get install -y git php7.0 php7.0-mbstring php7.0-curl php7.0-xml php7.0-intl php7.0-fpm php7.0-zip php7.0-mysql php7.0-cli php7.0-gd php7.0-json nginx mysql-server mysql-client --force-yes
 
 info "Configure MySQL"
-sed -i "s/.*bind-address.*/bind-address = 0.0.0.0/" /etc/mysql/mysql.conf.d/mysqld.cnf
-mysql -uroot <<< "CREATE USER 'root'@'%' IDENTIFIED BY ''"
-mysql -uroot <<< "GRANT ALL PRIVILEGES ON *.* TO 'root'@'%'"
-mysql -uroot <<< "DROP USER 'root'@'localhost'"
-mysql -uroot <<< "FLUSH PRIVILEGES"
+mysql -u root -ppassword -e "use mysql; UPDATE user SET authentication_string=PASSWORD('') WHERE User='root'; flush privileges;"
+sed -i "s/.*bind-address.*/bind-address = 0.0.0.0\
+\nsql-mode=\"\"/" /etc/mysql/mysql.conf.d/mysqld.cnf
 echo "Done!"
 
 info "Configure PHP-FPM"
@@ -56,8 +65,9 @@ ln -s /app/vagrant/nginx/app.conf /etc/nginx/sites-enabled/app.conf
 echo "Done!"
 
 info "Initailize databases for MySQL"
-mysql -uroot <<< "CREATE DATABASE yii2advanced"
-mysql -uroot <<< "CREATE DATABASE yii2advanced_test"
+mysql -uroot <<< "CREATE USER 'root'@'%'"
+mysql -uroot <<< "GRANT ALL PRIVILEGES ON *.* TO 'root'@'%' WITH GRANT OPTION"
+mysql -uroot <<< "CREATE DATABASE muzone"
 echo "Done!"
 
 info "Install composer"

@@ -1,9 +1,13 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
 require 'yaml'
 require 'fileutils'
 
 domains = {
-  frontend: 'y2aa-frontend.dev',
-  backend:  'y2aa-backend.dev'
+  frontend: 'muzone.dev',
+  backend: 'adm.muzone.dev',
+  tg: 'tg.muzone.dev'
 }
 
 config = {
@@ -22,22 +26,14 @@ if options['github_token'].nil? || options['github_token'].to_s.length != 40
   exit
 end
 
-# vagrant configurate
-Vagrant.configure(2) do |config|
-  # select the box
-  config.vm.box = 'bento/ubuntu-16.04'
+# All Vagrant configuration is done below. The "2" in Vagrant.configure
+# configures the configuration version (we support older styles for
+# backwards compatibility). Please don't change it unless you know what
+# you're doing.
+Vagrant.configure("2") do |config|
+  config.vm.box = "yk0/ubuntu-xenial"
 
-  # should we ask about box updates?
   config.vm.box_check_update = options['box_check_update']
-
-  config.vm.provider 'virtualbox' do |vb|
-    # machine cpus count
-    vb.cpus = options['cpus']
-    # machine memory size
-    vb.memory = options['memory']
-    # machine name (for VirtualBox UI)
-    vb.name = options['machine_name']
-  end
 
   # machine name (for vagrant console)
   config.vm.define options['machine_name']
@@ -49,10 +45,13 @@ Vagrant.configure(2) do |config|
   config.vm.network 'private_network', ip: options['ip']
 
   # sync: folder 'yii2-app-advanced' (host machine) -> folder '/app' (guest machine)
-  config.vm.synced_folder './', '/app', owner: 'vagrant', group: 'vagrant'
+  config.vm.synced_folder './', '/app', owner: 'vagrant', group: 'vagrant', type: 'rsync', rsync__auto: true
 
   # disable folder '/vagrant' (guest machine)
   config.vm.synced_folder '.', '/vagrant', disabled: true
+  config.vm.synced_folder '.', '/backend/runtime', disabled: true
+  config.vm.synced_folder '.', '/frontend/runtime', disabled: true
+  config.vm.synced_folder '.', '/tg/runtime', disabled: true
 
   # hosts settings (host machine)
   config.vm.provision :hostmanager
@@ -66,7 +65,4 @@ Vagrant.configure(2) do |config|
   config.vm.provision 'shell', path: './vagrant/provision/once-as-root.sh', args: [options['timezone']]
   config.vm.provision 'shell', path: './vagrant/provision/once-as-vagrant.sh', args: [options['github_token']], privileged: false
   config.vm.provision 'shell', path: './vagrant/provision/always-as-root.sh', run: 'always'
-
-  # post-install message (vagrant console)
-  config.vm.post_up_message = "Frontend URL: http://#{domains[:frontend]}\nBackend URL: http://#{domains[:backend]}"
 end

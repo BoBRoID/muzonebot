@@ -35,6 +35,9 @@ return [
                 ],
             ],
         ],
+        'user' => [
+            'identityClass'     =>  false,
+        ],
         'request' => [
             'csrfParam' => '_csrf-tg',
         ],

@@ -10,9 +10,6 @@ use yii\web\NotFoundHttpException;
 class SiteController extends Controller
 {
 
-    public $layout = '@app/../frontend/views/layouts/main.php';
-    public $viewPath = '@app/../frontend/views/site/';
-
     /**
      * @inheritdoc
      */
@@ -38,8 +35,6 @@ class SiteController extends Controller
      */
     public function actionIndex()
     {
-        \Yii::setAlias('@app', \Yii::getAlias('@app/../frontend/'));
-
         throw new NotFoundHttpException();
     }
 
