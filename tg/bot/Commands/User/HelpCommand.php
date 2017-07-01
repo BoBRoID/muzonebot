@@ -76,7 +76,7 @@ class HelpCommand extends BaseUserCommand
                 '%s '.PHP_EOL.
                 \Yii::t('general', 'Бот - музыкальная библиотека, в которую вы можете добавлять треки, которые будут доступны всем! Чтобы добавить трек, достаточно отправить его боту (приватно, или в диалог). Поиск по уже добавленым трекам происходит через inline режим.').PHP_EOL.PHP_EOL.
                 \Yii::t('general', 'Список команд:') . PHP_EOL,
-                $this->telegram->getBotName()
+                $this->telegram->getBotUsername()
             );
 
             foreach ($command_objs as $command) {
