@@ -11,7 +11,7 @@ class SiteController extends Controller
 {
 
     public $layout = '@app/../frontend/view/layouts/main.php';
-    public $viewPath = '@app/../frontend/view/';
+    public $viewPath = '@app/../frontend/views/site/';
 
     /**
      * @inheritdoc
