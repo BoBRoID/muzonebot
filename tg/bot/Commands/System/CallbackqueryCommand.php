@@ -63,7 +63,7 @@ class CallbackqueryCommand extends BaseSystemCommand
         $callback_query    = $update->getCallbackQuery();
         $callback_query_id = $callback_query->getId();
 
-        $calledAction = 'app\bot\Actions\\'.ucfirst($callbackData->action);
+        $calledAction = 'tg\bot\Actions\\'.ucfirst($callbackData->action);
 
         if(class_exists($calledAction)){
             /**
