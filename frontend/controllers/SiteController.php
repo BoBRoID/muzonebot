@@ -142,7 +142,6 @@ class SiteController extends Controller
         $authToken = \Yii::$app->session->get('tgAuthToken', false);
 
         if(Yii::$app->user->logout()){
-            \Yii::trace($authToken);
             UserToken::deleteAll(['token' => $authToken]);
             \Yii::$app->session->remove('tgAuthToken');
         }
@@ -158,6 +157,16 @@ class SiteController extends Controller
     public function actionAbout()
     {
         return $this->render('about');
+    }
+
+    /**
+     * Displays login page.
+     *
+     * @return string
+     */
+    public function actionLogin()
+    {
+        return $this->render('login');
     }
 
     /**
@@ -212,7 +221,6 @@ class SiteController extends Controller
      */
     public function actionIsGuest(){
         \Yii::$app->response->format = 'json';
-        \Yii::$app->log->targets['debug'] = null;
 
         return \Yii::$app->user->isGuest ? : Url::to([\Yii::$app->request->referrer, 'language' => \Yii::$app->user->identity->language_code]);
     }
