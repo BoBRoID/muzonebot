@@ -42,33 +42,39 @@ class User extends ActiveRecord
      * @return self
      */
     public static function initializeBotUser(Command $command){
-        $message = $command->getMessage();
-        $userID = $botUser = $language_code = null;
+        $entity = null;
+        $update = $command->getUpdate();
 
-        \Yii::trace($message);
+        if($update->getMessage()){
+            $entity = $update->getMessage();
+        }else if($update->getCallbackQuery()){
+            $entity = $update->getCallbackQuery();
+        }else if($update->getInlineQuery()){
+            $entity = $update->getInlineQuery();
+        }else if($update->getEditedMessage()){
+            $entity = $update->getEditedMessage();
+        }else if($update->getChannelPost()){
+            $update->getChannelPost();
+        }else if($update->getChosenInlineResult()){
+            $update->getChosenInlineResult();
+        }
 
-        if($message){
-            $userID = $message->getFrom()->getId();
-            $language_code = $message->getFrom()->getLanguageCode();
+        if($entity){
+            $userID = $entity->getFrom()->getId();
+            $language_code = $entity->getFrom()->getLanguageCode();
         }else{
-            $data = json_decode($command->getTelegram()->getCustomInput());
-
-            if(isset($data->callback_query)){
-                $userID = $data->callback_query->from->id;
-            }else if(isset($data->inline_query)){
-                $userID = $data->inline_query->from->id;
-            }
+            return null;
         }
 
         $botUser = self::findByTelegramId($userID);
 
         if(is_null($botUser)){
             $botUser = new User([
-                'id'            =>  $message->getFrom()->getId(),
-                'first_name'    =>  $message->getFrom()->getFirstName(),
-                'last_name'     =>  $message->getFrom()->getLastName(),
-                'username'      =>  $message->getFrom()->getUsername(),
-                'language_code' =>  $message->getFrom()->getLanguageCode(),
+                'id'            =>  $entity->getFrom()->getId(),
+                'first_name'    =>  $entity->getFrom()->getFirstName(),
+                'last_name'     =>  $entity->getFrom()->getLastName(),
+                'username'      =>  $entity->getFrom()->getUsername(),
+                'language_code' =>  $entity->getFrom()->getLanguageCode(),
                 'created_at'    =>  time(),
                 'updated_at'    =>  time()
             ]);
