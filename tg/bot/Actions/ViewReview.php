@@ -68,8 +68,6 @@ class ViewReview extends BaseAction
             $feedback->save();
         }
 
-        \Yii::trace($data);
-
         return $this->updateCallbackQuery($data);
     }
 

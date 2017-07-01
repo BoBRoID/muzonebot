@@ -19,7 +19,7 @@ $('#loginModal').on('shown.bs.modal', function () {
       $.ajax({
         url: '/site/is-guest'
       }).success(function(data){
-          if(data !== false){
+          if(data.length){
               location.href = data;
           }
       });
@@ -96,8 +96,6 @@ $this->registerCss($css);
 
     if(!\Yii::$app->user->isGuest){
         $username = trim(Yii::$app->user->identity->username ? : Yii::$app->user->identity->first_name.' '.Yii::$app->user->identity->last_name);
-
-        \Yii::trace($username);
     }
 
     echo Nav::widget([

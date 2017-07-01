@@ -23,8 +23,6 @@ class WebHookAction extends Action
         try{
             $telegram = new Telegram(\Yii::$app->params['apiKey'], \Yii::$app->params['botName']);
 
-            \Yii::trace(\Yii::getAlias('@logs').'/update.log');
-
             TelegramLog::initUpdateLog(\Yii::getAlias('@logs').'/update.log');
             TelegramLog::initDebugLog(\Yii::getAlias('@logs').'/debug.log');
             TelegramLog::initErrorLog(\Yii::getAlias('@logs').'/error.log');
@@ -33,7 +31,6 @@ class WebHookAction extends Action
             //$telegram->enableBotan(\Yii::$app->params['botanKey']);
 
             $telegram->addCommandsPath(\Yii::getAlias('@app').'/bot/Commands');
-            \Yii::trace($telegram->getCommandsPaths());
             $telegram->enableAdmins(\Yii::$app->params['adminsId']);
             $telegram->handle();
         }catch (TelegramException $e){
