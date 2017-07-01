@@ -18,7 +18,7 @@ class m170324_202801_create_genres_table extends Migration
         ]);
 
         $this->addPrimaryKey('name-id', 'genres', ['id', 'name']);
-        $this->addForeignKey('fk-songs-genreID-genres-id', 'songs', 'genreID', 'genres', 'id');
+        //$this->addForeignKey('fk-songs-genreID-genres-id', 'songs', 'genreID', 'genres', 'id');
     }
 
     /**
