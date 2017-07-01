@@ -19,7 +19,7 @@ class BaseAction
 
     /**
      * @var Command|null
-     */use common\models\BotUser;
+     */
 
     protected $command = null;
 
