@@ -38,6 +38,8 @@ class SiteController extends Controller
      */
     public function actionIndex()
     {
+        \Yii::setAlias('@app', \Yii::getAlias('@app/../frontend/'));
+
         throw new NotFoundHttpException();
     }
 
