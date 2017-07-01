@@ -21,7 +21,7 @@ class ChangeLanguage extends BaseAction
             $language = Language::findOne(['status' => 1, 'language_id' => $this->queryData]);
 
             if($language && $this->botUser){
-                $this->botUser->language_code = $this->queryData;
+                $this->botUser->language_id = $this->queryData;
 
                 if($this->botUser->save(false)){
                     \Yii::$app->language = $this->queryData;
@@ -52,7 +52,7 @@ class ChangeLanguage extends BaseAction
 
         foreach(Language::findAll(['status' => 1]) as $language){
             $buttons[] = new InlineKeyboardButton([
-                'text'          =>  $language->name.($language->language_id == $this->botUser->language_code ? ' ('.\Yii::t('general', 'текущий').') ' : '').($language->flag ? json_decode('"'.$language->flag.'"') : null),
+                'text'          =>  $language->name.($language->language_id == $this->botUser->language_id ? ' ('.\Yii::t('general', 'текущий').') ' : '').($language->flag ? json_decode('"'.$language->flag.'"') : null),
                 'callback_data' =>  json_encode(['action' => 'changeLanguage', 'data' => $language->language_id,])
             ]);
         }

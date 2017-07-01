@@ -56,7 +56,7 @@ class BaseAction
         if($this->update->getCallbackQuery() && $userId = $this->update->getCallbackQuery()->getFrom()->getId()){
             $this->botUser = User::findByTelegramId($userId);
 
-            \Yii::$app->language = $this->botUser->language_code;
+            \Yii::$app->language = $this->botUser->language_id;
         }
 
         if(!is_null($queryData)){

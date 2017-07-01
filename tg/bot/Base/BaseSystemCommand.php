@@ -31,8 +31,8 @@ abstract class BaseSystemCommand extends SystemCommand
             $this->botUser = User::initializeBotUser($this);
         }
 
-        if($this->botUser && !empty($this->botUser->language_code)){
-            \Yii::$app->language = $this->botUser->language_code;
+        if($this->botUser && !empty($this->botUser->language_id)){
+            \Yii::$app->language = $this->botUser->language_id;
         }
     }
 
