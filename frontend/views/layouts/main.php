@@ -20,7 +20,7 @@ $('#loginModal').on('shown.bs.modal', function () {
         url: '/site/is-guest'
       }).success(function(data){
           if(data === false){
-              location.reload;
+              location.reload();
           }
       });
   }, 1000);
