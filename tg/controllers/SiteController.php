@@ -10,7 +10,7 @@ use yii\web\NotFoundHttpException;
 class SiteController extends Controller
 {
 
-    public $layout = '@app/../frontend/view/layouts/main.php';
+    public $layout = '@app/../frontend/views/layouts/main.php';
     public $viewPath = '@app/../frontend/views/site/';
 
     /**
