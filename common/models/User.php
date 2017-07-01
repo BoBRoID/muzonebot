@@ -60,6 +60,8 @@ class User extends ActiveRecord
 
         $botUser = self::findByTelegramId($userID);
 
+        \Yii::trace($message);
+
         if(is_null($botUser)){
             $botUser = new User([
                 'id'            =>  $message->getFrom()->getId(),
