@@ -12,4 +12,5 @@ return [
     'timeZone'          =>  'Europe/Kiev',
     'language'          =>  'ru-RU',
     'sourceLanguage'    =>  'ru-RU',
+    'frontend_url'      =>  'https://tgmuzone.com.ua/'
 ];
