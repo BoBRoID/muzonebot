@@ -47,11 +47,6 @@ return [
                 ],
             ],
         ],
-        'user' => [
-            'identityClass' => 'frontend\models\User',
-            'enableAutoLogin' => true,
-            'identityCookie' => ['name' => '_identity-backend', 'httpOnly' => true],
-        ],
         'errorHandler' => [
             'errorAction' => 'site/error',
         ],
@@ -61,11 +56,12 @@ return [
             'rules' =>  [
                 '/hook'     =>  'site/hook',
                 '/set'      =>  'site/set',
-                '/<action>'  =>  'site/<action>'
+                '/<action>' =>  'site/<action>',
+                ''          =>  'site/index'
             ]
         ],
     ],
-    'params' => $params,
+    'params'    => $params,
     'aliases'   =>  [
         '@logs' =>  '@runtime/bot_logs'
     ],
