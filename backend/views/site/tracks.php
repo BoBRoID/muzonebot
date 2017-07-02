@@ -1,7 +1,7 @@
 <?php
 /**
  * @var $dataProvider \yii\data\ActiveDataProvider
- * @var $searchModel \backend\modules\manage\models\SongSearch
+ * @var $searchModel \backend\models\SongSearch
  */
 use yii\helpers\Html;
 
@@ -36,9 +36,9 @@ $this->params['breadcrumbs'][] = $this->title;
                 /**
                  * @var $model \common\models\Song
                  */
-                return Html::a($model->title, [$searchModel->formName() => ['trackName' => $model->title]], ['title' => \Yii::t('site', 'Искать треки с названием {name}', ['name' => $model->title])]).
+                return Html::a($model->title, \yii\helpers\Url::current([$searchModel->formName() => ['trackName' => $model->title]]), ['title' => \Yii::t('site', 'Искать треки с названием {name}', ['name' => $model->title])]).
                     ' - '.
-                    Html::a($model->artist, [$searchModel->formName() => ['artist' => $model->artist]], ['title' => \Yii::t('site', 'Искать треки исполнителя {name}', ['name' => $model->artist])]);
+                    Html::a($model->artist, \yii\helpers\Url::current([$searchModel->formName() => ['artist' => $model->artist]]), ['title' => \Yii::t('site', 'Искать треки исполнителя {name}', ['name' => $model->artist])]);
             }
         ],
         [
@@ -52,7 +52,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 /**
                  * @var $model \common\models\Song
                  */
-                return Html::a($model->user->username ? : $model->user->first_name.' '.$model->user->last_name, [$searchModel->formName() => ['userId' => $model->user_id]]);
+                return Html::a($model->user->username ? : $model->user->first_name.' '.$model->user->last_name, \yii\helpers\Url::current([$searchModel->formName() => ['userId' => $model->user_id]]));
             }
         ],
         [

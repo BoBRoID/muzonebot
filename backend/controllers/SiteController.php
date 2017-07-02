@@ -3,6 +3,7 @@ namespace backend\controllers;
 
 use backend\models\SongSearch;
 use common\models\AdminToken;
+use common\models\Feedback;
 use common\models\User;
 use Yii;
 use yii\data\ActiveDataProvider;
@@ -112,8 +113,19 @@ class SiteController extends Controller
 
     }
 
-    public function actionFeedbacks(){
+    public function actionFeedback(){
+        $dataProvider = new ActiveDataProvider([
+            'query' =>  Feedback::find(),
+            'sort'  =>  [
+                'defaultOrder'  =>  [
+                    'created'   =>  SORT_DESC
+                ]
+            ]
+        ]);
 
+        return $this->render('feedback', [
+            'dataProvider'  =>  $dataProvider
+        ]);
     }
 
     /**

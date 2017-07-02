@@ -6,23 +6,23 @@ $this->params['breadcrumbs'][] = $this->title;
 $managerBlocks = [
     [
         'title' =>  \Yii::t('manage', 'Управление пользователями'),
-        'url'   =>  \yii\helpers\Url::to(['/manage/default/users'])
+        'url'   =>  \yii\helpers\Url::to(['/site/users'])
     ],
     [
         'title' =>  \Yii::t('manage', 'Управление жанрами'),
-        'url'   =>  \yii\helpers\Url::to(['/manage/default/genres'])
+        'url'   =>  \yii\helpers\Url::to(['/site/genres'])
     ],
     [
         'title' =>  \Yii::t('manage', 'Управление треками'),
-        'url'   =>  \yii\helpers\Url::to(['/manage/default/tracks'])
+        'url'   =>  \yii\helpers\Url::to(['/site/tracks'])
     ],
     [
         'title' =>  \Yii::t('manage', 'Управление альбомами'),
-        'url'   =>  \yii\helpers\Url::to(['/manage/default/albums'])
+        'url'   =>  \yii\helpers\Url::to(['/site/albums'])
     ],
     [
         'title' =>  \Yii::t('manage', 'Управление отзывами'),
-        'url'   =>  \yii\helpers\Url::to(['/manage/default/feedbacks'])
+        'url'   =>  \yii\helpers\Url::to(['/site/feedback'])
     ],
     [
         'title' =>  \Yii::t('manage', 'Управление переводами'),
