@@ -1,53 +1,49 @@
 <?php
+$this->title = \Yii::t('manage', 'Управление системой');
 
-/* @var $this yii\web\View */
+$this->params['breadcrumbs'][] = $this->title;
 
-$this->title = 'My Yii Application';
+$managerBlocks = [
+    [
+        'title' =>  \Yii::t('manage', 'Управление пользователями'),
+        'url'   =>  \yii\helpers\Url::to(['/manage/default/users'])
+    ],
+    [
+        'title' =>  \Yii::t('manage', 'Управление жанрами'),
+        'url'   =>  \yii\helpers\Url::to(['/manage/default/genres'])
+    ],
+    [
+        'title' =>  \Yii::t('manage', 'Управление треками'),
+        'url'   =>  \yii\helpers\Url::to(['/manage/default/tracks'])
+    ],
+    [
+        'title' =>  \Yii::t('manage', 'Управление альбомами'),
+        'url'   =>  \yii\helpers\Url::to(['/manage/default/albums'])
+    ],
+    [
+        'title' =>  \Yii::t('manage', 'Управление отзывами'),
+        'url'   =>  \yii\helpers\Url::to(['/manage/default/feedbacks'])
+    ],
+    [
+        'title' =>  \Yii::t('manage', 'Управление переводами'),
+        'url'   =>  \yii\helpers\Url::to(['/translatemanager/language/list'])
+    ],
+];
+
 ?>
-<div class="site-index">
-
-    <div class="jumbotron">
-        <h1>Congratulations!</h1>
-
-        <p class="lead">You have successfully created your Yii-powered application.</p>
-
-        <p><a class="btn btn-lg btn-success" href="http://www.yiiframework.com">Get started with Yii</a></p>
-    </div>
-
-    <div class="body-content">
-
-        <div class="row">
-            <div class="col-lg-4">
-                <h2>Heading</h2>
-
-                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et
-                    dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip
-                    ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu
-                    fugiat nulla pariatur.</p>
-
-                <p><a class="btn btn-default" href="http://www.yiiframework.com/doc/">Yii Documentation &raquo;</a></p>
-            </div>
-            <div class="col-lg-4">
-                <h2>Heading</h2>
-
-                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et
-                    dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip
-                    ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu
-                    fugiat nulla pariatur.</p>
-
-                <p><a class="btn btn-default" href="http://www.yiiframework.com/forum/">Yii Forum &raquo;</a></p>
-            </div>
-            <div class="col-lg-4">
-                <h2>Heading</h2>
-
-                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et
-                    dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip
-                    ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu
-                    fugiat nulla pariatur.</p>
-
-                <p><a class="btn btn-default" href="http://www.yiiframework.com/extensions/">Yii Extensions &raquo;</a></p>
+<h1><?=$this->title?></h1>
+<hr>
+<div class="row">
+    <?php foreach($managerBlocks as $block){ ?>
+    <div class="col-xs-12 col-md-6 col-lg-4 col-xl-3">
+        <div class="panel panel-default">
+            <div class="panel-body text-center">
+                <?=$block['title']?>
+                <br>
+                <br>
+                <a href="<?=$block['url']?>" class="btn btn-block btn-success"><?=\Yii::t('manage', 'Перейти')?></a>
             </div>
         </div>
-
     </div>
+    <?php } ?>
 </div>

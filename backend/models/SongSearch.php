@@ -5,7 +5,7 @@
  * Date: 26.06.2017
  * Time: 17:44
  */
-namespace backend\modules\manage\models;
+namespace backend\models;
 
 use common\models\Song;
 use common\models\User;

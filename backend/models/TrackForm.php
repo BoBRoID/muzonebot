@@ -6,7 +6,7 @@
  * Time: 11:24 PM
  */
 
-namespace backend\modules\manage\models;
+namespace backend\models;
 
 
 use common\models\Song;

@@ -1,7 +1,7 @@
 <?php
 /**
  * @var $dataProvider \yii\data\ActiveDataProvider
- * @var $searchModel \app\modules\manage\models\SongSearch
+ * @var $searchModel \backend\modules\manage\models\SongSearch
  */
 use yii\helpers\Html;
 
@@ -34,7 +34,7 @@ $this->params['breadcrumbs'][] = $this->title;
             'format'    =>  'html',
             'value'     =>  function($model) use($searchModel){
                 /**
-                 * @var $model \app\models\Song
+                 * @var $model \common\models\Song
                  */
                 return Html::a($model->title, [$searchModel->formName() => ['trackName' => $model->title]], ['title' => \Yii::t('site', 'Искать треки с названием {name}', ['name' => $model->title])]).
                     ' - '.
@@ -50,7 +50,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     return null;
                 }
                 /**
-                 * @var $model \app\models\Song
+                 * @var $model \common\models\Song
                  */
                 return Html::a($model->user->username ? : $model->user->first_name.' '.$model->user->last_name, [$searchModel->formName() => ['userId' => $model->user_id]]);
             }

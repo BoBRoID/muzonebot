@@ -6,7 +6,7 @@
  * Time: 11:35 PM
  */
 
-namespace backend\modules\manage\models;
+namespace backend\models;
 
 
 use yii\base\Model;

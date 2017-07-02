@@ -1,8 +1,11 @@
 <?php
 namespace backend\controllers;
 
+use backend\models\SongSearch;
 use common\models\AdminToken;
+use common\models\User;
 use Yii;
+use yii\data\ActiveDataProvider;
 use yii\web\Controller;
 use yii\filters\VerbFilter;
 use yii\filters\AccessControl;
@@ -67,14 +70,50 @@ class SiteController extends Controller
         ];
     }
 
-    /**
-     * Displays homepage.
-     *
-     * @return string
-     */
     public function actionIndex()
     {
         return $this->render('index');
+    }
+
+    public function actionUsers(){
+        $dataProvider = new ActiveDataProvider([
+            'query' =>  User::find()
+        ]);
+
+        return $this->render('users', [
+            'dataProvider'  =>  $dataProvider
+        ]);
+    }
+
+    public function actionTracks(){
+        $searchModel = new SongSearch;
+        $searchModel->load(\Yii::$app->request->get());
+
+        $dataProvider = new ActiveDataProvider([
+            'query' =>  $searchModel->getResults()->with('user'),
+            'sort'  =>  [
+                'defaultOrder'  =>  [
+                    'id'    =>  SORT_DESC
+                ]
+            ]
+        ]);
+
+        return $this->render('tracks', [
+            'dataProvider'  =>  $dataProvider,
+            'searchModel'   =>  $searchModel
+        ]);
+    }
+
+    public function actionGenres(){
+
+    }
+
+    public function actionAlbums(){
+
+    }
+
+    public function actionFeedbacks(){
+
     }
 
     /**

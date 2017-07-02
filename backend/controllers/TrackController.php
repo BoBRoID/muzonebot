@@ -11,7 +11,7 @@ namespace backend\modules\manage\controllers;
 
 use common\helpers\TrackDownloader;
 use common\models\Song;
-use backend\modules\manage\models\TrackForm;
+use backend\models\TrackForm;
 use ErrorException;
 use yii\web\BadRequestHttpException;
 use yii\filters\AccessControl;

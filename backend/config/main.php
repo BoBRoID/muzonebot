@@ -21,9 +21,6 @@ return [
             'class'     =>  'dektrium\rbac\RbacWebModule',
             'admins'    =>  ['SomeWho']
         ],
-        'manage' => [
-            'class' => 'backend\modules\manage\Module',
-        ],
     ],
     'components' => [
         'i18n' => [
