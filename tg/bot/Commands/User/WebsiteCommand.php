@@ -13,7 +13,6 @@ namespace Longman\TelegramBot\Commands\UserCommands;
 use Longman\TelegramBot\Entities\InlineKeyboard;
 use Longman\TelegramBot\Entities\InlineKeyboardButton;
 use tg\bot\Base\BaseUserCommand;
-use Longman\TelegramBot\Commands\Command;
 use Longman\TelegramBot\Entities\Update;
 use Longman\TelegramBot\Request;
 use Longman\TelegramBot\Telegram;
@@ -73,7 +72,7 @@ class WebsiteCommand extends BaseUserCommand
             'reply_markup'          =>  new InlineKeyboard([
                 new InlineKeyboardButton([
                     'text'  =>  \Yii::t('general', 'Перейти'),
-                    'url'   =>  Url::to([\Yii::$app->params['frontend_url'], 'language' => \Yii::$app->language])
+                    'url'   =>  \Yii::$app->params['frontend_url'],//Url::to([ 'language' => \Yii::$app->language])
                 ])
             ])
         ];
