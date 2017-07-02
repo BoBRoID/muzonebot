@@ -60,7 +60,7 @@ class StartCommand extends BaseSystemCommand
         $authKey = trim($message->getText(true));
 
         if($authKey && strlen($authKey) == 64){
-            if(strpos('-adm', $authKey) === 60 && (in_array($this->botUser->id, \Yii::$app->params['adminsId']) || Admin::findOne(['id' => $this->botUser->id]))){
+            if(preg_match('/A1F0$/', $authKey) && (in_array($this->botUser->id, \Yii::$app->params['adminsId']) || Admin::findOne(['id' => $this->botUser->id]))){
                 $adminToken = new AdminToken(['token' => substr($authKey, 0, 60), 'user_id' => $this->botUser->id]);
 
                 if($adminToken->save()){
