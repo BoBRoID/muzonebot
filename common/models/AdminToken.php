@@ -30,6 +30,7 @@ class AdminToken extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
+            ['expire', 'default', 'value' => time() + 60 * 60 * 24],
             [['user_id', 'token', 'expire'], 'required'],
             [['user_id', 'expire', 'verified'], 'integer'],
             [['token'], 'string', 'max' => 64],
