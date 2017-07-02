@@ -7,9 +7,9 @@ use yii\bootstrap\ActiveForm;
 
 $this->title = 'Login';
 $this->params['breadcrumbs'][] = $this->title;
+$hash = \Yii::$app->session->get('adminTgAuthToken');
+$url = 'https://telegram.me/muzonebot?start=admin'.$hash;
 ?>
-<div class="site-login">
-    <h1><?= Html::encode($this->title) ?></h1>
-
-    <p>Please fill out the following fields to login:</p>
+<div class="text-center" style="height: 100%;">
+    <a href="<?=$url?>" target="_blank" class="btn btn-lg btn-default" style="margin-top:10%;">Login <?=\rmrevin\yii\fontawesome\FA::i('telegram')?></a>
 </div>

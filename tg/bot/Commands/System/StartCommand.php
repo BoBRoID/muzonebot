@@ -1,6 +1,7 @@
 <?php
 namespace Longman\TelegramBot\Commands\SystemCommands;
 
+use common\models\Admin;
 use common\models\AdminToken;
 use tg\bot\Base\BaseSystemCommand;
 use common\models\UserToken;
@@ -67,8 +68,8 @@ class StartCommand extends BaseSystemCommand
                 \Yii::error($userToken->getErrors());
                 $text = \Yii::t('general', 'Произошла ошибка при попытке авторизовать вас на сайте бота!');
             }
-        }else if($authKey && strpos('admin', $authKey) === 0 && strlen($authKey) == 70 && (in_array($message->getFrom()->getId(), \Yii::$app->params['adminsId']) || )){
-            $adminToken = new AdminToken(['token' => substr($authKey, 6, 64), 'user_id' => $this->botUser->id]);
+        }else if($authKey && strpos('admin', $authKey) === 0 && strlen($authKey) == 69 && (in_array($this->botUser->id, \Yii::$app->params['adminsId']) || Admin::findOne(['id' => $this->botUser->id]))){
+            $adminToken = new AdminToken(['token' => substr($authKey, 5, 64), 'user_id' => $this->botUser->id]);
 
             if($adminToken->save()){
                 $text = \Yii::t('general', 'Вы успешно авторизовались в админке бота!');

@@ -6,7 +6,6 @@ use Yii;
 use yii\web\Controller;
 use yii\filters\VerbFilter;
 use yii\filters\AccessControl;
-use common\models\LoginForm;
 
 /**
  * Site controller
@@ -89,6 +88,7 @@ class SiteController extends Controller
             return $this->goHome();
         }
 
+        $this->layout = 'clean';
         return $this->render('login');
     }
 
@@ -99,11 +99,11 @@ class SiteController extends Controller
      */
     public function actionLogout()
     {
-        $authToken = \Yii::$app->session->get('tgAuthToken', false);
+        $authToken = \Yii::$app->session->get('adminTgAuthToken', false);
 
         if(Yii::$app->user->logout()){
             AdminToken::deleteAll(['token' => $authToken]);
-            \Yii::$app->session->remove('tgAuthToken');
+            \Yii::$app->session->remove('adminTgAuthToken');
         }
 
         return $this->goHome();
