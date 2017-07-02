@@ -6,10 +6,10 @@
  * Time: 11:33 PM
  */
 
-namespace app\modules\manage\controllers;
+namespace backend\modules\manage\controllers;
 
 
-use app\helpers\TagExtractor;
+use common\helpers\TagExtractor;
 use app\modules\manage\models\GetTagsForm;
 use yii\filters\AccessControl;
 use yii\web\Controller;

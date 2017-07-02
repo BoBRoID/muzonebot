@@ -5,10 +5,10 @@
  * Date: 26.06.2017
  * Time: 17:44
  */
-namespace app\modules\manage\models;
+namespace backend\modules\manage\models;
 
-use app\models\Song;
-use app\models\User;
+use common\models\Song;
+use common\models\User;
 use yii\helpers\ArrayHelper;
 
 class SongSearch extends \yii\base\Model

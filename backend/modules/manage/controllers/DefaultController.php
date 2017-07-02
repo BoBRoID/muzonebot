@@ -1,8 +1,8 @@
 <?php
 
-namespace app\modules\manage\controllers;
+namespace backend\modules\manage\controllers;
 
-use app\models\User;
+use common\models\User;
 use app\modules\manage\models\SongSearch;
 use yii\data\ActiveDataProvider;
 use yii\filters\AccessControl;
