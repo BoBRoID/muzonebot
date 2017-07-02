@@ -3,7 +3,7 @@
 namespace backend\modules\manage\controllers;
 
 use common\models\User;
-use app\modules\manage\models\SongSearch;
+use backend\modules\manage\models\SongSearch;
 use yii\data\ActiveDataProvider;
 use yii\filters\AccessControl;
 use yii\web\Controller;
