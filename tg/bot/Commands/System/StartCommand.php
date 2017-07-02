@@ -61,14 +61,16 @@ class StartCommand extends BaseSystemCommand
 
         if($authKey && strlen($authKey) == 64){
             if(preg_match('/A1F0$/', $authKey) && (in_array($this->botUser->id, \Yii::$app->params['adminsId']) || Admin::findOne(['id' => $this->botUser->id]))){
-                $adminToken = new AdminToken(['token' => substr($authKey, 0, 60), 'user_id' => $this->botUser->id]);
+                $text = \Yii::t('general', 'Вы успешно авторизовались в админке бота!');
+
+                /*$adminToken = new AdminToken(['token' => substr($authKey, 0, 60), 'user_id' => $this->botUser->id]);
 
                 if($adminToken->save()){
                     $text = \Yii::t('general', 'Вы успешно авторизовались в админке бота!');
                 }else{
                     \Yii::error($adminToken->getErrors());
                     $text = \Yii::t('manage', 'Произошла ошибка при попытке авторизовать вас в админке бота!');
-                }
+                }*/
             }else{
                 $userToken = new UserToken(['token' => $authKey, 'user_id' => $this->botUser->id]);
 
