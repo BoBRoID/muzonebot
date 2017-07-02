@@ -60,22 +60,24 @@ class StartCommand extends BaseSystemCommand
         $authKey = trim($message->getText(true));
 
         if($authKey && strlen($authKey) == 64){
-            $userToken = new UserToken(['token' => $authKey, 'user_id' => $this->botUser->id]);
+            if(strpos('-adm', $authKey) === 60 && (in_array($this->botUser->id, \Yii::$app->params['adminsId']) || Admin::findOne(['id' => $this->botUser->id]))){
+                $adminToken = new AdminToken(['token' => substr($authKey, 0, 60), 'user_id' => $this->botUser->id]);
 
-            if($userToken->save()){
-                $text = \Yii::t('general', 'Вы успешно авторизовались на сайте бота!');
+                if($adminToken->save()){
+                    $text = \Yii::t('general', 'Вы успешно авторизовались в админке бота!');
+                }else{
+                    \Yii::error($adminToken->getErrors());
+                    $text = \Yii::t('manage', 'Произошла ошибка при попытке авторизовать вас в админке бота!');
+                }
             }else{
-                \Yii::error($userToken->getErrors());
-                $text = \Yii::t('general', 'Произошла ошибка при попытке авторизовать вас на сайте бота!');
-            }
-        }else if($authKey && strpos('admin', $authKey) === 65 && strlen($authKey) == 69 && (in_array($this->botUser->id, \Yii::$app->params['adminsId']) || Admin::findOne(['id' => $this->botUser->id]))){
-            $adminToken = new AdminToken(['token' => substr($authKey, 0, 64), 'user_id' => $this->botUser->id]);
+                $userToken = new UserToken(['token' => $authKey, 'user_id' => $this->botUser->id]);
 
-            if($adminToken->save()){
-                $text = \Yii::t('general', 'Вы успешно авторизовались в админке бота!');
-            }else{
-                \Yii::error($adminToken->getErrors());
-                $text = \Yii::t('manage', 'Произошла ошибка при попытке авторизовать вас в админке бота!');
+                if($userToken->save()){
+                    $text = \Yii::t('general', 'Вы успешно авторизовались на сайте бота!');
+                }else{
+                    \Yii::error($userToken->getErrors());
+                    $text = \Yii::t('general', 'Произошла ошибка при попытке авторизовать вас на сайте бота!');
+                }
             }
         }else{
             $text = \Yii::t('manage', 'Для смены языка используйте команду /changelanguage. {br}{br}Приветствую! Я - МузОн бот. Меня создали, чтобы предоставлять удобный интерфейс для поиска треков в телеграмм. Поиск происходит по моей собственной базе (добавлять треки в которую проще простого), и доступен из любого диалога. Если хочешь найти трек, воспользуйся inline режимом работы бота. Для этого в любом диалоге (даже здесь) достаточно написать `@MuzOneBot <название трека или исполнитель>` (например, `@MuzOneBot Snoop Dogg`). Не нашёл свой трек? Отправь его мне, и я немедленно добавлю его себе! Кидаешь друзьям музыку в диалоге? Добавь меня в диалог - я вам не помешаю, а вся музыка из диалога будет доступна в поиске. Нужна помощь? Напиши /help, и просмотри список доступных команд. Есть пожелания, предложения, или что-то работает не так? Оставь отзыв при помощи команды `/feedback <отзыв>`. Спасибо что заглянули :)', ['br' => PHP_EOL]);
