@@ -1,6 +1,6 @@
 <?php
 /**
- * @var $trackForm \app\modules\manage\models\TrackForm
+ * @var $trackForm \backend\models\TrackForm
  */
 use yii\bootstrap\Html;
 
@@ -55,8 +55,8 @@ JS;
 
 $this->registerJs($js);
 
-$this->params['breadcrumbs'][] = ['url' => \yii\helpers\Url::to(['default/index']), 'label' => \Yii::t('manage', 'Управление системой')];
-$this->params['breadcrumbs'][] = ['url' => \yii\helpers\Url::to(['default/tracks']), 'label' => \Yii::t('manage', 'Список добавленых треков')];
+$this->params['breadcrumbs'][] = ['url' => \yii\helpers\Url::to(['/site/index']), 'label' => \Yii::t('manage', 'Управление системой')];
+$this->params['breadcrumbs'][] = ['url' => \yii\helpers\Url::to(['/site/tracks']), 'label' => \Yii::t('manage', 'Список добавленых треков')];
 $this->params['breadcrumbs'][] = $this->title;
 
 echo Html::tag('h1', $this->title, ['data-key' => $trackForm->id]);

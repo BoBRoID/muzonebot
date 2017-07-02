@@ -28,6 +28,10 @@ $managerBlocks = [
         'title' =>  \Yii::t('manage', 'Управление переводами'),
         'url'   =>  \yii\helpers\Url::to(['/translatemanager/language/list'])
     ],
+    [
+        'title' =>  \Yii::t('manage', 'Распознавалка тэгов'),
+        'url'   =>  \yii\helpers\Url::to(['/utilities/get-tags'])
+    ],
 ];
 
 ?>

@@ -4,7 +4,7 @@
  * User: bobroid
  * Date: 6/29/17
  * Time: 11:34 PM
- * @var $model \app\modules\manage\models\GetTagsForm
+ * @var $model \backend\models\GetTagsForm
  */
 $fileInfo = isset($fileInfo) ? $fileInfo : null;
 $this->title = \Yii::t('site', 'Получить список тэгов трека');
@@ -51,7 +51,7 @@ $(document).ready(function(){
 })
 JS;
 
-$this->params['breadcrumbs'][] = ['url' => \yii\helpers\Url::to(['default/index']), 'label' => \Yii::t('manage', 'Управление системой')];
+$this->params['breadcrumbs'][] = ['url' => \yii\helpers\Url::to(['/site/index']), 'label' => \Yii::t('manage', 'Управление системой')];
 //$this->params['breadcrumbs'][] = ['url' => \yii\helpers\Url::to(['default/utilities']), 'label' => \Yii::t('manage', 'Список добавленых треков')];
 $this->params['breadcrumbs'][] = $this->title;
 

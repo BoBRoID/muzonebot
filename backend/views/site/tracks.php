@@ -7,7 +7,7 @@ use yii\helpers\Html;
 
 $this->title = \Yii::t('manage', 'Список добавленых треков');
 
-$this->params['breadcrumbs'][] = ['url' => \yii\helpers\Url::to(['default/index']), 'label' => \Yii::t('manage', 'Управление системой')];
+$this->params['breadcrumbs'][] = ['url' => \yii\helpers\Url::to(['/site/index']), 'label' => \Yii::t('manage', 'Управление системой')];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <h1><?=$this->title?></h1>
