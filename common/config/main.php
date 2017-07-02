@@ -9,4 +9,7 @@ return [
             'class' => 'yii\caching\FileCache',
         ],
     ],
+    'timeZone'          =>  'Europe/Kiev',
+    'language'          =>  'ru-RU',
+    'sourceLanguage'    =>  'ru-RU',
 ];
