@@ -48,7 +48,7 @@ class InlinequeryCommand extends BaseSystemCommand
             $myTracks = mb_strpos(\Yii::t('general', 'мои треки'), $query) === 0;
 
             if($myTracks){
-                $query = mb_substr($myTracks, 10);
+                $query = mb_substr($query, 10);
             }
 
             $songs = Song::find()
