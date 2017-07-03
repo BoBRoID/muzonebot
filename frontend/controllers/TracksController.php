@@ -12,6 +12,7 @@ namespace frontend\controllers;
 use frontend\models\forms\SongSearch;
 use common\models\Song;
 use common\models\UserSongs;
+use frontend\models\forms\TrackForm;
 use yii\data\ActiveDataProvider;
 use yii\filters\AccessControl;
 use yii\web\Controller;
@@ -89,6 +90,35 @@ class TracksController extends Controller
                 throw new \Exception('cant add user song');
             }
         }
+    }
+
+    public function actionEdit($id){
+        $song = Song::findOne(['id' => $id]);
+
+        if(!$song || !$song->user_id != \Yii::$app->user->identity->getId()){
+            throw new NotFoundHttpException();
+        }
+
+        $form = new TrackForm();
+        $form->load([$form->formName() => $song->toArray()]);
+        $form->trackID = $song->id;
+
+        if(\Yii::$app->request->post($form->formName()) && $form->load(\Yii::$app->request->post())){
+            if($form->save()){
+                \Yii::$app->session->addFlash('messages', ['message' => \Yii::t('site', 'Трек успешно отредактирован!'), 'type' => 'success']);
+            }else{
+                \Yii::trace($form->getErrors());
+                \Yii::$app->session->addFlash('messages', ['message' => \Yii::t('site', 'Произошли ошибки при редактировании трека!'), 'type' => 'danger']);
+            }
+        }
+
+        if(\Yii::$app->request->isAjax){
+            $this->layout = false;
+        }
+
+        return $this->render('edit', [
+            'model' =>  $form
+        ]);
     }
 
 }

@@ -58,6 +58,15 @@ use yii\bootstrap\Html;
                         'class' => 'btn btn-default btn-xs toggleTrack',
                         'title' => $model->userSong ? \Yii::t('site', 'Убрать из моих треков') : \Yii::t('site', 'Добавить в мои треки')
                     ]);
+
+            if($model->user_id == \Yii::$app->user->identity->getId()){
+                echo Html::button(
+                    FA::i('pencil'),
+                    [
+                        'class' => 'btn btn-default btn-xs editTrack',
+                        'title' => \Yii::t('site', 'Редактировать')
+                    ]);
+            }
         }
         ?>
     </div>

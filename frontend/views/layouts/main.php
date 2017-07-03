@@ -172,6 +172,16 @@ $this->registerCss($css);
             <b><?=\Yii::t('site', 'Важно!')?></b> <?=\Yii::t('site', 'Не закрывайте это модальное окно пока бот не ответит вам что вы успешно авторизованы. В инном случае вам придётся после ответа обновить страницу самостоятельно!')?>
         <?php
             \yii\bootstrap\Modal::end();
+        }else{
+            \yii\bootstrap\Modal::begin([
+                'id'        =>  'trackEditModal',
+                'header'    =>  \Yii::t('site', 'Редактирование трека')
+            ]);
+            \yii\widgets\Pjax::begin([
+                'enablePushState'   =>  false
+            ]);
+            \yii\widgets\Pjax::end();
+            \yii\bootstrap\Modal::end();
         } ?>
     </div>
 </div>
@@ -179,7 +189,6 @@ $this->registerCss($css);
 <footer class="footer">
     <div class="container">
         <p class="pull-left">&copy; Kroshyk and Lazy Penguin <?= date('Y') ?></p>
-
         <p class="pull-right"><?= Yii::powered() ?></p>
     </div>
 </footer>
