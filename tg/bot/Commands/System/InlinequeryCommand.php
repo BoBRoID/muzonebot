@@ -45,7 +45,7 @@ class InlinequeryCommand extends BaseSystemCommand
         $results = $articles = [];
 
         if ($query !== '') {
-            $myTracks = mb_strpos(\Yii::t('general', 'мои треки'), $query) === 0;
+            $myTracks = preg_match('/^'.\Yii::t('general', 'мои треки').'/', $query);
 
             if($myTracks){
                 $query = mb_substr($query, 10);
