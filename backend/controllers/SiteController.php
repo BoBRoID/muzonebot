@@ -40,7 +40,7 @@ class SiteController extends Controller
                 'class' => AccessControl::className(),
                 'rules' => [
                     [
-                        'actions' => ['login', 'error'],
+                        'actions' => ['login', 'error', 'is-guest'],
                         'allow' => true,
                     ],
                     [
@@ -157,5 +157,14 @@ class SiteController extends Controller
         }
 
         return $this->goHome();
+    }
+
+    /**
+     * @return string
+     */
+    public function actionIsGuest(){
+        \Yii::$app->response->format = 'json';
+
+        return \Yii::$app->user->isGuest;
     }
 }
