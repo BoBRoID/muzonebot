@@ -45,22 +45,22 @@ class InlinequeryCommand extends BaseSystemCommand
         $results = $articles = [];
 
         if ($query !== '') {
-            $myTracks = mb_strpos(\Yii::t('general', 'мои треки '), $query) === 0;
+            $myTracks = mb_strpos(\Yii::t('general', 'мои треки'), $query) === 0;
 
             if($myTracks){
                 $query = mb_substr($myTracks, 10);
             }
 
             $songs = Song::find()
-                ->where(['like', 'title', $query])
-                ->orWhere(['like', 'artist', $query]);
+                ->where(['like', 'songs.title', $query])
+                ->orWhere(['like', 'songs.artist', $query]);
 
             if($myTracks){
                 $songs->leftJoin(['us' => UserSongs::tableName()], 'us.song_id = songs.id')
                     ->andWhere(['us.user_id' => $this->botUser->id]);
             }
         }else{
-            $songs = Song::find()->where('title IS NOT NULL')->andWhere('artist IS NOT NULL');
+            $songs = Song::find()->where('songs.title IS NOT NULL')->andWhere('songs.artist IS NOT NULL');
         }
 
         $songsProvider = new ActiveDataProvider([
