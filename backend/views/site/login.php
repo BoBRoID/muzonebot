@@ -22,6 +22,8 @@ setInterval(function(){
   }, 5000);
 JS;
 
+$this->registerJs($js);
+
 ?>
 <div class="text-center" style="height: 100%;">
     <a href="<?=$url?>" target="_blank" class="btn btn-lg btn-default" style="margin-top:10%;">Login <?=\rmrevin\yii\fontawesome\FA::i('telegram')?></a>
