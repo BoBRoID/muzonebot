@@ -2,6 +2,7 @@
 namespace Longman\TelegramBot\Commands\SystemCommands;
 
 use common\models\Song;
+use common\models\UserSongs;
 use tg\bot\Base\BaseSystemCommand;
 use Longman\TelegramBot\Entities\InlineQuery\InlineQueryResultArticle;
 use Longman\TelegramBot\Entities\InlineQuery\InlineQueryResultCachedAudio;
@@ -44,9 +45,20 @@ class InlinequeryCommand extends BaseSystemCommand
         $results = $articles = [];
 
         if ($query !== '') {
+            $myTracks = mb_strpos(\Yii::t('general', 'мои треки '), $query) === 0;
+
+            if($myTracks){
+                $query = mb_substr($myTracks, 10);
+            }
+
             $songs = Song::find()
                 ->where(['like', 'title', $query])
                 ->orWhere(['like', 'artist', $query]);
+
+            if($myTracks){
+                $songs->leftJoin(['us' => UserSongs::tableName()], 'us.song_id = songs.id')
+                    ->andWhere(['us.user_id' => $this->botUser->id]);
+            }
         }else{
             $songs = Song::find()->where('title IS NOT NULL')->andWhere('artist IS NOT NULL');
         }
