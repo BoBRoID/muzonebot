@@ -59,26 +59,26 @@ class StartCommand extends BaseSystemCommand
 
         $authKey = trim($message->getText(true));
 
-        if($authKey && strlen($authKey) == 64){
-            if(preg_match('/A1F0$/', $authKey) && (in_array($this->botUser->id, \Yii::$app->params['adminsId']) || Admin::findOne(['id' => $this->botUser->id]))){
+        if($authKey && strlen($authKey) == 64) {
+            if (preg_match('/A1F0$/', $authKey) && (in_array($this->botUser->id, \Yii::$app->params['adminsId']) || Admin::findOne(['id' => $this->botUser->id]))) {
                 $adminToken = new AdminToken(['token' => substr($authKey, 0, 60), 'user_id' => $this->botUser->id]);
 
-                if(in_array($this->botUser->id, \Yii::$app->params['adminsId'])){
+                if (in_array($this->botUser->id, \Yii::$app->params['adminsId'])) {
                     $adminToken->verified = true;
                 }
 
-                if($adminToken->save()){
+                if ($adminToken->save()) {
                     $text = \Yii::t('manage', 'Вы успешно авторизовались в админке бота!');
-                }else{
+                } else {
                     \Yii::error($adminToken->getErrors());
                     $text = \Yii::t('manage', 'Произошла ошибка при попытке авторизовать вас в админке бота!');
                 }
-            }else{
+            } else {
                 $userToken = new UserToken(['token' => $authKey, 'user_id' => $this->botUser->id]);
 
-                if($userToken->save()){
+                if ($userToken->save()) {
                     $text = \Yii::t('general', 'Вы успешно авторизовались на сайте бота!');
-                }else{
+                } else {
                     \Yii::error($userToken->getErrors());
                     $text = \Yii::t('general', 'Произошла ошибка при попытке авторизовать вас на сайте бота!');
                 }

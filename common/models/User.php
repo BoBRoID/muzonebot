@@ -16,6 +16,7 @@ use yii\db\ActiveRecord;
  * @property string $updated_at
  * @property string $language_code
  * @property string $language_id
+ * @property NotificationSettings[] $notificationSettings
  */
 class User extends ActiveRecord
 {
@@ -125,4 +126,22 @@ class User extends ActiveRecord
         return (new UserSongs(['user_id' => $this->id, 'song_id' => $song->id]))->save();
     }
 
+    public function getNotificationSettings(){
+        return $this->hasMany(NotificationSettings::className(), ['user_id' => 'id']);
+    }
+
+    /**
+     * @param $type
+     * @param bool $default
+     * @return bool|int
+     */
+    public function getNotificationSettingValue($type, $default = false){
+        foreach($this->notificationSettings as $notificationSetting){
+            if($notificationSetting->type == $type){
+                return $notificationSetting->value;
+            }
+        }
+
+        return $default;
+    }
 }

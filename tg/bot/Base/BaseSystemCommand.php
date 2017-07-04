@@ -16,6 +16,9 @@ use Longman\TelegramBot\Telegram;
 abstract class BaseSystemCommand extends SystemCommand
 {
 
+    /**
+     * @var User|null
+     */
     public $botUser = null;
 
     /**

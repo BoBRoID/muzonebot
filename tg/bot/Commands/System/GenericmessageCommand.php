@@ -3,6 +3,7 @@
 
 namespace Longman\TelegramBot\Commands\SystemCommands;
 
+use common\models\NotificationSettings;
 use tg\bot\Base\BaseSystemCommand;
 use common\helpers\TagExtractor;
 use common\helpers\TrackDownloader;
@@ -49,7 +50,7 @@ class GenericmessageCommand extends BaseSystemCommand
 
         if($audio = $message->getAudio()){
             if($song = Song::findOne(['fileId' => $audio->getFileId()])){
-                if($message->getChat()->isPrivateChat()){
+                if($message->getChat()->isPrivateChat() && $this->botUser->getNotificationSettingValue(NotificationSettings::TYPE_WHEN_EXISTS, true)){
                     return Request::sendMessage([
                         'text'                  => \Yii::t('general', 'Данный трек уже есть в нашей базе!'),
                         'reply_to_message_id'   =>  $message->getMessageId()
@@ -59,14 +60,16 @@ class GenericmessageCommand extends BaseSystemCommand
                 }
             }
 
-            Request::sendMessage([
-                'text' => \Yii::t('general', 'Получен трек{track}. Пробую его проиндексировать...', [
-                    'track'     =>  $audio->getPerformer() && $audio->getTitle() ? \Yii::t('general', ' "{artist} - {title}"', [
-                        'artist'    =>  $audio->getPerformer(),
-                        'title'     =>  $audio->getTitle()
-                    ]) : null
-                ]),
-            ] + $data);
+            if($this->botUser->getNotificationSettingValue(NotificationSettings::TYPE_WHEN_RECEIVED, true)){
+                Request::sendMessage([
+                    'text' => \Yii::t('general', 'Получен трек{track}. Пробую его проиндексировать...', [
+                        'track'     =>  $audio->getPerformer() && $audio->getTitle() ? \Yii::t('general', ' "{artist} - {title}"', [
+                            'artist'    =>  $audio->getPerformer(),
+                            'title'     =>  $audio->getTitle()
+                        ]) : null
+                    ]),
+                ] + $data);
+            }
 
             Request::sendChatAction(['action' => 'upload_audio'] + $data);
 
@@ -101,10 +104,12 @@ class GenericmessageCommand extends BaseSystemCommand
                         \Yii::trace($e->getMessage());
                     }
                 }catch (\Exception $exception){
-                    return Request::sendMessage([
-                        'text' => \Yii::t('general', 'Произошла ошибка при попытке получить ссылку на файл!'),
-                        'reply_to_message_id'   =>  $message->getMessageId()
-                    ] + $data);
+                    if($this->botUser->getNotificationSettingValue(NotificationSettings::TYPE_WHEN_SYSTEM_ERROR, true)){
+                        Request::sendMessage([
+                            'text' => \Yii::t('general', 'Произошла ошибка при попытке получить ссылку на файл!'),
+                            'reply_to_message_id'   =>  $message->getMessageId()
+                        ] + $data);
+                    }
                 }
             }
 
@@ -121,24 +126,31 @@ class GenericmessageCommand extends BaseSystemCommand
             }
 
             if($song->save()){
-                if($this->botUser){
-                    $this->botUser->addTrack($song);
-                }
+                $this->botUser->addTrack($song);
 
-                return Request::sendMessage([
-                    'text'      => \Yii::t('general', 'Трек "{artist} - {title}" успешно добавлен!', [
-                        'artist'    => $song->artist,
-                        'title'     => $song->title
-                    ]),
-                ] + $data);
+                if($this->botUser->getNotificationSettingValue(NotificationSettings::TYPE_WHEN_ADDED, true)){
+                    return Request::sendMessage([
+                        'text'      => \Yii::t('general', 'Трек "{artist} - {title}" успешно добавлен!', [
+                            'artist'    => $song->artist,
+                            'title'     => $song->title
+                        ]),
+                    ] + $data);
+                }else{
+                    return Request::emptyResponse();
+                }
             }else{
-                return Request::sendMessage([
-                    'text'      =>  \Yii::t('general', 'Произошла ошибка при попытке сохранить в базу трек. {errors}', [
-                        'title' => $song->title,
-                        'errors' => $this->telegram->isAdmin() ? ' Ошибки: '.json_encode($song->getErrors(), JSON_UNESCAPED_UNICODE) : null
-                    ]),
-                    'reply_to_message_id'   =>  $message->getMessageId()
-                ] + $data);
+                \Yii::info($song->toArray());
+
+                if($this->botUser->getNotificationSettingValue(NotificationSettings::TYPE_WHEN_CANT_SAVE, true)){
+                    return Request::sendMessage([
+                        'text'      =>  \Yii::t('general', 'Произошла ошибка при попытке сохранить в базу трек. {errors}', [
+                            'errors'    => $this->telegram->isAdmin() ? ' Ошибки: '.json_encode($song->getErrors(), JSON_UNESCAPED_UNICODE) : null
+                        ]),
+                        'reply_to_message_id'   =>  $message->getMessageId()
+                    ] + $data);
+                }else{
+                    return Request::emptyResponse();
+                }
             }
         }else if($message->getText(true) && $message->getChat()->isPrivateChat()){
             return Request::sendMessage([

@@ -95,7 +95,7 @@ class TracksController extends Controller
     public function actionEdit($id){
         $song = Song::findOne(['id' => $id]);
 
-        if(!$song || !$song->user_id != \Yii::$app->user->identity->getId()){
+        if(!$song || $song->user_id != \Yii::$app->user->identity->getId()){
             throw new NotFoundHttpException();
         }
 
@@ -113,7 +113,9 @@ class TracksController extends Controller
         }
 
         if(\Yii::$app->request->isAjax){
-            $this->layout = false;
+            return $this->renderAjax('edit', [
+                'model' =>  $form
+            ]);
         }
 
         return $this->render('edit', [
