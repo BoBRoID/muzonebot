@@ -150,7 +150,10 @@ $this->registerCss($css);
 
             \yii\bootstrap\Modal::begin([
                 'id'        =>  'loginModal',
-                'header'    =>  \Yii::t('site', 'Авторизация')
+                'header'    =>  \Yii::t('site', 'Авторизация'),
+                'options'   =>  [
+                    'data-static'   =>  true
+                ]
             ]);
 
             $hash = \Yii::$app->session->get('tgAuthToken');

@@ -29,6 +29,10 @@ $(document).ready(function(){
             $('#trackEditModal .modal-body div').html(data);
         })
     }).on('show.bs.modal', '.modal', function(){
+        if($(this).data('static')){
+            return;
+        }
+
         var modal = $(this).find('.modal-body div');
 
         if(modal === undefined){
