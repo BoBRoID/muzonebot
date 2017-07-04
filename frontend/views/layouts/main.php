@@ -152,7 +152,7 @@ $this->registerCss($css);
                 'id'        =>  'loginModal',
                 'header'    =>  \Yii::t('site', 'Авторизация'),
                 'options'   =>  [
-                    'data-static'   =>  true
+                    'data-static'   =>  1
                 ]
             ]);
 
