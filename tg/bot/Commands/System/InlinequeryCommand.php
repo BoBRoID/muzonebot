@@ -58,11 +58,13 @@ class InlinequeryCommand extends BaseSystemCommand
 
             if($myTracks){
                 $songs->leftJoin(['us' => UserSongs::tableName()], 'us.song_id = songs.id')
-                    ->andWhere(['us.user_id' => $this->botUser->id]);
+                    ->andWhere(['us.user_id' => $this->botUser->id])
+                    ->orderBy('us.added DESC');
             }
         }else{
             $songs->leftJoin(['us' => UserSongs::tableName()], 'us.song_id = songs.id')
-                ->andWhere(['us.user_id' => $this->botUser->id]);
+                ->andWhere(['us.user_id' => $this->botUser->id])
+                ->orderBy('us.added DESC');
         }
 
         $songsProvider = new ActiveDataProvider([
