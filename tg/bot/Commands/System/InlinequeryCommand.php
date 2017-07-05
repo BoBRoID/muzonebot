@@ -55,16 +55,13 @@ class InlinequeryCommand extends BaseSystemCommand
             }
 
             if($query){
-                $songs->andWhere(['like', 'songs.title', $query])
-                    ->orWhere(['like', 'songs.artist', $query]);
-            }
-
-            if($myTracks){
-                $songs->leftJoin(['us' => UserSongs::tableName()], 'us.song_id = songs.id')
-                    ->andWhere(['us.user_id' => $this->botUser->id])
-                    ->orderBy('us.added DESC');
+                $songs->andWhere(['or', [['like', 'songs.title', $query], ['like', 'songs.artist', $query]]]);
             }
         }else{
+            $myTracks = true;
+        }
+
+        if($myTracks){
             $songs->leftJoin(['us' => UserSongs::tableName()], 'us.song_id = songs.id')
                 ->andWhere(['us.user_id' => $this->botUser->id])
                 ->orderBy('us.added DESC');
