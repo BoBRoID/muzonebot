@@ -23,6 +23,12 @@ class TagExtractor
             $tags = self::getID3TagComment($analise);
         }
 
+        array_walk($tags, function(&$item){
+            if(is_array($item)){
+                $item = array_shift($item);
+            }
+        });
+
         $songTags->load([$songTags->formName() => $tags]);
 
         if(array_key_exists('audio', $analise) && array_key_exists('bitrate', $analise['audio'])){
