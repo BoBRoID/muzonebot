@@ -44,6 +44,8 @@ class InlinequeryCommand extends BaseSystemCommand
         $data    = ['inline_query_id' => $inline_query->getId()];
         $results = $articles = [];
 
+        $songs = Song::find();
+
         if ($query !== '') {
             $myTracks = preg_match('/^'.\Yii::t('general', 'мои треки').'/', $query);
 
@@ -51,8 +53,7 @@ class InlinequeryCommand extends BaseSystemCommand
                 $query = mb_substr($query, 10);
             }
 
-            $songs = Song::find()
-                ->where(['like', 'songs.title', $query])
+            $songs->andWhere(['like', 'songs.title', $query])
                 ->orWhere(['like', 'songs.artist', $query]);
 
             if($myTracks){
@@ -60,7 +61,8 @@ class InlinequeryCommand extends BaseSystemCommand
                     ->andWhere(['us.user_id' => $this->botUser->id]);
             }
         }else{
-            $songs = Song::find()->where('songs.title IS NOT NULL')->andWhere('songs.artist IS NOT NULL');
+            $songs->leftJoin(['us' => UserSongs::tableName()], 'us.song_id = songs.id')
+                ->andWhere(['us.user_id' => $this->botUser->id]);
         }
 
         $songsProvider = new ActiveDataProvider([
@@ -89,15 +91,26 @@ class InlinequeryCommand extends BaseSystemCommand
                 $data['next_offset'] = $songsProvider->getPagination()->getPage() + 1;
             }
         }else{
+            if(!empty($query)){
+                $description = \Yii::t('general', 'К сожалению, по запросу `{query}` треки не найдены. {br}Хотите добавить? Отправьте их боту!', [
+                    'query' =>  $query,
+                    'br'    =>  PHP_EOL
+                ]);
+                $command = '/help@MuzOneBot';
+            }else{
+                $description = \Yii::t('general', 'Здесь будут отображаться ваши треки, когда вы их добавите. Чтобы найти трек, продолжайте вводить имя исполнителя или название трека. Хотите узнать как добавить себе треков? Нажмите на сообщение!', [
+                    'query' =>  $query,
+                    'br'    =>  PHP_EOL
+                ]);
+                $command = '/mytracks@MuzOneBot';
+            }
+
             $results[] = new InlineQueryResultArticle([
                 'id'    =>  '001',
                 'title' =>  \Yii::t('general', 'Нет результатов'),
-                'description'   =>  \Yii::t('general', 'К сожалению, по запросу `{query}` треки не найдены. {br}Хотите добавить? Отправьте их боту!', [
-                    'query' =>  $query,
-                    'br'    =>  PHP_EOL
-                ]),
+                'description'   =>  $description,
                 'input_message_content' =>  new InputTextMessageContent([
-                    'message_text' => '/help@MuzOneBot'])
+                    'message_text'      => $command])
             ]);
         }
 
