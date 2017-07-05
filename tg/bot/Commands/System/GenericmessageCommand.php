@@ -107,12 +107,16 @@ class GenericmessageCommand extends BaseSystemCommand
                     $fileName = preg_replace('/(^(.*)\/|\.\w+$)/', '', urldecode($filepath));
                     $fileNameParts = explode('-', $fileName);
 
-                    if(empty($song->title) && $fileNameParts){
-                        $song->title = trim($fileNameParts[0]);
-                    }
+                    if(empty($song->title)){
+                        if(count($fileNameParts) == 1){
+                            $song->title = trim($fileNameParts[0]);
+                        }else{
+                            $song->title = trim($fileNameParts[1]);
 
-                    if(empty($song->artist) && array_key_exists(1, $fileNameParts)){
-                        $song->artist = trim($fileNameParts[1]);
+                            if(empty($song->artist)){
+                                $song->artist = trim($fileNameParts[0]);
+                            }
+                        }
                     }
                 }catch (\Exception $exception){
                     if($this->botUser->getNotificationSettingValue(NotificationSettings::TYPE_WHEN_SYSTEM_ERROR, true)){
