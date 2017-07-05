@@ -104,12 +104,7 @@ class GenericmessageCommand extends BaseSystemCommand
                         \Yii::trace($e->getMessage());
                     }
 
-                    \Yii::trace($filepath);
-
-                    $fileName = preg_replace('/(^(.*)\/|\.\w+$)/', '', $filepath);
-
-                    \Yii::trace($fileName);
-
+                    $fileName = preg_replace('/(^(.*)\/|\.\w+$)/', '', urldecode($filepath));
                     $fileNameParts = explode('-', $fileName);
 
                     if(empty($song->title) && $fileNameParts){
