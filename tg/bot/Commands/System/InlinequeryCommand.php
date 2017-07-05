@@ -70,7 +70,7 @@ class InlinequeryCommand extends BaseSystemCommand
         $songsProvider = new ActiveDataProvider([
             'query'         =>  $songs,
             'pagination'    =>  [
-                'pageSize'  =>  50
+                'pageSize'  =>  49
             ],
         ]);
 
@@ -84,7 +84,7 @@ class InlinequeryCommand extends BaseSystemCommand
              */
             foreach($songsProvider->getModels() as $song){
                 $results[] = new InlineQueryResultCachedAudio([
-                    'id'            =>  '00'.$song->id,
+                    'id'            =>  '0'.$song->id,
                     'audio_file_id' =>  $song->fileId
                 ]);
             }

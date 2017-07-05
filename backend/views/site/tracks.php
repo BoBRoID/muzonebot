@@ -80,6 +80,20 @@ $this->params['breadcrumbs'][] = $this->title;
             }
         ],
         [
+            'label'     =>  \Yii::t('manage', 'Продолжительность'),
+            'attribute' =>  'duration',
+            'value'     =>  function($model){
+                $minutes = floor($model->duration / 60);
+                $seconds = $model->duration - ($minutes * 60);
+
+                if($seconds <= 9){
+                    $seconds = '0'.$seconds;
+                }
+
+                return $minutes.':'.$seconds;
+            }
+        ],
+        [
             'class'     =>  \yii\grid\ActionColumn::className(),
             'buttons'   =>  [
                 'edit'  =>  function($url, $model){
