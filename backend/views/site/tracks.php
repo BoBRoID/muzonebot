@@ -4,6 +4,7 @@
  * @var $searchModel \backend\models\SongSearch
  */
 use yii\helpers\Html;
+use yii\helpers\Url;
 
 $js = <<<'JS'
     $(document).on('click', '.removeTrack', function(){
@@ -24,7 +25,7 @@ $this->registerJs($js);
 
 $this->title = \Yii::t('manage', 'Список добавленых треков');
 
-$this->params['breadcrumbs'][] = ['url' => \yii\helpers\Url::to(['/site/index']), 'label' => \Yii::t('manage', 'Управление системой')];
+$this->params['breadcrumbs'][] = ['url' => Url::to(['/site/index']), 'label' => \Yii::t('manage', 'Управление системой')];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <h1><?=$this->title?></h1>
@@ -46,16 +47,29 @@ $this->params['breadcrumbs'][] = $this->title;
             'attribute' =>  'id'
         ],
         [
-            'label'     =>  \Yii::t('manage', 'Название и исполнитель'),
+            'label'     =>  \Yii::t('manage', 'Название '),
             'attribute' =>  'title',
             'format'    =>  'html',
             'value'     =>  function($model) use($searchModel){
                 /**
                  * @var $model \common\models\Song
                  */
-                return Html::a($model->title, \yii\helpers\Url::current([$searchModel->formName() => ['trackName' => $model->title]]), ['title' => \Yii::t('site', 'Искать треки с названием {name}', ['name' => $model->title])]).
-                    ' - '.
-                    Html::a($model->artist, \yii\helpers\Url::current([$searchModel->formName() => ['artist' => $model->artist]]), ['title' => \Yii::t('site', 'Искать треки исполнителя {name}', ['name' => $model->artist])]);
+                return Html::a($model->title, Url::current([
+                        $searchModel->formName() => ['trackName' => $model->title]
+                    ]), ['title' => \Yii::t('site', 'Искать треки с названием {name}', ['name' => $model->title])]);
+            }
+        ],
+        [
+            'label'     =>  \Yii::t('manage', 'Исполнитель'),
+            'attribute' =>  'artist',
+            'format'    =>  'html',
+            'value'     =>  function($model) use($searchModel){
+                /**
+                 * @var $model \common\models\Song
+                 */
+                return Html::a($model->artist, Url::current([
+                        $searchModel->formName() => ['artist' => $model->artist]
+                ]), ['title' => \Yii::t('site', 'Искать треки исполнителя {name}', ['name' => $model->artist])]);
             }
         ],
         [
@@ -69,7 +83,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 /**
                  * @var $model \common\models\Song
                  */
-                return Html::a($model->user->username ? : $model->user->first_name.' '.$model->user->last_name, \yii\helpers\Url::current([$searchModel->formName() => ['userId' => $model->user_id]]));
+                return Html::a($model->user->username ? : $model->user->first_name.' '.$model->user->last_name, Url::current([$searchModel->formName() => ['userId' => $model->user_id]]));
             }
         ],
         [
@@ -80,7 +94,7 @@ $this->params['breadcrumbs'][] = $this->title;
             }
         ],
         [
-            'label'     =>  \Yii::t('manage', 'Продолжительность'),
+            'label'     =>  \Yii::t('manage', 'Длина'),
             'attribute' =>  'duration',
             'value'     =>  function($model){
                 $minutes = floor($model->duration / 60);
@@ -97,7 +111,7 @@ $this->params['breadcrumbs'][] = $this->title;
             'class'     =>  \yii\grid\ActionColumn::className(),
             'buttons'   =>  [
                 'edit'  =>  function($url, $model){
-                    return Html::a(Html::tag('i', null, ['class' => 'glyphicon glyphicon-pencil']), \yii\helpers\Url::to(['track/edit', 'id' => $model->id]), ['class' => 'btn btn-default']);
+                    return Html::a(Html::tag('i', null, ['class' => 'glyphicon glyphicon-pencil']), Url::to(['track/edit', 'id' => $model->id]), ['class' => 'btn btn-default']);
                 },
                 'play'  =>  function($model){
                     return Html::button(Html::tag('i', null, ['class' => 'glyphicon glyphicon-play']), ['class' => 'btn btn-default pull-left']);
