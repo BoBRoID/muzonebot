@@ -47,14 +47,17 @@ class InlinequeryCommand extends BaseSystemCommand
         $songs = Song::find();
 
         if ($query !== '') {
-            $myTracks = preg_match('/^'.\Yii::t('general', 'мои треки').'/', $query);
+            $myTracksText = \Yii::t('general', 'мои треки');
+            $myTracks = preg_match('/^'.$myTracksText.'/', $query);
 
             if($myTracks){
-                $query = mb_substr($query, 10);
+                $query = trim(mb_substr($query, strlen($myTracksText) + 1));
             }
 
-            $songs->andWhere(['like', 'songs.title', $query])
-                ->orWhere(['like', 'songs.artist', $query]);
+            if($query){
+                $songs->andWhere(['like', 'songs.title', $query])
+                    ->orWhere(['like', 'songs.artist', $query]);
+            }
 
             if($myTracks){
                 $songs->leftJoin(['us' => UserSongs::tableName()], 'us.song_id = songs.id')
