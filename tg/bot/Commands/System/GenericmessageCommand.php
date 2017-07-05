@@ -103,6 +103,17 @@ class GenericmessageCommand extends BaseSystemCommand
                     }catch (ErrorException $e){
                         \Yii::trace($e->getMessage());
                     }
+
+                    $fileName = preg_replace('/(^(.*)\/|\.\w+$)/g', '', $filepath);
+                    $fileNameParts = explode('-', $fileName);
+
+                    if(empty($song->title) && $fileNameParts){
+                        $song->title = trim($fileNameParts[0]);
+                    }
+
+                    if(empty($song->artist) && array_key_exists(1, $fileNameParts)){
+                        $song->artist = trim($fileNameParts[1]);
+                    }
                 }catch (\Exception $exception){
                     if($this->botUser->getNotificationSettingValue(NotificationSettings::TYPE_WHEN_SYSTEM_ERROR, true)){
                         Request::sendMessage([
