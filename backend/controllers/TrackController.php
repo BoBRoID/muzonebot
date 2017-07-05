@@ -6,7 +6,7 @@
  * Time: 8:10 PM
  */
 
-namespace backend\modules\manage\controllers;
+namespace backend\controllers;
 
 
 use common\helpers\TrackDownloader;
