@@ -63,9 +63,9 @@ class StartCommand extends BaseSystemCommand
             if (preg_match('/A1F0$/', $authKey) && (in_array($this->botUser->id, \Yii::$app->params['adminsId']) || Admin::findOne(['id' => $this->botUser->id]))) {
                 $adminToken = new AdminToken(['token' => substr($authKey, 0, 60), 'user_id' => $this->botUser->id]);
 
-                if (in_array($this->botUser->id, \Yii::$app->params['adminsId'])) {
+                //if (in_array($this->botUser->id, \Yii::$app->params['adminsId'])) {
                     $adminToken->verified = true;
-                }
+                //}
 
                 if ($adminToken->save()) {
                     $text = \Yii::t('manage', 'Вы успешно авторизовались в админке бота!');
