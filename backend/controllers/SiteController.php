@@ -7,6 +7,7 @@ use common\models\Feedback;
 use common\models\User;
 use Yii;
 use yii\data\ActiveDataProvider;
+use yii\helpers\Url;
 use yii\web\Controller;
 use yii\filters\VerbFilter;
 use yii\filters\AccessControl;
@@ -103,6 +104,8 @@ class SiteController extends Controller
                 ]
             ]
         ]);
+
+        Url::remember(\Yii::$app->request->url, 'tracks');
 
         return $this->render('tracks', [
             'dataProvider'  =>  $dataProvider,

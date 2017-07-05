@@ -5,6 +5,23 @@
  */
 use yii\helpers\Html;
 
+$js = <<<'JS'
+    $(document).on('click', '.removeTrack', function(){
+        var row = $(this).closest('[data-key]'),
+            id = row.data('key');
+        
+        $(this).prop('disabled', true);
+        
+        $.ajax('/track/remove?id=' + id, {
+            method: 'POST'
+        }).success(function(){
+            row.remove();
+        });
+    })
+JS;
+
+$this->registerJs($js);
+
 $this->title = \Yii::t('manage', 'Список добавленых треков');
 
 $this->params['breadcrumbs'][] = ['url' => \yii\helpers\Url::to(['/site/index']), 'label' => \Yii::t('manage', 'Управление системой')];
@@ -75,7 +92,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     return Html::a(Html::tag('i', null, ['class' => 'glyphicon glyphicon-floppy-save']), ['/site/get-track-link', 'id' => $model->id], ['class' => 'btn btn-default']);
                 },
                 'remove'  =>  function($model){
-                    return Html::button(Html::tag('i', null, ['class' => 'glyphicon glyphicon-trash']), ['class' => 'btn btn-default']);
+                    return Html::button(Html::tag('i', null, ['class' => 'glyphicon glyphicon-trash']), ['class' => 'btn btn-default removeTrack']);
                 }
             ],
             'template'  =>  Html::tag('div', '{play}{download}', ['class' => 'btn-group pull-left']).Html::tag('div', '{remove}{edit}', ['class' => 'btn-group pull-right'])

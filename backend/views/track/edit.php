@@ -71,6 +71,8 @@ echo $form->field($trackForm, 'title'),
 echo Html::tag('div', Html::button(\Yii::t('manage', 'Просмотреть метаданные'), ['class' => 'btn btn-warning', 'data-toggle' => 'modal', 'data-target' => '#metadataModal']), ['class' => 'text-center']);
 echo Html::tag('br');
 echo Html::tag('div', Html::submitButton(\Yii::t('manage', 'Сохранить изменения')), ['class' => 'text-center']);
+echo Html::tag('br');
+echo Html::tag('div', Html::a(\Yii::t('manage', 'К результатам поиска'), \yii\helpers\Url::previous('tracks'), ['class' => 'btn btn-info']), ['class' => 'text-center']);
 
 $form->end();
 

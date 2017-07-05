@@ -12,6 +12,7 @@ namespace backend\controllers;
 use common\helpers\TrackDownloader;
 use common\models\Song;
 use backend\models\TrackForm;
+use common\models\UserSongs;
 use ErrorException;
 use yii\web\BadRequestHttpException;
 use yii\filters\AccessControl;
@@ -63,6 +64,21 @@ class TrackController extends Controller
         return $this->render('edit', [
             'trackForm' =>  $trackForm
         ]);
+    }
+
+    public function actionRemove($id){
+        if(!\Yii::$app->request->isAjax){
+            throw new BadRequestHttpException();
+        }
+
+        $track = Song::findOne($id);
+
+        if(!$track){
+            throw new NotFoundHttpException(\Yii::t('manage', 'Трек не найден!'));
+        }
+
+        UserSongs::deleteAll(['song_id' => $track->id]);
+        return $track->delete();
     }
 
     public function actionGetMetadata($id){
