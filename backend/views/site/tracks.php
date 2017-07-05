@@ -23,6 +23,19 @@ JS;
 
 $this->registerJs($js);
 
+$css = <<<'CSS'
+.table tr td a{
+    white-space: pre-wrap; /* css-3 */    
+    white-space: -moz-pre-wrap; /* Mozilla, since 1999 */
+    white-space: -pre-wrap; /* Opera 4-6 */    
+    white-space: -o-pre-wrap; /* Opera 7 */    
+    word-wrap: break-word; /* Internet Explorer 5.5+ */
+    word-wrap: break-word;
+}
+CSS;
+
+$this->registerCss($css);
+
 $this->title = \Yii::t('manage', 'Список добавленых треков');
 
 $this->params['breadcrumbs'][] = ['url' => Url::to(['/site/index']), 'label' => \Yii::t('manage', 'Управление системой')];
@@ -42,6 +55,9 @@ $this->params['breadcrumbs'][] = $this->title;
 </div>
 <?=\yii\grid\GridView::widget([
     'dataProvider'  =>  $dataProvider,
+    'tableOptions'  =>  [
+        'class' =>  'table table-condensed table-striped'
+    ],
     'columns'       =>  [
         [
             'attribute' =>  'id'
@@ -55,8 +71,8 @@ $this->params['breadcrumbs'][] = $this->title;
                  * @var $model \common\models\Song
                  */
                 return Html::a($model->title, Url::current([
-                        $searchModel->formName() => ['trackName' => $model->title]
-                    ]), ['title' => \Yii::t('site', 'Искать треки с названием {name}', ['name' => $model->title])]);
+                    $searchModel->formName() => ['trackName' => $model->title]
+                ]), ['title' => \Yii::t('site', 'Искать треки с названием {name}', ['name' => $model->title])]);
             }
         ],
         [
@@ -68,8 +84,22 @@ $this->params['breadcrumbs'][] = $this->title;
                  * @var $model \common\models\Song
                  */
                 return Html::a($model->artist, Url::current([
-                        $searchModel->formName() => ['artist' => $model->artist]
+                    $searchModel->formName() => ['artist' => $model->artist]
                 ]), ['title' => \Yii::t('site', 'Искать треки исполнителя {name}', ['name' => $model->artist])]);
+            }
+        ],
+        [
+            'label'     =>  \Yii::t('manage', 'Длина'),
+            'attribute' =>  'duration',
+            'value'     =>  function($model){
+                $minutes = floor($model->duration / 60);
+                $seconds = $model->duration - ($minutes * 60);
+
+                if($seconds <= 9){
+                    $seconds = '0'.$seconds;
+                }
+
+                return $minutes.':'.$seconds;
             }
         ],
         [
@@ -94,20 +124,6 @@ $this->params['breadcrumbs'][] = $this->title;
             }
         ],
         [
-            'label'     =>  \Yii::t('manage', 'Длина'),
-            'attribute' =>  'duration',
-            'value'     =>  function($model){
-                $minutes = floor($model->duration / 60);
-                $seconds = $model->duration - ($minutes * 60);
-
-                if($seconds <= 9){
-                    $seconds = '0'.$seconds;
-                }
-
-                return $minutes.':'.$seconds;
-            }
-        ],
-        [
             'class'     =>  \yii\grid\ActionColumn::className(),
             'buttons'   =>  [
                 'edit'  =>  function($url, $model){
@@ -123,7 +139,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     return Html::button(Html::tag('i', null, ['class' => 'glyphicon glyphicon-trash']), ['class' => 'btn btn-default removeTrack']);
                 }
             ],
-            'template'  =>  Html::tag('div', '{play}{download}', ['class' => 'btn-group pull-left']).Html::tag('div', '{remove}{edit}', ['class' => 'btn-group pull-right'])
+            'template'  =>  Html::tag('div', Html::tag('div', '{play}{download}', ['class' => 'btn-group pull-left']).Html::tag('div', '{remove}{edit}', ['class' => 'btn-group pull-right']), ['style' => 'width: 180px'])
         ]
     ]
 ])?>
