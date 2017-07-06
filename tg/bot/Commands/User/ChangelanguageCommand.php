@@ -38,18 +38,6 @@ class ChangelanguageCommand extends BaseUserCommand
      * {@inheritdoc}
      */
     public function execute(){
-        $message = $this->getMessage();
-        $chat = $message->getChat();
-        $text = strtolower($message->getText(true));
-
-        $data = ['chat_id' => $chat->getId()];
-
-        if ($text !== 'glasnost' && !$chat->isPrivateChat()) {
-            $data['text'] = \Yii::t('general', 'Данный функционал доступен только в приватном диалоге с ботом!');
-
-            return Request::sendMessage($data);
-        }
-
         return (new ChangeLanguage($this))->setBotUser($this->botUser)->runIndex();
     }
 }

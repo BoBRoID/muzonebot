@@ -21,10 +21,16 @@ class SongSearch extends \yii\base\Model
 
     public $userId;
 
+    public $addedRange;
+
+    public $addedFrom;
+
+    public $addedTo;
+
     public function rules()
     {
         return [
-            [['query', 'artist', 'trackName'], 'safe'],
+            [['query', 'artist', 'trackName', 'addedFrom', 'addedTo'], 'string'],
             [['userId'], 'integer']
         ];
     }

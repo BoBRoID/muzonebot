@@ -50,6 +50,12 @@ $this->params['breadcrumbs'][] = $this->title;
     <?=$form->field($searchModel, 'userId')->dropDownList($searchModel->getUsers())?>
     <?=$form->field($searchModel, 'artist')?>
     <?=$form->field($searchModel, 'trackName')?>
+    <?=$form->field($searchModel, 'addedFrom')->widget(\nex\datepicker\DatePicker::className(), [
+
+    ])?>
+    <?=$form->field($searchModel, 'addedTo')->widget(\nex\datepicker\DatePicker::className(), [
+
+    ])?>
     <div class="text-center"><button type="submit" class="btn btn-success"><?=\Yii::t('manage', 'Фильтровать список треков')?></button></div>
     <?php $form->end(); ?>
 </div>
@@ -91,6 +97,9 @@ $this->params['breadcrumbs'][] = $this->title;
         [
             'label'     =>  \Yii::t('manage', 'Длина'),
             'attribute' =>  'duration',
+            'contentOptions'    =>  [
+                'class' =>  'text-center'
+            ],
             'value'     =>  function($model){
                 $minutes = floor($model->duration / 60);
                 $seconds = $model->duration - ($minutes * 60);
@@ -119,8 +128,12 @@ $this->params['breadcrumbs'][] = $this->title;
         [
             'label'     =>  \Yii::t('manage', 'Добавлено'),
             'attribute' =>  'added',
+            'format'    =>  'html',
+            'contentOptions'    =>  [
+                'class' =>  'text-center'
+            ],
             'value'     =>  function($model){
-                return \Yii::$app->formatter->asDatetime($model->added);
+                return \Yii::$app->formatter->asDatetime($model->added, 'MM/dd/yyyy').'&nbsp;'.Html::tag('br', null, ['class' => 'hidden-md hidden-lg']).\Yii::$app->formatter->asDatetime($model->added, 'HH:mm');
             }
         ],
         [
@@ -139,7 +152,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     return Html::button(Html::tag('i', null, ['class' => 'glyphicon glyphicon-trash']), ['class' => 'btn btn-default removeTrack']);
                 }
             ],
-            'template'  =>  Html::tag('div', Html::tag('div', '{play}{download}', ['class' => 'btn-group pull-left']).Html::tag('div', '{remove}{edit}', ['class' => 'btn-group pull-right']), ['style' => 'width: 180px'])
+            'template'  =>  Html::tag('div', Html::tag('div', '{play}{download}', ['class' => 'btn-group btn-group-sm pull-left']).Html::tag('div', '{remove}{edit}', ['class' => 'btn-group btn-group-sm pull-right']), ['style' => 'width: 150px'])
         ]
     ]
 ])?>
