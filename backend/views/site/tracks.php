@@ -18,7 +18,16 @@ $js = <<<'JS'
         }).success(function(){
             row.remove();
         });
-    })
+    });
+    
+    $("#songsearch-addedfrom").on("dp.change", function (e) {
+        console.log('adfdsf');
+        $('#songsearch-addedto').data("DateTimePicker").minDate(e.date);
+    });
+    $("#songsearch-addedto").on("dp.change", function (e) {
+        console.log('adf');
+        $('#songsearch-addedfrom').data("DateTimePicker").maxDate(e.date);
+    });
 JS;
 
 $this->registerJs($js);
@@ -47,14 +56,30 @@ $this->params['breadcrumbs'][] = $this->title;
     Фильтры
     <?php $form = \yii\bootstrap\ActiveForm::begin(['method' => 'get', 'layout' => 'horizontal']); ?>
     <?=$form->field($searchModel, 'query')?>
-    <?=$form->field($searchModel, 'userId')->dropDownList($searchModel->getUsers())?>
     <?=$form->field($searchModel, 'artist')?>
     <?=$form->field($searchModel, 'trackName')?>
+    <?=$form->field($searchModel, 'userId')->widget(\kartik\select2\Select2::className(), [
+        'data'      =>  $searchModel->getUsers(),
+        'options'   =>  [
+            'multiple'  =>  true
+        ]
+    ])?>
     <?=$form->field($searchModel, 'addedFrom')->widget(\nex\datepicker\DatePicker::className(), [
-
+        'clientOptions'  =>  [
+            'sideBySide'    =>  false,
+            'maxDate'       =>  date('Y-m-d 23:59:59'),
+            'format'        =>  'MM/DD/YYYY HH:mm',
+            'locale'        =>  \Yii::$app->language
+        ]
     ])?>
     <?=$form->field($searchModel, 'addedTo')->widget(\nex\datepicker\DatePicker::className(), [
-
+        'clientOptions'  =>  [
+            'sideBySide'    =>  false,
+            'useCurrent'    =>  false,
+            'format'        =>  'MM/DD/YYYY HH:mm',
+            'maxDate'       =>  date('Y-m-d 23:59:59'),
+            'locale'        =>  \Yii::$app->language
+        ]
     ])?>
     <div class="text-center"><button type="submit" class="btn btn-success"><?=\Yii::t('manage', 'Фильтровать список треков')?></button></div>
     <?php $form->end(); ?>

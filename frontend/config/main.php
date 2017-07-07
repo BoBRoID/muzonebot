@@ -61,13 +61,17 @@ return [
         'urlManager' => [
             'class' => 'codemix\localeurls\UrlManager',
             'languages' => [
-                'russian'       => 'ru-RU',
-                'english_us'    => 'en-US',
-                'ukrainian'     => 'uk-UA',
-                'portuguese_br' => 'pt-BR'
+                'ru-RU',
+                'en-US',
+                'uk-UA',
+                'pt-BR'
             ],
             'enablePrettyUrl'   =>  true,
             'showScriptName'    =>  false,
+            'ignoreLanguageUrlPatterns' => [
+                // route pattern => url pattern
+                '#^site/is-guest#' => '#^site/is-guest#',
+            ],
         ],
     ],
     'params' => $params,

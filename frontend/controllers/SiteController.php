@@ -171,6 +171,7 @@ class SiteController extends Controller
 
     /**
      * @return string
+     * @throws \yii\base\InvalidParamException
      */
     public function actionStats(){
         $chatsStats = Chat::find()
@@ -213,6 +214,17 @@ class SiteController extends Controller
             'chatsStats'        =>  $chatsStats,
             'chatsCount'        =>  $chatsCount,
             'topUploaderStats'  =>  $topUploaderStats
+        ]);
+    }
+
+    public function actionGetRoutes(){
+        \Yii::$app->response->format = 'raw';
+
+        return 'var routes = '.json_encode([
+            'tracks'    =>  [
+                'toggle'    =>  Url::to(['/tracks/toggle-my']),
+                'edit'      =>  Url::to(['/tracks/edit'])
+            ]
         ]);
     }
 

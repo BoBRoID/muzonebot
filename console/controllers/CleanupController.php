@@ -9,6 +9,7 @@
 namespace console\controllers;
 
 
+use common\models\AdminToken;
 use common\models\UserToken;
 use yii\console\Controller;
 
@@ -21,6 +22,10 @@ class CleanupController extends Controller
 
     public function actionTokens(){
         \Yii::$app->db->createCommand()->delete(UserToken::tableName(), ['<=', 'expire', time()]);
+    }
+
+    public function actionAdminTokens(){
+        \Yii::$app->db->createCommand()->delete(AdminToken::tableName(), ['<=', 'expire', time()]);
     }
 
     public function actionSongsLinks(){

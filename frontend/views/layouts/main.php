@@ -15,17 +15,18 @@ $loginJs = <<<'JS'
 var timer = null;
 
 $('#loginModal').on('shown.bs.modal', function () {
-  timer = setInterval(function(){
-      $.ajax({
-        url: '/site/is-guest'
-      }).success(function(data){
-          if(data === false){
-              location.reload();
-          }
-      });
-  }, 1000);
+    timer = setInterval(function(){
+        $.ajax({
+          url: '/site/is-guest',
+          method: 'post'
+        }).success(function(data){
+            if(data === false){
+                location.reload();
+            }
+        });
+    }, 1000);
 }).on('hide.bs.modal', function () {
-  clearInterval(timer);
+    clearInterval(timer);
 })
 JS;
 
@@ -66,6 +67,8 @@ $css = <<<'CSS'
 CSS;
 
 $this->registerCss($css);
+
+$this->registerJsFile(\yii\helpers\Url::to(['/site/get-routes']));
 
 ?>
 <?php $this->beginPage() ?>

@@ -4,10 +4,10 @@ $(document).ready(function(){
             button = $(this);
 
         $.ajax({
-            method: 'POST',
-            url: '/tracks/toggle-my',
+            url: routes.tracks.toggle,
+            method: 'post',
             data: {
-                song_id: song_id
+                trackId: song_id
             }
         }).success(function(data){
             if(data.result === 'success'){
@@ -24,7 +24,7 @@ $(document).ready(function(){
         $('#trackEditModal').modal('show');
 
         $.ajax({
-            url: '/tracks/edit?id=' + id
+            url: routes.tracks.edit + '?id=' + id
         }).success(function(data){
             $('#trackEditModal .modal-body div').html(data);
         })
@@ -33,7 +33,7 @@ $(document).ready(function(){
             return;
         }
 
-        var modal = $(this).find('.modal-body div');
+        var modal = $(this).find('.modal-body');
 
         if(modal === undefined){
             modal = $(this).find('.modal-body');

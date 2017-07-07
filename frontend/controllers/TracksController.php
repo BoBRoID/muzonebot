@@ -13,8 +13,10 @@ use frontend\models\forms\SongSearch;
 use common\models\Song;
 use common\models\UserSongs;
 use frontend\models\forms\TrackForm;
+use yii\base\InvalidParamException;
 use yii\data\ActiveDataProvider;
 use yii\filters\AccessControl;
+use yii\web\BadRequestHttpException;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 
@@ -62,41 +64,45 @@ class TracksController extends Controller
     }
 
     public function actionToggleMy(){
-        if(\Yii::$app->request->isAjax == false || ($song_id = \Yii::$app->request->post('song_id', false)) == false){
-            throw new NotFoundHttpException();
+        if(\Yii::$app->request->isAjax === false){
+            throw new BadRequestHttpException('only ajax');
         }
 
         \Yii::$app->response->format = 'json';
 
+        if(!$trackId = \Yii::$app->request->post('trackId')){
+            throw new InvalidParamException('trackId is required');
+        }
+
         /**
          * @var Song $song
          */
-        $song = Song::find()->where(['id' => $song_id])->with('userSong')->one();
+        $song = Song::find()->where(['id' => $trackId])->with('userSong')->one();
 
         if(!$song){
-            throw new NotFoundHttpException();
+            throw new NotFoundHttpException('song not found');
         }
 
         if($song->userSong){
-            if($song->userSong->delete()){
-                return ['result' => 'success', 'state' => 'deleted', 'message' => \Yii::t('site', 'Добавить в мои треки')];
-            }else{
-                throw new \Exception('cant remove user song');
+            if(!$song->userSong->delete()){
+                throw new \RuntimeException('cant remove user song');
             }
-        }else{
-            if(\Yii::$app->user->getIdentity()->addTrack($song)){
-                return ['result' => 'success', 'state' => 'added', 'message' => \Yii::t('site', 'Убрать из моих треков')];
-            }else{
-                throw new \Exception('cant add user song');
-            }
+
+            return ['result' => 'success', 'state' => 'deleted', 'message' => \Yii::t('site', 'Добавить в мои треки')];
         }
+
+        if(!\Yii::$app->user->getIdentity()->addTrack($song)){
+            throw new \RuntimeException('cant add user song');
+        }
+
+        return ['result' => 'success', 'state' => 'added', 'message' => \Yii::t('site', 'Убрать из моих треков')];
     }
 
     public function actionEdit($id){
         $song = Song::findOne(['id' => $id]);
 
-        if(!$song || $song->user_id != \Yii::$app->user->identity->getId()){
-            throw new NotFoundHttpException();
+        if(!$song || (int)$song->user_id !== (int)\Yii::$app->user->identity->getId()){
+            throw new NotFoundHttpException('its not your track');
         }
 
         $form = new TrackForm();
