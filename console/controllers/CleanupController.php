@@ -17,15 +17,15 @@ class CleanupController extends Controller
 {
 
     public function actionMessages(){
-        \Yii::$app->db->createCommand()->delete('message', ['<=', 'date', date('Y-m-d 00:00:00')]);
+        \Yii::$app->db->createCommand()->delete('message', ['<=', 'date', date('Y-m-d 00:00:00')])->execute();
     }
 
     public function actionTokens(){
-        \Yii::$app->db->createCommand()->delete(UserToken::tableName(), ['<=', 'expire', time()]);
+        \Yii::$app->db->createCommand()->delete(UserToken::tableName(), ['<=', 'expire', time()])->execute();
     }
 
     public function actionAdminTokens(){
-        \Yii::$app->db->createCommand()->delete(AdminToken::tableName(), ['<=', 'expire', time()]);
+        \Yii::$app->db->createCommand()->delete(AdminToken::tableName(), ['<=', 'expire', time()])->execute();
     }
 
     public function actionSongsLinks(){
