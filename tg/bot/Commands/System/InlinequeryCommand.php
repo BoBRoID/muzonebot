@@ -55,7 +55,7 @@ class InlinequeryCommand extends BaseSystemCommand
             }
 
             if($query){
-                $songs->andWhere(['or', [['like', 'songs.title', $query], ['like', 'songs.artist', $query]]]);
+                $songs->andWhere(['or', ['like', 'songs.title', $query], ['like', 'songs.artist', $query]]);
             }
         }else{
             $myTracks = true;
