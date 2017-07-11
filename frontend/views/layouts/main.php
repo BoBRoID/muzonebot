@@ -73,12 +73,12 @@ $this->registerJsFile(\yii\helpers\Url::to(['/site/get-routes']));
 
 ?>
 <?php $this->beginPage() ?>
+
 <!DOCTYPE html>
 <html lang="<?= Yii::$app->language ?>">
 <head>
     <meta charset="<?= Yii::$app->charset ?>">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <?= Html::csrfMetaTags() ?>
     <title><?= Html::encode($this->title) ?></title>
     <?php $this->head() ?>
@@ -86,72 +86,71 @@ $this->registerJsFile(\yii\helpers\Url::to(['/site/get-routes']));
 <body>
 <?php $this->beginBody() ?>
 
-<div class="wrap">
-    <?php
-    NavBar::begin([
-        'brandLabel' => 'MuzOne',
-        'brandUrl' => Yii::$app->homeUrl,
-        'options' => [
-            'class' => 'navbar-light navbar-toggleable navbar-fixed-top bg-faded',
-        ],
-        'containerOptions' =>  [
-            'class' =>  'collapse navbar-collapse d-flex justify-content-end'
+<?php
+NavBar::begin([
+    'brandLabel' => 'MuzOne',
+    'brandUrl' => Yii::$app->homeUrl,
+    'options' => [
+        'class' => 'navbar-light navbar-toggleable navbar-fixed-top bg-faded',
+    ],
+    'containerOptions' =>  [
+        'class' =>  'collapse navbar-collapse d-flex justify-content-end'
+    ]
+]);
+
+$username = null;
+
+if(!\Yii::$app->user->isGuest){
+    /**
+     * @var $user \frontend\models\User
+     */
+    $user = \Yii::$app->user->identity;
+    $username = trim($user->username ? : $user->first_name.' '.$user->last_name);
+}
+
+$items = [
+    '<li>'.
+    \app\widgets\LanguagePicker::widget()
+    . '</li>',
+    ['label' => Yii::t('site', 'Главная'), 'url' => ['/site/index']],
+    ['label' => \Yii::t('site', 'Статистика'), 'url' => ['/site/stats']],
+    ['label' => Yii::t('site', 'О сервисе'), 'url' => ['/site/about']]
+];
+
+$items[] = Yii::$app->user->isGuest ?
+    ['label' => \Yii::t('site', 'Авторизация'), 'url' => '#', 'options' => ['data-toggle' => 'modal', 'data-target' => '#loginModal']] :
+    '<li>'.
+    Html::a(
+        \Yii::t('site', 'Привет, {user}!', ['user' => $username]),
+        '#',
+        ['data-toggle' => 'dropdown', 'class' => 'dropdown-toggle']
+    ).
+    \yii\bootstrap\Dropdown::widget([
+        'items' => [
+            [
+                'label'  =>  \Yii::t('site', 'Мои треки'),
+                'url'   =>  '/tracks/my'
+            ],
+            '<li role="presentation" class="divider"></li>',
+            '<li>'
+            .Html::beginForm(['/site/logout'])
+            .Html::submitButton(
+                \Yii::t('site', 'Выйти'),
+                ['class' => 'btn btn-link']
+            )
+            .Html::endForm()
+            .'</li>'
         ]
-    ]);
+    ])
+    . '</li>';
 
-    $username = null;
-
-    if(!\Yii::$app->user->isGuest){
-        /**
-         * @var $user \frontend\models\User
-         */
-        $user = \Yii::$app->user->identity;
-        $username = trim($user->username ? : $user->first_name.' '.$user->last_name);
-    }
-
-    $items = [
-        '<li>'.
-        \app\widgets\LanguagePicker::widget()
-        . '</li>',
-        ['label' => Yii::t('site', 'Главная'), 'url' => ['/site/index']],
-        ['label' => \Yii::t('site', 'Статистика'), 'url' => ['/site/stats']],
-        ['label' => Yii::t('site', 'О сервисе'), 'url' => ['/site/about']]
-    ];
-
-    $items[] = Yii::$app->user->isGuest ?
-        ['label' => \Yii::t('site', 'Авторизация'), 'url' => '#', 'options' => ['data-toggle' => 'modal', 'data-target' => '#loginModal']] :
-        '<li>'.
-        Html::a(
-            \Yii::t('site', 'Привет, {user}!', ['user' => $username]),
-            '#',
-            ['data-toggle' => 'dropdown', 'class' => 'dropdown-toggle']
-        ).
-        \yii\bootstrap\Dropdown::widget([
-            'items' => [
-                [
-                    'label'  =>  \Yii::t('site', 'Мои треки'),
-                    'url'   =>  '/tracks/my'
-                ],
-                '<li role="presentation" class="divider"></li>',
-                '<li>'
-                .Html::beginForm(['/site/logout'])
-                .Html::submitButton(
-                    \Yii::t('site', 'Выйти'),
-                    ['class' => 'btn btn-link']
-                )
-                .Html::endForm()
-                .'</li>'
-            ]
-        ])
-        . '</li>';
-
-    echo Nav::widget([
-        'options'   => ['class' => 'navbar navbar-toggleable-md navbar-light bg-faded'],
-        'items'     => $items,
-    ]);
-    NavBar::end();
-    ?>
-
+echo Nav::widget([
+    'options'   => ['class' => 'navbar navbar-toggleable-md navbar-light bg-faded'],
+    'items'     => $items,
+]);
+NavBar::end();
+?>
+<div class="wrap">
     <div class="container pt-3">
         <?= Breadcrumbs::widget([
             'links'                 =>  isset($this->params['breadcrumbs']) ? $this->params['breadcrumbs'] : [],
@@ -172,8 +171,8 @@ $this->registerJsFile(\yii\helpers\Url::to(['/site/get-routes']));
             ]);
 
             echo $this->render('../utilites/login.php'),
-                Html::tag('b', \Yii::t('site', 'Важно!')),
-                \Yii::t('site', 'Не закрывайте это модальное окно пока бот не ответит вам что вы успешно авторизованы. В инном случае вам придётся после ответа обновить страницу самостоятельно!');
+            Html::tag('b', \Yii::t('site', 'Важно!')),
+            \Yii::t('site', 'Не закрывайте это модальное окно пока бот не ответит вам что вы успешно авторизованы. В инном случае вам придётся после ответа обновить страницу самостоятельно!');
 
             Modal::end();
         }else{
