@@ -1,4 +1,12 @@
 $(document).ready(function(){
+    var pleer = undefined,
+        icon = function(name){
+            return '<i class="fa fa-' + name + '"></i>';
+        },
+        preloader = function(){
+            return '<div class="text-center"><i class="fa fa-spinner fa-spin fa-fw"></i></div>';
+        };
+
     $(document).on('click', '.toggleTrack', function(){
         var song_id = $(this).closest('[data-key]').data('key'),
             button = $(this);
@@ -42,5 +50,57 @@ $(document).ready(function(){
         modal.html('<div class="text-center"><i class="fa fa-spinner fa-spin fa-3x fa-fw"></i><span class="sr-only">Loading...</span></div>');
     }).on('submit', '.modal [data-pjax-container] form', function(){
         console.log($(this));
+    }).on('click', '.listenTrack', function(){
+        var id = $(this).closest('[data-key]').attr('data-key'),
+            currentTrack = pleer!== undefined ? $(pleer.container).closest('[data-key]') : undefined;
+
+        if(currentTrack !== undefined && $(currentTrack).attr('data-key') === id){
+            pleer.playPause();
+        }else{
+            if(pleer !== undefined){
+                $(currentTrack)
+                    .find('.waveform')
+                    .toggleClass('pt-3');
+
+                $(currentTrack)
+                    .find('button[data-id]')
+                    .html(icon('play'))
+                    .addClass('listenTrack')
+                    .removeClass('pauseTrack');
+
+                pleer.destroy();
+            }
+
+            var wavesurfer = WaveSurfer.create({
+                container: '[data-key="' + id + '"] .waveform',
+                height: 40
+            });
+
+            $(this)
+                .html(preloader())
+                .prop('disabled', true);
+
+            wavesurfer.load(routes.tracks.get + '?id=' + id);
+
+            wavesurfer.on('ready', function () {
+                wavesurfer.play();
+                $(wavesurfer.container).toggleClass('pt-3');
+            });
+
+            pleer = wavesurfer;
+        }
+
+        $(this)
+            .html(icon('pause'))
+            .prop('disabled', false)
+            .toggleClass('listenTrack')
+            .toggleClass('pauseTrack');
+    }).on('click', '.pauseTrack', function(){
+        pleer.playPause();
+
+        $(this)
+            .html(icon('play'))
+            .toggleClass('listenTrack')
+            .toggleClass('pauseTrack');
     });
 });

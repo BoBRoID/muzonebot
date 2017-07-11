@@ -7,7 +7,9 @@
 
 namespace frontend\assets;
 
+use yii\bootstrap\BootstrapAsset;
 use yii\web\AssetBundle;
+use yii\web\YiiAsset;
 
 /**
  * @author Qiang Xue <qiang.xue@gmail.com>
@@ -20,11 +22,12 @@ class AppAsset extends AssetBundle
         'css/site.css',
     ];
     public $js = [
-        'js/main.js'
+        'js/main.js',
+        '//cdnjs.cloudflare.com/ajax/libs/wavesurfer.js/1.3.7/wavesurfer.min.js'
     ];
     public $depends = [
-        'yii\web\YiiAsset',
-        'yii\bootstrap\BootstrapAsset',
-        'rmrevin\yii\fontawesome\cdn\AssetBundle'
+        YiiAsset::class,
+        BootstrapAsset::class,
+        \rmrevin\yii\fontawesome\cdn\AssetBundle::class
     ];
 }

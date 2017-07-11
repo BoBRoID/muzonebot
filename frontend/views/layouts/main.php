@@ -3,6 +3,7 @@
 /* @var $this \yii\web\View */
 /* @var $content string */
 
+use yii\bootstrap\Modal;
 use yii\helpers\Html;
 use yii\bootstrap\Nav;
 use yii\bootstrap\NavBar;
@@ -91,95 +92,92 @@ $this->registerJsFile(\yii\helpers\Url::to(['/site/get-routes']));
         'brandLabel' => 'MuzOne',
         'brandUrl' => Yii::$app->homeUrl,
         'options' => [
-            'class' => 'navbar-inverse navbar-fixed-top',
+            'class' => 'navbar-light navbar-toggleable navbar-fixed-top bg-faded',
         ],
+        'containerOptions' =>  [
+            'class' =>  'collapse navbar-collapse d-flex justify-content-end'
+        ]
     ]);
 
     $username = null;
 
     if(!\Yii::$app->user->isGuest){
-        $username = trim(Yii::$app->user->identity->username ? : Yii::$app->user->identity->first_name.' '.Yii::$app->user->identity->last_name);
+        /**
+         * @var $user \frontend\models\User
+         */
+        $user = \Yii::$app->user->identity;
+        $username = trim($user->username ? : $user->first_name.' '.$user->last_name);
     }
 
+    $items = [
+        '<li>'.
+        \app\widgets\LanguagePicker::widget()
+        . '</li>',
+        ['label' => Yii::t('site', 'Главная'), 'url' => ['/site/index']],
+        ['label' => \Yii::t('site', 'Статистика'), 'url' => ['/site/stats']],
+        ['label' => Yii::t('site', 'О сервисе'), 'url' => ['/site/about']]
+    ];
+
+    $items[] = Yii::$app->user->isGuest ?
+        ['label' => \Yii::t('site', 'Авторизация'), 'url' => '#', 'options' => ['data-toggle' => 'modal', 'data-target' => '#loginModal']] :
+        '<li>'.
+        Html::a(
+            \Yii::t('site', 'Привет, {user}!', ['user' => $username]),
+            '#',
+            ['data-toggle' => 'dropdown', 'class' => 'dropdown-toggle']
+        ).
+        \yii\bootstrap\Dropdown::widget([
+            'items' => [
+                [
+                    'label'  =>  \Yii::t('site', 'Мои треки'),
+                    'url'   =>  '/tracks/my'
+                ],
+                '<li role="presentation" class="divider"></li>',
+                '<li>'
+                .Html::beginForm(['/site/logout'])
+                .Html::submitButton(
+                    \Yii::t('site', 'Выйти'),
+                    ['class' => 'btn btn-link']
+                )
+                .Html::endForm()
+                .'</li>'
+            ]
+        ])
+        . '</li>';
+
     echo Nav::widget([
-        'options' => ['class' => 'navbar-nav navbar-right'],
-        'items' => [
-            '<li>'.
-            \app\widgets\LanguagePicker::widget()
-            . '</li>',
-            ['label' => Yii::t('site', 'Главная'), 'url' => ['/site/index']],
-            ['label' => \Yii::t('site', 'Статистика'), 'url' => ['/site/stats']],
-            ['label' => Yii::t('site', 'О сервисе'), 'url' => ['/site/about']],
-            Yii::$app->user->isGuest ? (
-                ['label' => \Yii::t('site', 'Авторизация'), 'url' => '#', 'options' => ['data-toggle' => 'modal', 'data-target' => '#loginModal']]
-            ) : (
-                '<li>'.
-                Html::a(
-                    \Yii::t('site', 'Привет, {user}!', ['user' => $username]),
-                    '#',
-                    ['data-toggle' => 'dropdown', 'class' => 'dropdown-toggle']
-                ).
-                \yii\bootstrap\Dropdown::widget([
-                    'items' => [
-                        [
-                            'label'  =>  \Yii::t('site', 'Мои треки'),
-                            'url'   =>  '/tracks/my'
-                        ],
-                        '<li role="presentation" class="divider"></li>',
-                        '<li>'
-                        .Html::beginForm(['/site/logout'], 'post')
-                        .Html::submitButton(
-                            \Yii::t('site', 'Выйти'),
-                            ['class' => 'btn btn-link']
-                        )
-                        .Html::endForm()
-                        .'</li>'
-                    ]
-                ])
-                . '</li>'
-            )
-        ],
+        'options'   => ['class' => 'navbar navbar-toggleable-md navbar-light bg-faded'],
+        'items'     => $items,
     ]);
     NavBar::end();
     ?>
 
-    <div class="container">
+    <div class="container pt-3">
         <?= Breadcrumbs::widget([
-            'links' => isset($this->params['breadcrumbs']) ? $this->params['breadcrumbs'] : [],
+            'links'                 =>  isset($this->params['breadcrumbs']) ? $this->params['breadcrumbs'] : [],
+            'itemTemplate'          =>  "<li class=\"breadcrumb-item\">{link}</li>\n",
+            'activeItemTemplate'    =>  "<li class=\"breadcrumb-item active\">{link}</li>\n"
         ]) ?>
         <?= $content ?>
         <?php if(\Yii::$app->user->isGuest){
             $this->registerJs($loginJs);
 
-            \yii\bootstrap\Modal::begin([
+            Modal::begin([
                 'id'        =>  'loginModal',
                 'header'    =>  \Yii::t('site', 'Авторизация'),
+                'size'      =>  Modal::SIZE_LARGE,
                 'options'   =>  [
                     'data-static'   =>  1
                 ]
             ]);
 
-            $hash = \Yii::$app->session->get('tgAuthToken');
-            $url = 'https://telegram.me/muzonebot?start='.$hash;
-        ?>
-            <?=\Yii::t('site', 'Для авторизации, пожалуйста, нажмите на кнопку ниже, затем нажмите START в диалоге с ботом в вашем клиенте telegram')?>
-            <br>
-            <br>
-            <div class="text-center">
-                <?=Html::a(\Yii::t('site', 'Авторизоваться через telegram'), $url, ['target' => '_blank', 'class' => 'btn btn-default'])?>
-            </div>
-            <br>
-            <?=\Yii::t('site', 'или отправьте боту следующую команду')?>
-            <br>
-            <br>
-            <blockquote>
-                <small>/start <?=$hash?></small>
-            </blockquote>
-            <b><?=\Yii::t('site', 'Важно!')?></b> <?=\Yii::t('site', 'Не закрывайте это модальное окно пока бот не ответит вам что вы успешно авторизованы. В инном случае вам придётся после ответа обновить страницу самостоятельно!')?>
-        <?php
-            \yii\bootstrap\Modal::end();
+            echo $this->render('../utilites/login.php'),
+                Html::tag('b', \Yii::t('site', 'Важно!')),
+                \Yii::t('site', 'Не закрывайте это модальное окно пока бот не ответит вам что вы успешно авторизованы. В инном случае вам придётся после ответа обновить страницу самостоятельно!');
+
+            Modal::end();
         }else{
-            \yii\bootstrap\Modal::begin([
+            Modal::begin([
                 'id'        =>  'trackEditModal',
                 'header'    =>  \Yii::t('site', 'Редактирование трека')
             ]);
@@ -187,7 +185,7 @@ $this->registerJsFile(\yii\helpers\Url::to(['/site/get-routes']));
                 'enablePushState'   =>  false
             ]);
             \yii\widgets\Pjax::end();
-            \yii\bootstrap\Modal::end();
+            Modal::end();
         } ?>
     </div>
 </div>

@@ -6,42 +6,43 @@
  * @var $searchModel \frontend\models\forms\SongSearch
  */
 
-use yii\helpers\Html;
+use yii\helpers\Url;
+use yii\widgets\ActiveForm;
+use yii\widgets\ListView;
+use yii\widgets\Pjax;
 
 $this->title = \Yii::t('site', '{siteName} - муызка из мессенджера telegram', ['siteName' => \Yii::$app->params['siteName']]);
 ?>
 
-<div class="row">
-    <div class="col-xs-8 col-xs-offset-2">
-        <div class="well">
-            <h3 class="text-center"><?=\Yii::t('site', 'Поиск по базе треков')?></h3>
-            <?php $form = \yii\widgets\ActiveForm::begin(['method' => 'get', 'action' => \yii\helpers\Url::to('/site/search')]) ?>
-            <?=$form->field($searchModel, 'query', ['inputOptions' => ['class' => 'form-control', 'placeholder' => \Yii::t('site', 'Название трека, албьома, или исполнитель')]])->label(false)?>
+<div class="jumbotron jumbotron-fluid">
+    <div class="container">
+        <h1 class="display-3 pb-2"><?=\Yii::t('site', 'Поиск по базе треков')?></h1>
+        <div class="lead">
+            <?php $form = ActiveForm::begin(['method' => 'get', 'action' => Url::to('/site/search')]) ?>
+            <?=$form->field($searchModel, 'query', ['inputOptions' => ['class' => 'form-control form-control-lg text-center', 'placeholder' => \Yii::t('site', 'Название трека, албьома, или исполнитель')]])->label(false)?>
             <div class="text-center">
                 <button type="submit" class="btn btn-success"><?=\Yii::t('site', 'Искать')?></button>
             </div>
-            <?php \yii\widgets\ActiveForm::end() ?>
+            <?php ActiveForm::end() ?>
         </div>
     </div>
 </div>
-<div class="well">
-    <h3 class="text-center"><?=\Yii::t('site', '10 последних добавленных треков')?></h3>
-    <?php
-    \yii\widgets\Pjax::begin(['id' => 'last10tracksPjax']);
-    echo \yii\widgets\ListView::widget([
-        'dataProvider'  =>  $songs,
-        'options'       =>  [
-            'class' =>  'list-group'
-        ],
-        'itemOptions'   =>  ['class' => 'list-group-item'],
-        'itemView'      =>  function($model) use($searchModel){
-            return $this->render('../utilites/song.php', [
-                'model'         =>  $model,
-                'searchModel'   =>  $searchModel
-            ]);
-        },
-        'layout'    =>  '{items}'
-    ]);;
-    \yii\widgets\Pjax::end();
-    ?>
-</div>
+<h3 class="text-center"><?=\Yii::t('site', '10 последних добавленных треков')?></h3>
+<?php
+Pjax::begin(['id' => 'last10tracksPjax']);
+echo ListView::widget([
+    'dataProvider'  =>  $songs,
+    'options'       =>  [
+        'class' =>  'list-group'
+    ],
+    'itemOptions'   =>  ['class' => 'list-group-item'],
+    'itemView'      =>  function($model) use($searchModel){
+        return $this->render('../utilites/song.php', [
+            'model'         =>  $model,
+            'searchModel'   =>  $searchModel
+        ]);
+    },
+    'layout'    =>  '{items}'
+]);
+Pjax::end();
+?>

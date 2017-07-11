@@ -16,7 +16,8 @@
     "require": {
         "php": ">=5.4.0",
         "yiisoft/yii2": "~2.0.6",
-        "yiisoft/yii2-bootstrap": "~2.0.0",
+        "yiisoft/yii2-bootstrap": "~2.1.0@dev",
+        "bower-asset/bootstrap": "~4.0.0@alpha",
         "yiisoft/yii2-swiftmailer": "~2.0.0",
         "longman/telegram-bot": "~0.45",
         "james-heinrich/getid3": "^1.9",
