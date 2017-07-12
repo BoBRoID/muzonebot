@@ -39,7 +39,7 @@ $managerBlocks = [
 <hr>
 <div class="row">
     <?php foreach($managerBlocks as $block){ ?>
-    <div class="col-xs-12 col-md-6 col-lg-4 col-xl-3">
+    <div class="col-12 col-md-6 col-lg-4 col-xl-3">
         <div class="panel panel-default">
             <div class="panel-body text-center">
                 <?=$block['title']?>

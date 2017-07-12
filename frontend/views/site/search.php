@@ -9,7 +9,7 @@ use yii\helpers\Html;
 $this->title = \Yii::t('site', 'Поиск');
 ?>
 <div class="row">
-    <div class="col-8 offset-2">
+    <div class="col-12 col-sm-10 offset-sm-1 col-md-8 offset-md-2">
         <div class="jumbotron jumbotron-fluid mb-3 pb-3">
             <div class="container">
                 <h1 class="display-3 pb-2"><?=\Yii::t('site', 'Поиск по базе треков')?></h1>
@@ -39,13 +39,19 @@ $this->title = \Yii::t('site', 'Поиск');
                                 <div class="card-block">
                                     <div class="col-10 offset-1">
                                         <?=$form->field($searchModel, 'trackName', [
-                                            'wrapperOptions'  => [
-                                                'class' =>  'col-9'
+                                            'horizontalCssClasses'  =>  [
+                                                'label' =>  'form-control-label col-12 col-lg-4 col-xl-3',
+                                            ],
+                                            'wrapperOptions'        => [
+                                                'class' =>  'col-12 col-lg-8 col-xl-9'
                                             ]
                                         ])->label(\Yii::t('site', 'Названию'))?>
                                         <?=$form->field($searchModel, 'artist', [
-                                            'wrapperOptions'  => [
-                                                'class' =>  'col-9'
+                                            'horizontalCssClasses'  =>  [
+                                                'label' =>  'form-control-label col-12 col-lg-4 col-xl-3',
+                                            ],
+                                            'wrapperOptions'        => [
+                                                'class' =>  'col-12 col-lg-8 col-xl-9'
                                             ]
                                         ])->label(\Yii::t('site', 'Исполнителю'))?>
                                     </div>

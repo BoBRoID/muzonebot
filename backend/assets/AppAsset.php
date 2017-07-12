@@ -2,6 +2,7 @@
 
 namespace backend\assets;
 
+use yii\bootstrap\BootstrapPluginAsset;
 use yii\web\AssetBundle;
 use yii\web\YiiAsset;
 use yii\bootstrap\BootstrapAsset;
@@ -18,10 +19,15 @@ class AppAsset extends AssetBundle
         'css/custom.css',
     ];
     public $js = [
+        'js/pace.min.js',
+        'js/app.js',
+        'js/views/main.js',
+
     ];
     public $depends = [
         YiiAsset::class,
         BootstrapAsset::class,
-        \rmrevin\yii\fontawesome\cdn\AssetBundle::class
+        \rmrevin\yii\fontawesome\cdn\AssetBundle::class,
+        BootstrapPluginAsset::class
     ];
 }

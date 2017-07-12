@@ -15,6 +15,6 @@ $url = 'https://telegram.me/muzonebot?start='.$hash;
 <?=\Yii::t('site', 'или отправьте боту следующую команду')?>
 <br>
 <br>
-<blockquote>
+<blockquote class="blockquote">
     <small>/start <?=$hash?></small>
 </blockquote>

@@ -77,8 +77,8 @@ class TrackController extends Controller
             throw new NotFoundHttpException(\Yii::t('manage', 'Трек не найден!'));
         }
 
-        UserSongs::deleteAll(['song_id' => $track->id]);
-        return $track->delete();
+        $track->deleted = 1;
+        return $track->save();
     }
 
     public function actionGetMetadata($id){

@@ -7,21 +7,10 @@ $params = array_merge(
 );
 
 return [
-    'id' => 'app-backend',
+    'id' => 'MuzAdmin',
     'basePath' => dirname(__DIR__),
-    'controllerNamespace' => 'backend\controllers',
     'bootstrap' => ['log'],
-    'modules'   =>  [
-        'translatemanager' => [
-            'class' => 'lajax\translatemanager\Module',
-            'allowedIPs' => ['*'],
-            'roles' => ['@'],
-        ],
-        'rbac' => [
-            'class'     =>  'dektrium\rbac\RbacWebModule',
-            'admins'    =>  ['SomeWho']
-        ],
-    ],
+    'controllerNamespace' => 'backend\controllers',
     'components' => [
         'i18n' => [
             'translations' => [
@@ -50,8 +39,8 @@ return [
         ],
         'user' => [
             'idParam'           =>  'adminTgAuthToken',
-            'identityClass' => 'backend\models\User',
-            'enableAutoLogin' => true,
+            'identityClass'     =>  'backend\models\User',
+            'enableAutoLogin'   =>  true,
         ],
         'session' => [
             // this is the name of the session cookie used for login on the backend
@@ -66,13 +55,23 @@ return [
                 ],
             ],
         ],
-
         'errorHandler' => [
             'errorAction' => 'site/error',
         ],
         'urlManager' => [
             'enablePrettyUrl' => true,
             'showScriptName' => false,
+        ],
+    ],
+    'modules'   =>  [
+        'translatemanager' => [
+            'class' => 'lajax\translatemanager\Module',
+            'allowedIPs' => ['*'],
+            'roles' => ['@'],
+        ],
+        'rbac' => [
+            'class'     =>  'dektrium\rbac\RbacWebModule',
+            'admins'    =>  ['SomeWho']
         ],
     ],
     'params' => $params,

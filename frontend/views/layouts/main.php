@@ -3,9 +3,9 @@
 /* @var $this \yii\web\View */
 /* @var $content string */
 
+use common\widgets\Modal;
 use frontend\widgets\NavBar;
 use yii\bootstrap\Dropdown;
-use yii\bootstrap\Modal;
 use yii\helpers\Html;
 use yii\bootstrap\Nav;
 use yii\widgets\Breadcrumbs;
