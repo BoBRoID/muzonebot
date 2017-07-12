@@ -3,22 +3,25 @@
 namespace backend\assets;
 
 use yii\web\AssetBundle;
+use yii\web\YiiAsset;
+use yii\bootstrap\BootstrapAsset;
 
 /**
  * Main backend application asset bundle.
  */
 class AppAsset extends AssetBundle
 {
-    public $basePath = '@webroot';
-    public $baseUrl = '@web';
+    public $sourcePath = '@app/web/static';
     public $css = [
-        'css/site.css',
+        'css/simple-line-icons.css',
+        'css/style.css',
+        'css/custom.css',
     ];
     public $js = [
     ];
     public $depends = [
-        'yii\web\YiiAsset',
-        'yii\bootstrap\BootstrapAsset',
-        'rmrevin\yii\fontawesome\cdn\AssetBundle'
+        YiiAsset::class,
+        BootstrapAsset::class,
+        \rmrevin\yii\fontawesome\cdn\AssetBundle::class
     ];
 }

@@ -15,6 +15,7 @@ use Longman\TelegramBot\Entities\Audio;
  * @property int $genreID
  * @property int $added
  * @property int $user_id
+ * @property int $deleted
  *
  * @property User $user
  * @property UserSongs $userSong
@@ -37,7 +38,7 @@ class Song extends \yii\db\ActiveRecord
         return [
             [['fileId', 'title'], 'required'],
             [['title', 'artist'], 'string'],
-            [['duration', 'added', 'genreID', 'user_id'], 'integer'],
+            [['duration', 'added', 'genreID', 'user_id', 'deleted'], 'integer'],
             [['fileId'], 'string', 'max' => 40],
             [['fileId'], 'unique'],
         ];
@@ -105,7 +106,8 @@ class Song extends \yii\db\ActiveRecord
             'duration' => 'Duration',
             'added' => 'Added',
             'genreID' => 'genreID',
-            'user_id'   =>  'userID'
+            'user_id'   =>  'userID',
+            'deleted'   =>  'deleted',
         ];
     }
 }

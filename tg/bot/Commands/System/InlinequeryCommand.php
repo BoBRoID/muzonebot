@@ -44,7 +44,8 @@ class InlinequeryCommand extends BaseSystemCommand
         $data    = ['inline_query_id' => $inline_query->getId()];
         $results = $articles = [];
 
-        $songs = Song::find();
+        $songs = Song::find()
+            ->andWhere(['deleted' => 0]);
 
         if ($query !== '') {
             $myTracksText = \Yii::t('general', 'мои треки');

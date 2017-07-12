@@ -8,8 +8,6 @@ use common\models\User;
 use Yii;
 use frontend\models\forms\SongSearch;
 use common\models\Song;
-use Longman\TelegramBot\Request;
-use Longman\TelegramBot\Telegram;
 use common\models\UserToken;
 use yii\data\ActiveDataProvider;
 use common\models\Chat;
@@ -21,6 +19,8 @@ use yii\helpers\Url;
 use yii\web\Controller;
 use yii\filters\VerbFilter;
 use yii\web\NotFoundHttpException;
+use yii\web\ErrorAction;
+use yii\captcha\CaptchaAction;
 
 class SiteController extends Controller
 {
@@ -67,10 +67,10 @@ class SiteController extends Controller
     {
         return [
             'error' => [
-                'class' => 'yii\web\ErrorAction',
+                'class' => ErrorAction::class,
             ],
             'captcha' => [
-                'class' => 'yii\captcha\CaptchaAction',
+                'class' => CaptchaAction::class,
                 'fixedVerifyCode' => YII_ENV_TEST ? 'testme' : null,
             ],
         ];
@@ -80,11 +80,12 @@ class SiteController extends Controller
      * Displays homepage.
      *
      * @return string
+     * @throws \yii\base\InvalidParamException
      */
     public function actionIndex()
     {
         $dataProvider = new ActiveDataProvider([
-            'query' =>  Song::find()->with('userSong'),
+            'query' =>  Song::find()->with('userSong')->where(['deleted' => 0]),
             'sort'  =>  [
                 'defaultOrder'  =>  [
                     'added' => SORT_DESC
@@ -117,7 +118,7 @@ class SiteController extends Controller
     }
 
     public function actionGetTrack($id){
-        $song = Song::findOne(['id' => $id]);
+        $song = Song::findOne(['id' => $id, 'deleted' => 0]);
 
         if(!$song){
             throw new NotFoundHttpException('song with that id is not found!');
@@ -154,6 +155,7 @@ class SiteController extends Controller
      * Displays about page.
      *
      * @return string
+     * @throws \yii\base\InvalidParamException
      */
     public function actionAbout()
     {
@@ -164,6 +166,7 @@ class SiteController extends Controller
      * Displays login page.
      *
      * @return string
+     * @throws \yii\base\InvalidParamException
      */
     public function actionLogin()
     {
@@ -184,8 +187,9 @@ class SiteController extends Controller
         $topUploaderStats = Song::find()
             ->select(['count' => new Expression('COUNT(`s`.`id`)'), 'u.username', 'u.first_name', 'u.last_name'])
             ->from(['s' => Song::tableName(), 'u' => User::tableName()])
-            ->where(['not', ['s.user_id' => 0]])
-            ->where('s.user_id = u.id')
+            ->andWhere(['not', ['s.user_id' => 0]])
+            ->andWhere('s.user_id = u.id')
+            ->andWhere(['s.deleted' => 0])
             ->groupBy('s.user_id')
             ->orderBy('count DESC')
             ->limit(10)

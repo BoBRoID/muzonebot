@@ -2,8 +2,7 @@
 
 /* @var $this yii\web\View */
 
-use yii\helpers\Html;
-use yii\bootstrap\ActiveForm;
+use rmrevin\yii\fontawesome\FA;
 
 $this->title = 'Login';
 $this->params['breadcrumbs'][] = $this->title;
@@ -25,6 +24,18 @@ JS;
 $this->registerJs($js);
 
 ?>
-<div class="text-center" style="height: 100%;">
-    <a href="<?=$url?>" target="_blank" class="btn btn-lg btn-default" style="margin-top:10%;">Login <?=\rmrevin\yii\fontawesome\FA::i('telegram')?></a>
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="card-group mb-0">
+            <div class="card card-inverse card-info py-5 d-md-down-none" style="width:44%">
+                <div class="card-block text-center">
+                    <div>
+                        <div class="text-center">
+                            <a href="<?=$url?>" target="_blank" class="btn btn-outline-primary btn-lg active">Login <?=\rmrevin\yii\fontawesome\FA::i('telegram')?></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
