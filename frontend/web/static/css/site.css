@@ -113,3 +113,8 @@ a.desc:after {
 .nav > li > form > button.logout:focus {
     outline: none;
 }
+
+.one-line{
+    overflow: hidden;
+    white-space: nowrap;
+}

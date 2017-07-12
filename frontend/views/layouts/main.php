@@ -3,10 +3,10 @@
 /* @var $this \yii\web\View */
 /* @var $content string */
 
+use frontend\widgets\NavBar;
 use yii\bootstrap\Modal;
 use yii\helpers\Html;
 use yii\bootstrap\Nav;
-use yii\bootstrap\NavBar;
 use yii\widgets\Breadcrumbs;
 use frontend\assets\AppAsset;
 
@@ -88,13 +88,18 @@ $this->registerJsFile(\yii\helpers\Url::to(['/site/get-routes']));
 
 <?php
 NavBar::begin([
-    'brandLabel' => 'MuzOne',
-    'brandUrl' => Yii::$app->homeUrl,
-    'options' => [
-        'class' => 'navbar-light navbar-toggleable navbar-fixed-top bg-faded',
+    'brandLabel'        => 'MuzOne',
+    'brandUrl'          => Yii::$app->homeUrl,
+    'options'           => [
+        'class'             =>  'navbar-light navbar-toggleable-sm bd-navbar bg-faded',
+        'tag'               =>  'header'
     ],
-    'containerOptions' =>  [
-        'class' =>  'collapse navbar-collapse d-flex justify-content-end'
+    'containerOptions'  =>  [
+        'class'             =>  'collapse navbar-collapse justify-content-end',
+        'aria-expanded'     =>  false
+    ],
+    'innerContainerOptions'  =>  [
+        'class'             =>  'container',
     ]
 ]);
 
@@ -109,8 +114,8 @@ if(!\Yii::$app->user->isGuest){
 }
 
 $items = [
-    '<li>'.
-    \app\widgets\LanguagePicker::widget()
+    '<li class="nav-item">'.
+    \frontend\widgets\LanguagePicker::widget()
     . '</li>',
     ['label' => Yii::t('site', 'Главная'), 'url' => ['/site/index']],
     ['label' => \Yii::t('site', 'Статистика'), 'url' => ['/site/stats']],
@@ -123,7 +128,7 @@ $items[] = Yii::$app->user->isGuest ?
     Html::a(
         \Yii::t('site', 'Привет, {user}!', ['user' => $username]),
         '#',
-        ['data-toggle' => 'dropdown', 'class' => 'dropdown-toggle']
+        ['data-toggle' => 'dropdown', 'class' => 'nav-link']
     ).
     \yii\bootstrap\Dropdown::widget([
         'items' => [
@@ -145,7 +150,7 @@ $items[] = Yii::$app->user->isGuest ?
     . '</li>';
 
 echo Nav::widget([
-    'options'   => ['class' => 'navbar navbar-toggleable-md navbar-light bg-faded'],
+    'options'   => ['class' => 'navbar navbar-nav bg-faded'],
     'items'     => $items,
 ]);
 NavBar::end();

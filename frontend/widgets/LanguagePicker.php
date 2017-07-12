@@ -1,6 +1,6 @@
 <?php
 
-namespace app\widgets;
+namespace frontend\widgets;
 use common\models\Language;
 use yii\bootstrap\Dropdown;
 use yii\helpers\Html;
@@ -44,7 +44,7 @@ class LanguagePicker extends \yii\base\Widget
         return Html::a(
             $currentLanguage['name'].' '.json_decode('"'.$currentLanguage['flag'].'"'),
             '#',
-            ['data-toggle' => 'dropdown', 'class' => 'dropdown-toggle']
+            ['data-toggle' => 'dropdown', 'class' => 'nav-link']
         ).$dropdown;
     }
 
