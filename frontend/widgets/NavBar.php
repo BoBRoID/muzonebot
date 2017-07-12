@@ -45,7 +45,7 @@ class NavBar extends \yii\bootstrap\NavBar
         }
         if ($this->brandLabel !== false) {
             Html::addCssClass($this->brandOptions, ['widget' => 'navbar-brand']);
-            echo Html::a($this->brandLabel, $this->brandUrl === false ? Yii::$app->homeUrl : $this->brandUrl, $this->brandOptions);
+            echo Html::a($this->brandLabel, $this->brandUrl === false ? \Yii::$app->homeUrl : $this->brandUrl, $this->brandOptions);
         }
         echo $this->renderToggleButton();
         echo Html::endTag('div');

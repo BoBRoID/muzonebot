@@ -52,6 +52,7 @@ $(document).ready(function(){
         console.log($(this));
     }).on('click', '.listenTrack', function(){
         var id = $(this).closest('[data-key]').attr('data-key'),
+            button = $(this),
             currentTrack = pleer!== undefined ? $(pleer.container).closest('[data-key]') : undefined;
 
         if(currentTrack !== undefined && $(currentTrack).attr('data-key') === id){
@@ -62,12 +63,7 @@ $(document).ready(function(){
                     .find('.waveform')
                     .toggleClass('pt-3');
 
-                $(currentTrack)
-                    .find('button[data-id]')
-                    .html(icon('play'))
-                    .addClass('listenTrack')
-                    .removeClass('pauseTrack');
-
+                pleer.pause();
                 pleer.destroy();
             }
 
@@ -76,7 +72,7 @@ $(document).ready(function(){
                 height: 40
             });
 
-            $(this)
+            $(button)
                 .html(preloader())
                 .prop('disabled', true);
 
@@ -87,20 +83,30 @@ $(document).ready(function(){
                 $(wavesurfer.container).toggleClass('pt-3');
             });
 
+            wavesurfer.on('pause', function(){
+                $(this).closest('[data-key]')
+                    .find('button.listenTrack')
+                    .html(icon('play'))
+                    .addClass('listenTrack')
+                    .removeClass('pauseTrack');
+            });
+
+            wavesurfer.on('play', function(){
+                $(this).closest('[data-key]')
+                    .find('button.listenTrack')
+                    .html(icon('pause'))
+                    .prop('disabled', false)
+                    .addClass('pauseTrack')
+                    .removeClass('listenTrack');
+            });
+
+            wavesurfer.on('finish', function(){
+                console.log($(this).closest('[data-key]'));
+            });
+
             pleer = wavesurfer;
         }
-
-        $(this)
-            .html(icon('pause'))
-            .prop('disabled', false)
-            .toggleClass('listenTrack')
-            .toggleClass('pauseTrack');
     }).on('click', '.pauseTrack', function(){
         pleer.playPause();
-
-        $(this)
-            .html(icon('play'))
-            .toggleClass('listenTrack')
-            .toggleClass('pauseTrack');
     });
 });

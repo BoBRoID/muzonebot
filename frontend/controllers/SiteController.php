@@ -120,7 +120,7 @@ class SiteController extends Controller
         $song = Song::findOne(['id' => $id]);
 
         if(!$song){
-            throw new NotFoundHttpException();
+            throw new NotFoundHttpException('song with that id is not found!');
         }
 
         try{

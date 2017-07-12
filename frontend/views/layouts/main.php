@@ -4,6 +4,7 @@
 /* @var $content string */
 
 use frontend\widgets\NavBar;
+use yii\bootstrap\Dropdown;
 use yii\bootstrap\Modal;
 use yii\helpers\Html;
 use yii\bootstrap\Nav;
@@ -32,38 +33,8 @@ $('#loginModal').on('shown.bs.modal', function () {
 JS;
 
 $css = <<<'CSS'
-.navbar-inverse .dropdown-menu form .btn.btn-link:hover{
-    color: #262626;
-    text-decoration: none;
-    background-color: #f5f5f5;
-}
-
-.navbar-inverse .dropdown-menu form .btn.btn-link:active{
-    text-decoration: none;
-}
-
-.dropdown-menu > li form button.btn.btn-link{
-    display: block;
-    padding: 3px 20px;
-    clear: both;
-    font-weight: normal;
-    line-height: 1.42857143;
-    color: #333;
-    white-space: nowrap;
-    width: 100%;
-    text-align: left;
-}
-
-@media (max-width: 768px) {
-    .navbar-inverse .dropdown-menu > li form button.btn.btn-link{
-        color: #9d9d9d;
-        background-color: transparent !important;
-    }
-    
-    .navbar-inverse .dropdown-menu > li form button.btn.btn-link:hover{
-        color: #fff;
-    }
-
+button.btn-link.dropdown-item{
+    cursor: pointer;
 }
 CSS;
 
@@ -124,27 +95,27 @@ $items = [
 
 $items[] = Yii::$app->user->isGuest ?
     ['label' => \Yii::t('site', 'Авторизация'), 'url' => '#', 'options' => ['data-toggle' => 'modal', 'data-target' => '#loginModal']] :
-    '<li>'.
+    '<li class="nav-item dropdown">'.
     Html::a(
         \Yii::t('site', 'Привет, {user}!', ['user' => $username]),
         '#',
-        ['data-toggle' => 'dropdown', 'class' => 'nav-link']
+        ['data-toggle' => 'dropdown', 'class' => 'nav-link dropdown-toggle', 'id' => 'navbarUserMenu']
     ).
-    \yii\bootstrap\Dropdown::widget([
+    Dropdown::widget([
         'items' => [
             [
                 'label'  =>  \Yii::t('site', 'Мои треки'),
                 'url'   =>  '/tracks/my'
             ],
-            '<li role="presentation" class="divider"></li>',
-            '<li>'
+            '<div role="presentation" class="divider"></div>',
+            '<div>'
             .Html::beginForm(['/site/logout'])
             .Html::submitButton(
                 \Yii::t('site', 'Выйти'),
-                ['class' => 'btn btn-link']
+                ['class' => 'btn btn-link dropdown-item']
             )
             .Html::endForm()
-            .'</li>'
+            .'</div>'
         ]
     ])
     . '</li>';

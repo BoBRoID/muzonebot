@@ -26,5 +26,19 @@ echo \yii\widgets\ListView::widget([
             'searchLink'    =>  '/tracks/my'
         ]);
     },
+    'pager'     =>  [
+        'options'           =>  [
+            'class' =>  'pagination mx-auto mt-3 d-inline-flex'
+        ],
+        'linkOptions'       =>  [
+            'class'             =>  'page-link',
+        ],
+        'pageCssClass'      =>  'page-item',
+        'prevPageCssClass'  =>  'page-item',
+        'nextPageCssClass'  =>  'page-item',
+        'disabledListItemSubTagOptions' =>  [
+            'class' =>  'page-link'
+        ]
+    ],
     'layout'    =>  '{items} '.\yii\helpers\Html::tag('div', '{pager}', ['class' => 'text-center'])
 ]);
