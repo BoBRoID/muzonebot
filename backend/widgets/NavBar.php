@@ -32,6 +32,9 @@ class NavBar extends \yii\bootstrap\NavBar
         }
         $options = $this->options;
         $tag = ArrayHelper::remove($options, 'tag', 'nav');
+        if (!isset($this->containerOptions['id'])) {
+            $this->containerOptions['id'] = "{$this->options['id']}-collapse";
+        }
         echo Html::beginTag($tag, $options);
         echo $this->renderToggleButton();
         if ($this->brandLabel !== false) {
