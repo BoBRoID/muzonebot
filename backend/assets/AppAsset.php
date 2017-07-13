@@ -2,6 +2,7 @@
 
 namespace backend\assets;
 
+use dosamigos\chartjs\ChartJsAsset;
 use yii\bootstrap\BootstrapPluginAsset;
 use yii\web\AssetBundle;
 use yii\web\YiiAsset;
@@ -22,12 +23,12 @@ class AppAsset extends AssetBundle
         'js/pace.min.js',
         'js/app.js',
         'js/views/main.js',
-
     ];
     public $depends = [
         YiiAsset::class,
         BootstrapAsset::class,
         \rmrevin\yii\fontawesome\cdn\AssetBundle::class,
-        BootstrapPluginAsset::class
+        BootstrapPluginAsset::class,
+        ChartJsAsset::class
     ];
 }

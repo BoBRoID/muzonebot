@@ -5,11 +5,23 @@
 
 use backend\assets\AppAsset;
 use backend\widgets\NavBar;
+use rmrevin\yii\fontawesome\FA;
+use yii\bootstrap\Nav;
 use yii\helpers\Html;
 use yii\widgets\Breadcrumbs;
 use common\widgets\Alert;
 
 AppAsset::register($this);
+
+$username = null;
+
+if(!\Yii::$app->user->isGuest){
+    /**
+     * @var $user \frontend\models\User
+     */
+    $user = \Yii::$app->user->identity;
+    $username = trim($user->username ? : $user->first_name.' '.$user->last_name);
+}
 ?>
 <?php $this->beginPage() ?>
 <!DOCTYPE html>
@@ -23,10 +35,82 @@ AppAsset::register($this);
         <?php $this->head() ?>
     </head>
     <body class="app header-fixed sidebar-fixed aside-menu-fixed aside-menu-hidden">
-    <?php $this->beginBody() ?>
-        <header class="app-header navbar">
+    <?php $this->beginBody();
+
+    NavBar::begin([
+        'brandLabel'        => 'adm.MuzOne',
+        'brandUrl'          => Yii::$app->homeUrl,
+        'options'           => [
+            'class'             =>  'app-header navbar',
+            'tag'               =>  'header'
+        ],
+        'containerOptions'  =>  [
+            'class'             =>  'collapse navbar-collapse justify-content-end test',
+            'aria-expanded'     =>  false
+        ],
+        'innerContainerOptions'  =>  [
+            'class'             =>  'container',
+        ]
+    ]);
+    echo Nav::widget([
+        'options'   =>  [
+            'class' =>  'nav navbar-nav d-md-down-none',
+        ],
+        'items' => [
+            [
+                'linkOptions'   =>  [
+                    'class'     =>  'nav-link navbar-toggler sidebar-toggler',
+                ],
+                'label'     =>  '☰',
+                'url'       =>  '#'
+            ],
+            [
+                'options'   =>  [
+                    'class'     =>  'nav-item px-3',
+                ],
+                'label' =>  \Yii::t('manage', 'Главная'),
+                'url'   =>  \yii\helpers\Url::to(['/site/index'])
+            ],
+        ],
+    ]);
+    echo Nav::widget([
+        'encodeLabels'  =>  false,
+        'options'   =>  [
+            'class' =>  'nav navbar-nav ml-auto',
+        ],
+        'items' => [
+            [
+                'label' =>  \Yii::$app->user->identity->username,
+                'url'   =>  '#',
+                'dropDownOptions'   =>  [
+                    'class' =>  'dropdown-menu dropdown-menu-right'
+                ],
+                'items' =>  [
+                    Html::tag('div', Html::tag('strong', \Yii::t('manage', 'Аккаунт')), ['class' => 'dropdown-header text-center']),
+                    '<div>'
+                    .Html::beginForm(['/site/logout'])
+                    .Html::submitButton(
+                        FA::i('lock').\Yii::t('manage', 'Выйти'),
+                        ['class' => 'btn btn-link dropdown-item']
+                    )
+                    .Html::endForm()
+                    .'</div>'
+                ],
+            ],
+            [
+                'label'     =>  '☰',
+                'options'   =>  [
+                    'class'     =>  'nav-item d-md-down-none'
+                ],
+                'url'   =>  '#'
+            ]
+        ],
+    ]);
+    NavBar::end();
+    ?>
+        <!--<header class="app-header navbar">
             <button class="navbar-toggler mobile-sidebar-toggler d-lg-none" type="button">☰</button>
-            <a class="navbar-brand" href="#"></a>
+            <a class="navbar-brand" href="#">MuzOneAdmin</a>
             <ul class="nav navbar-nav d-md-down-none">
                 <li class="nav-item">
                     <a class="nav-link navbar-toggler sidebar-toggler" href="#">☰</a>
@@ -54,8 +138,8 @@ AppAsset::register($this);
                 </li>
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle nav-link" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
-                        <img src="img/avatars/6.jpg" class="img-avatar" alt="admin@bootstrapmaster.com">
-                        <span class="d-md-down-none">admin</span>
+                        <img src="img/avatars/6.jpg" class="img-avatar" alt="<?=$username?>">
+                        <span class="d-md-down-none"><?=$username?></span>
                     </a>
                     <div class="dropdown-menu dropdown-menu-right">
 
@@ -86,7 +170,7 @@ AppAsset::register($this);
                 </li>
 
             </ul>
-        </header>
+        </header>-->
 
         <div class="app-body">
             <div class="sidebar">

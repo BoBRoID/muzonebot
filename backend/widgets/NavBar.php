@@ -44,15 +44,6 @@ class NavBar extends \yii\bootstrap\NavBar
             }
             echo Html::beginTag('nav', $this->innerContainerOptions);
         }
-        echo Html::beginTag('div', ['class' => 'd-flex justify-content-between']);
-        if (!isset($this->containerOptions['id'])) {
-            $this->containerOptions['id'] = "{$this->options['id']}-collapse";
-        }
-        echo Html::endTag('div');
-        Html::addCssClass($this->containerOptions, ['collapse' => 'collapse', 'widget' => 'navbar-toggleable-xs']);
-        $options = $this->containerOptions;
-        $tag = ArrayHelper::remove($options, 'tag', 'div');
-        echo Html::beginTag($tag, $options);
     }
 
     /**
@@ -60,13 +51,29 @@ class NavBar extends \yii\bootstrap\NavBar
      */
     public function run()
     {
-        $tag = ArrayHelper::remove($this->containerOptions, 'tag', 'div');
-        echo Html::endTag($tag);
         if ($this->renderInnerContainer) {
             echo Html::endTag('nav');
         }
         $tag = ArrayHelper::remove($this->options, 'tag', 'nav');
         echo Html::endTag($tag);
         BootstrapPluginAsset::register($this->getView());
+    }
+
+    /**
+     * Renders collapsible toggle button.
+     * @return string the rendering toggle button.
+     */
+    protected function renderToggleButton()
+    {
+        $screenReader = Html::tag('span', null, ['class' => 'navbar-toggler-icon']);
+
+        return Html::button($screenReader, [
+            'class'         => 'navbar-toggler mobile-sidebar-toggler d-lg-none',
+            'data-toggle'   => 'collapse',
+            'data-target'   => "#{$this->containerOptions['id']}",
+            'aria-controls' =>  $this->containerOptions['id'],
+            'aria-expanded' =>  false,
+            'aria-label'    =>  $this->screenReaderToggleText
+        ]);
     }
 }
