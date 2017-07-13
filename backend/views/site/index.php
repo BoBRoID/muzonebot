@@ -78,8 +78,14 @@ $managerBlocks = [
             <div class="chart-wrapper" style="height:70px;">
                 <?php if($newTracksToday && $lastAddedTrack){ ?>
                 <p class="px-3 ml-1">
-                    Last track: choo choo motherfucker - major pain<br>
-                    added by: major pain, on 07.07.2017 14:47
+                    <span class="one-line"><?=\Yii::t('manage', 'Последний: {track}', [
+                            'track' =>  $lastAddedTrack->title.' - '.$lastAddedTrack->artist
+                        ])?></span>
+                    <br>
+                    <span class="one-line"><?=\Yii::t('manage', 'Добавил {username} {date}', [
+                            'date'      =>  \Yii::$app->formatter->asDateTime($lastAddedTrack->added),
+                            'username'  =>  $lastAddedTrack->getUser()->username
+                        ])?></span>
                 </p>
                 <?php } ?>
             </div>

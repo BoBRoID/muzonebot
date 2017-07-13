@@ -3,7 +3,8 @@
  * @var $dataProvider \yii\data\ActiveDataProvider
  * @var $searchModel \backend\models\SongSearch
  */
-use yii\helpers\Html;
+use rmrevin\yii\fontawesome\FA;
+use yii\bootstrap\Html;
 use yii\helpers\Url;
 
 $js = <<<'JS'
@@ -58,29 +59,6 @@ $this->params['breadcrumbs'][] = $this->title;
     <?=$form->field($searchModel, 'query')?>
     <?=$form->field($searchModel, 'artist')?>
     <?=$form->field($searchModel, 'trackName')?>
-    <?=$form->field($searchModel, 'userId')->widget(\kartik\select2\Select2::className(), [
-        'data'      =>  $searchModel->getUsers(),
-        'options'   =>  [
-            'multiple'  =>  true
-        ]
-    ])?>
-    <?=$form->field($searchModel, 'addedFrom')->widget(\nex\datepicker\DatePicker::className(), [
-        'clientOptions'  =>  [
-            'sideBySide'    =>  false,
-            'maxDate'       =>  date('Y-m-d 23:59:59'),
-            'format'        =>  'MM/DD/YYYY HH:mm',
-            'locale'        =>  \Yii::$app->language
-        ]
-    ])?>
-    <?=$form->field($searchModel, 'addedTo')->widget(\nex\datepicker\DatePicker::className(), [
-        'clientOptions'  =>  [
-            'sideBySide'    =>  false,
-            'useCurrent'    =>  false,
-            'format'        =>  'MM/DD/YYYY HH:mm',
-            'maxDate'       =>  date('Y-m-d 23:59:59'),
-            'locale'        =>  \Yii::$app->language
-        ]
-    ])?>
     <div class="text-center"><button type="submit" class="btn btn-success"><?=\Yii::t('manage', 'Фильтровать список треков')?></button></div>
     <?php $form->end(); ?>
 </div>
@@ -88,6 +66,20 @@ $this->params['breadcrumbs'][] = $this->title;
     'dataProvider'  =>  $dataProvider,
     'tableOptions'  =>  [
         'class' =>  'table table-condensed table-striped'
+    ],
+    'pager'     =>  [
+        'options'           =>  [
+            'class' =>  'pagination mx-auto mt-3 d-inline-flex'
+        ],
+        'linkOptions'       =>  [
+            'class'             =>  'page-link',
+        ],
+        'pageCssClass'      =>  'page-item',
+        'prevPageCssClass'  =>  'page-item',
+        'nextPageCssClass'  =>  'page-item',
+        'disabledListItemSubTagOptions' =>  [
+            'class' =>  'page-link'
+        ]
     ],
     'columns'       =>  [
         [
@@ -165,16 +157,16 @@ $this->params['breadcrumbs'][] = $this->title;
             'class'     =>  \yii\grid\ActionColumn::className(),
             'buttons'   =>  [
                 'edit'  =>  function($url, $model){
-                    return Html::a(Html::tag('i', null, ['class' => 'glyphicon glyphicon-pencil']), Url::to(['track/edit', 'id' => $model->id]), ['class' => 'btn btn-default']);
+                    return Html::a(FA::i('pencil'), Url::to(['track/edit', 'id' => $model->id]), ['class' => 'btn btn-secondary']);
                 },
                 'play'  =>  function($model){
-                    return Html::button(Html::tag('i', null, ['class' => 'glyphicon glyphicon-play']), ['class' => 'btn btn-default pull-left']);
+                    return Html::button(FA::i('play'), ['class' => 'btn btn-secondary pull-left']);
                 },
                 'download'  =>  function($url, $model){
-                    return Html::a(Html::tag('i', null, ['class' => 'glyphicon glyphicon-floppy-save']), ['/site/get-track-link', 'id' => $model->id], ['class' => 'btn btn-default']);
+                    return Html::a(FA::i('save'), ['/site/get-track-link', 'id' => $model->id], ['class' => 'btn btn-secondary']);
                 },
                 'remove'  =>  function($model){
-                    return Html::button(Html::tag('i', null, ['class' => 'glyphicon glyphicon-trash']), ['class' => 'btn btn-default removeTrack']);
+                    return Html::button(FA::i('trash'), ['class' => 'btn btn-secondary removeTrack']);
                 }
             ],
             'template'  =>  Html::tag('div', Html::tag('div', '{play}{download}', ['class' => 'btn-group btn-group-sm pull-left']).Html::tag('div', '{remove}{edit}', ['class' => 'btn-group btn-group-sm pull-right']), ['style' => 'width: 150px'])

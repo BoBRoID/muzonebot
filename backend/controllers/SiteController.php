@@ -89,9 +89,11 @@ class SiteController extends Controller
     }
 
     public function actionIndex(){
-        $newMembersToday = $activeMembersToday = $newTracksToday = 0;
-
-        $lastAddedTrack = new Song();
+        $todayDate = date('Y-m-d').' 00:00:00';
+        $newMembersToday = User::find()->where(['>=', 'created_at', $todayDate])->count();
+        $activeMembersToday = User::find()->where(['>=', 'updated_at', $todayDate])->count();
+        $newTracksToday = Song::find()->where(['>=', 'added', strtotime($todayDate)])->count();
+        $lastAddedTrack = Song::find()->orderBy('added DESC')->limit(1)->one();
 
         return $this->render('index', [
             'newMembersToday'   =>  $newMembersToday,
