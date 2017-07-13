@@ -84,7 +84,7 @@ $managerBlocks = [
                     <br>
                     <span class="one-line"><?=\Yii::t('manage', 'Добавил {username} {date}', [
                             'date'      =>  \Yii::$app->formatter->asDateTime($lastAddedTrack->added),
-                            'username'  =>  $lastAddedTrack->getUser()->username
+                            'username'  =>  $lastAddedTrack->user->username
                         ])?></span>
                 </p>
                 <?php } ?>
