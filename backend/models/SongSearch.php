@@ -27,11 +27,14 @@ class SongSearch extends \yii\base\Model
 
     public $addedTo;
 
+    public $deleted = false;
+
     public function rules()
     {
         return [
             [['query', 'artist', 'trackName', 'addedFrom', 'addedTo'], 'string'],
-            [['userId'], 'integer']
+            [['userId'], 'integer'],
+            [['deleted'], 'boolean']
         ];
     }
 
@@ -72,6 +75,10 @@ class SongSearch extends \yii\base\Model
 
         if(!empty($this->userId)){
             $query->andWhere(['in', 'user_id', $this->userId]);
+        }
+
+        if(!$this->deleted){
+            $query->andWhere(['deleted' => 0]);
         }
 
         return $query;
