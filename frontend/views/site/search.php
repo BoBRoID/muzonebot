@@ -89,6 +89,7 @@ echo \yii\widgets\ListView::widget([
         'linkOptions'       =>  [
             'class'             =>  'page-link',
         ],
+        'maxButtonCount'   =>  '5',
         'pageCssClass'      =>  'page-item',
         'prevPageCssClass'  =>  'page-item',
         'nextPageCssClass'  =>  'page-item',

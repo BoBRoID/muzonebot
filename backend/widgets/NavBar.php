@@ -38,7 +38,7 @@ class NavBar extends \yii\bootstrap\NavBar
         echo Html::beginTag($tag, $options);
         echo $this->renderToggleButton();
         if ($this->brandLabel !== false) {
-            Html::addCssClass($this->brandOptions, ['widget' => 'navbar-brand']);
+            Html::addCssClass($this->brandOptions, ['widget' => 'navbar-brand text-center']);
             echo Html::a($this->brandLabel, $this->brandUrl === false ? \Yii::$app->homeUrl : $this->brandUrl, $this->brandOptions);
         }
         if ($this->renderInnerContainer) {
@@ -68,9 +68,7 @@ class NavBar extends \yii\bootstrap\NavBar
      */
     protected function renderToggleButton()
     {
-        $screenReader = Html::tag('span', null, ['class' => 'navbar-toggler-icon']);
-
-        return Html::button($screenReader, [
+        return Html::button('☰', [
             'class'         => 'navbar-toggler mobile-sidebar-toggler d-lg-none',
             'data-toggle'   => 'collapse',
             'data-target'   => "#{$this->containerOptions['id']}",
