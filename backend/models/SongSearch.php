@@ -93,4 +93,17 @@ class SongSearch extends \yii\base\Model
         return ArrayHelper::map(User::find()->where(['in', 'id', ArrayHelper::getColumn($possibleUsers, 'user_id')])->asArray()->all(), 'id', 'username');
     }
 
+    public function attributeLabels()
+    {
+        return [
+            'query'     =>  \Yii::t('manage', 'Запрос'),
+            'artist'    =>  \Yii::t('manage', 'Исполнитель'),
+            'trackName' =>  \Yii::t('manage', 'Название трека'),
+            'deleted'   =>  \Yii::t('manage', 'Искать в удалённых'),
+            'addedFrom' =>  \Yii::t('manage', 'Добавлен от'),
+            'addedTo'   =>  \Yii::t('manage', 'Добавлен до'),
+            'user_id'   =>  \Yii::t('manage', 'Добавил пользователь'),
+        ];
+    }
+
 }

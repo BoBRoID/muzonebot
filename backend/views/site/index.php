@@ -5,8 +5,9 @@
  * @var $newTracksToday int
  * @var $lastAddedTrack \common\models\Song
  */
-$this->title = \Yii::t('manage', 'Управление системой');
 
+$this->title = \Yii::t('manage', 'Управление системой');
+\backend\assets\DashboardAsset::register($this);
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <h4>Сегодняшняя статистика</h4>
