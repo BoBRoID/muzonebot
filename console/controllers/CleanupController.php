@@ -41,7 +41,7 @@ class CleanupController extends Controller
         /**
          * @var $song Song
          */
-        foreach(Song::find()->where(['deleted' => 0, 'isBig' => 0])->andWhere(['>=', 'last_update', time() - 3600])->each() as $song){
+        foreach(Song::find()->where(['deleted' => 0, 'isBig' => 0])->andWhere(['<=', 'last_update', time() - 3600])->each() as $song){
             $total++;
             try{
                 TrackDownloader::getUrl($song->fileId);
