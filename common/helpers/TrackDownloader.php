@@ -46,7 +46,8 @@ class TrackDownloader
         new Telegram(\Yii::$app->params['apiKey'], \Yii::$app->params['botName']);
         $fileRequest = Request::getFile(['file_id' => $telegramFileId]);
 
-        if($fileRequest->getOk() == false){
+        if($fileRequest->getOk() === false){
+            \Yii::trace($fileRequest);
             throw new NotFoundHttpException();
         }
 
