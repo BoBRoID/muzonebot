@@ -14,7 +14,10 @@ class Song extends \common\models\Song
     public function behaviors()
     {
         return [
-            'sammaye\audittrail\LoggableBehavior'
+            'LoggableBehavior'  =>  [
+                'class'     =>  'sammaye\audittrail\LoggableBehavior',
+                'ignored'   =>  ['last_update']
+            ]
         ];
     }
 
