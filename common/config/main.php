@@ -16,4 +16,5 @@ return [
     'timeZone'          =>  'Europe/Kiev',
     'language'          =>  'ru-RU',
     'sourceLanguage'    =>  'ru-RU',
+    'audittrail.table'  =>  'tbl_audit_trail'
 ];
