@@ -7,7 +7,7 @@ use common\helpers\TrackDownloader;
 use common\models\User;
 use Yii;
 use frontend\models\forms\SongSearch;
-use common\models\Song;
+use frontend\models\Song;
 use common\models\UserToken;
 use yii\data\ActiveDataProvider;
 use common\models\Chat;

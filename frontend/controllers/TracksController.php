@@ -10,7 +10,7 @@ namespace frontend\controllers;
 
 
 use frontend\models\forms\SongSearch;
-use common\models\Song;
+use frontend\models\Song;
 use common\models\UserSongs;
 use frontend\models\forms\TrackForm;
 use yii\base\InvalidParamException;

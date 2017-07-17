@@ -14,6 +14,8 @@ use common\models\AdminToken;
 use common\models\Song;
 use common\models\UserToken;
 use yii\console\Controller;
+use yii\web\BadRequestHttpException;
+use yii\web\NotFoundHttpException;
 
 class CleanupController extends Controller
 {
@@ -39,13 +41,16 @@ class CleanupController extends Controller
         /**
          * @var $song Song
          */
-        foreach(Song::find()->where(['deleted' => 0])->each() as $song){
+        foreach(Song::find()->where(['deleted' => 0, 'isBig' => 0])->andWhere(['>=', 'last_update', time() - 3600])->each() as $song){
             $total++;
             try{
                 TrackDownloader::getUrl($song->fileId);
-            }catch (\Exception $e){
+            }catch (NotFoundHttpException $e){
                 $deleted++;
                 $song->deleted = 1;
+                $song->save(false);
+            }catch (BadRequestHttpException $e){
+                $song->isBig = 1;
                 $song->save(false);
             }
         }

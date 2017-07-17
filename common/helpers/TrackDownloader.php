@@ -9,8 +9,10 @@
 namespace common\helpers;
 
 
+use GuzzleHttp\Exception\BadResponseException;
 use Longman\TelegramBot\Request;
 use Longman\TelegramBot\Telegram;
+use yii\web\BadRequestHttpException;
 use yii\web\NotFoundHttpException;
 
 class TrackDownloader
@@ -40,14 +42,20 @@ class TrackDownloader
     /**
      * @param $telegramFileId string
      * @return string
+     * @throws \Longman\TelegramBot\Exception\TelegramException
+     * @throws BadRequestHttpException
      * @throws NotFoundHttpException
      */
     public static function getUrl($telegramFileId){
         new Telegram(\Yii::$app->params['apiKey'], \Yii::$app->params['botName']);
+
         $fileRequest = Request::getFile(['file_id' => $telegramFileId]);
 
         if($fileRequest->getOk() === false){
-            \Yii::trace($fileRequest);
+            if((int)$fileRequest->getErrorCode() === 400){
+                throw new BadRequestHttpException($fileRequest->getResult());
+            }
+
             throw new NotFoundHttpException();
         }
 

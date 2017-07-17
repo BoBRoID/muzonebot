@@ -8,8 +8,7 @@
 
 namespace frontend\models\forms;
 
-
-use common\models\Song;
+use frontend\models\Song;
 use yii\base\Model;
 
 class TrackForm extends Model

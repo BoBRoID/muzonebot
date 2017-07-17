@@ -7,7 +7,6 @@
  */
 namespace backend\models;
 
-use common\models\Song;
 use common\models\User;
 use yii\helpers\ArrayHelper;
 

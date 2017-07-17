@@ -4,7 +4,7 @@ namespace backend\controllers;
 use backend\models\SongSearch;
 use common\models\AdminToken;
 use common\models\Feedback;
-use common\models\Song;
+use backend\models\Song;
 use common\models\User;
 use Yii;
 use yii\data\ActiveDataProvider;

@@ -10,9 +10,8 @@ namespace backend\controllers;
 
 
 use common\helpers\TrackDownloader;
-use common\models\Song;
+use backend\models\Song;
 use backend\models\TrackForm;
-use common\models\UserSongs;
 use ErrorException;
 use yii\web\BadRequestHttpException;
 use yii\filters\AccessControl;
