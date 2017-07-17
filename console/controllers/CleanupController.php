@@ -9,7 +9,9 @@
 namespace console\controllers;
 
 
+use common\helpers\TrackDownloader;
 use common\models\AdminToken;
+use common\models\Song;
 use common\models\UserToken;
 use yii\console\Controller;
 
@@ -30,6 +32,25 @@ class CleanupController extends Controller
 
     public function actionSongsLinks(){
 
+    }
+
+    public function actionSongs(){
+        $total = $deleted = 0;
+        /**
+         * @var $song Song
+         */
+        foreach(Song::find()->where(['deleted' => 0])->each() as $song){
+            $total++;
+            try{
+                TrackDownloader::getUrl($song->fileId);
+            }catch (\Exception $e){
+                $deleted++;
+                $song->deleted = 1;
+                $song->save(false);
+            }
+        }
+
+        echo 'Total worked with '.$total.' tracks, deleted '.$deleted;
     }
 
 }
