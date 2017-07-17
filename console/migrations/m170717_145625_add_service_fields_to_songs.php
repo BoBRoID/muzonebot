@@ -7,7 +7,7 @@ class m170717_145625_add_service_fields_to_songs extends Migration
     public function safeUp()
     {
         $this->addColumn('songs', 'isBig', $this->boolean()->unsigned()->notNull()->defaultValue(0));
-        $this->addColumn('songs', 'last_update', $this->integer()->unsigned());
+        $this->addColumn('songs', 'last_update', $this->integer()->unsigned()->defaultValue(0));
     }
 
     public function safeDown()
