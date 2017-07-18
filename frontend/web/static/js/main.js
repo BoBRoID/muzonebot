@@ -54,7 +54,7 @@ $(document).ready(function(){
 
                     if(item === undefined){
                         break;
-                    }else if(item.find('button[disabled]') === 0){
+                    }else if(item.find('button[disabled]').length === 0){
                         nextId = $(item).data('key');
                         break;
                     }
