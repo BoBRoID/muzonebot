@@ -22,6 +22,7 @@ class AppAsset extends AssetBundle
     public $js = [
         'js/pace.min.js',
         'js/app.js',
+        'js/main.js'
     ];
     public $depends = [
         YiiAsset::class,

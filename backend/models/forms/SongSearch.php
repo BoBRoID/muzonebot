@@ -5,8 +5,9 @@
  * Date: 26.06.2017
  * Time: 17:44
  */
-namespace backend\models;
+namespace backend\models\forms;
 
+use backend\models\Song;
 use common\models\User;
 use yii\helpers\ArrayHelper;
 

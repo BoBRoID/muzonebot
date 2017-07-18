@@ -9,7 +9,7 @@
 namespace backend\controllers;
 
 
-use backend\models\GetTagsForm;
+use backend\models\forms\GetTagsForm;
 use common\helpers\TagExtractor;
 use yii\filters\AccessControl;
 use yii\web\Controller;

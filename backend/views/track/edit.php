@@ -1,7 +1,8 @@
 <?php
 /**
- * @var $trackForm \backend\models\TrackForm
+ * @var $trackForm \backend\models\forms\TrackForm
  */
+use common\widgets\Alert;
 use yii\bootstrap\Html;
 
 $this->title = \Yii::t('manage', 'Редактирование трека');
@@ -40,9 +41,7 @@ function syntaxHighlight(json) {
     });
 }
 
-$(document).on('show.bs.modal', '#metadataModal', function(){
-    $(this).find('.modal-body').html('<div class="text-center"><i class="fa fa-spinner fa-spin fa-3x fa-fw"></i><span class="sr-only">Loading...</span></div>');
-}).on('shown.bs.modal', '#metadataModal', function(){
+$(document).on('shown.bs.modal', '#metadataModal', function(){
     var modal = $(this);
     
     $.ajax({
@@ -56,25 +55,18 @@ JS;
 $this->registerJs($js);
 
 $this->params['breadcrumbs'][] = ['url' => \yii\helpers\Url::to(['/site/index']), 'label' => \Yii::t('manage', 'Управление системой')];
-$this->params['breadcrumbs'][] = ['url' => \yii\helpers\Url::to(['/site/tracks']), 'label' => \Yii::t('manage', 'Список добавленых треков')];
+$this->params['breadcrumbs'][] = ['url' => \yii\helpers\Url::to(['/track/index']), 'label' => \Yii::t('manage', 'Список добавленых треков')];
 $this->params['breadcrumbs'][] = $this->title;
 
-echo Html::tag('h1', $this->title, ['data-key' => $trackForm->id]);
+if(!\Yii::$app->request->isAjax){
+    echo Html::tag('h1', $this->title, ['data-key' => $trackForm->id]);
+}else{
+    echo Alert::widget();
+}
 
-$form = \yii\bootstrap\ActiveForm::begin(['layout' => 'horizontal']);
-
-echo $form->field($trackForm, 'title'),
-    $form->field($trackForm, 'artist'),
-    $form->field($trackForm, 'duration'),
-    $form->field($trackForm, 'genreID');
-
-echo Html::tag('div', Html::button(\Yii::t('manage', 'Просмотреть метаданные'), ['class' => 'btn btn-warning', 'data-toggle' => 'modal', 'data-target' => '#metadataModal']), ['class' => 'text-center']);
-echo Html::tag('br');
-echo Html::tag('div', Html::submitButton(\Yii::t('manage', 'Сохранить изменения')), ['class' => 'text-center']);
-echo Html::tag('br');
-echo Html::tag('div', Html::a(\Yii::t('manage', 'К результатам поиска'), \yii\helpers\Url::previous('tracks'), ['class' => 'btn btn-info']), ['class' => 'text-center']);
-
-$form->end();
+echo $this->render('_form', [
+    'trackForm' =>  $trackForm,
+]);
 
 \yii\bootstrap\Modal::begin([
     'id'        =>  'metadataModal',

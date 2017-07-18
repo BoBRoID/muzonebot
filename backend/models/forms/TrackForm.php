@@ -6,8 +6,9 @@
  * Time: 11:24 PM
  */
 
-namespace backend\models;
+namespace backend\models\forms;
 
+use backend\models\Song;
 use yii\base\Model;
 
 class TrackForm extends Model
@@ -41,6 +42,19 @@ class TrackForm extends Model
         $song->load([$song->formName() => $this->toArray()]);
 
         return $song->save();
+    }
+
+    /**
+     * @return array
+     */
+    public function attributeLabels()
+    {
+        return [
+            'genreID'   =>  \Yii::t('manage', 'Жанр'),
+            'duration'  =>  \Yii::t('manage', 'Длина'),
+            'title'     =>  \Yii::t('manage', 'Название'),
+            'artist'    =>  \Yii::t('manage', 'Исполнитель')
+        ];
     }
 
 }

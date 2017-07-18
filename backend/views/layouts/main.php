@@ -11,6 +11,7 @@ use yii\helpers\Html;
 use yii\helpers\Url;
 use yii\widgets\Breadcrumbs;
 use common\widgets\Alert;
+$this->registerJsFile(\yii\helpers\Url::to(['/site/get-routes']));
 
 AppAsset::register($this);
 
@@ -132,7 +133,7 @@ if(!\Yii::$app->user->isGuest){
                             ],
                             [
                                 'label'     =>  Html::tag('i', null, ['class' => 'icon-music-tone-alt']).\Yii::t('manage', 'Треки'),
-                                'url'       =>  Url::to(['/site/tracks'])
+                                'url'       =>  Url::to(['/track/index'])
                             ],
                             [
                                 'label'     =>  Html::tag('i', null, ['class' => 'icon-grid']).\Yii::t('manage', 'Альбомы'),
@@ -169,6 +170,7 @@ if(!\Yii::$app->user->isGuest){
                     </div>
                 </div>
             </main>
+            <?=isset($this->params['afterContent']) ? implode('', $this->params['afterContent']) : null?>
         </div>
         <?php $this->endBody() ?>
     </body>

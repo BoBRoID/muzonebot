@@ -9,10 +9,13 @@
 namespace backend\controllers;
 
 
+use backend\models\forms\SongSearch;
 use common\helpers\TrackDownloader;
 use backend\models\Song;
-use backend\models\TrackForm;
+use backend\models\forms\TrackForm;
 use ErrorException;
+use yii\data\ActiveDataProvider;
+use yii\helpers\Url;
 use yii\web\BadRequestHttpException;
 use yii\filters\AccessControl;
 use yii\web\Controller;
@@ -36,6 +39,28 @@ class TrackController extends Controller
         ];
     }
 
+    public function actionIndex(){
+        $searchModel = new SongSearch;
+        $searchModel->load(\Yii::$app->request->get());
+
+        $dataProvider = new ActiveDataProvider([
+            'query' =>  $searchModel->getResults()->with('user'),
+            'sort'  =>  [
+                'defaultOrder'  =>  [
+                    'id'    =>  SORT_DESC
+                ]
+            ]
+        ]);
+
+        Url::remember(\Yii::$app->request->url, 'tracks');
+
+        return $this->render('index', [
+            'dataProvider'  =>  $dataProvider,
+            'searchModel'   =>  $searchModel
+        ]);
+    }
+
+
     public function actionEdit($id){
         $track = Song::findOne($id);
 
@@ -58,6 +83,12 @@ class TrackController extends Controller
             }else{
                 \Yii::$app->session->addFlash('danger', \Yii::t('manage', 'Произошли ошибки при редактировании: {errors}!', ['errors' => \GuzzleHttp\json_encode($trackForm->getErrors())]));
             }
+        }
+
+        if(\Yii::$app->request->isAjax){
+            return $this->renderAjax('edit', [
+                'trackForm' =>  $trackForm
+            ]);
         }
 
         return $this->render('edit', [

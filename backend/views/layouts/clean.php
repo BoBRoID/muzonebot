@@ -5,6 +5,7 @@
 
 use backend\assets\AppAsset;
 use yii\helpers\Html;
+$this->registerJsFile(\yii\helpers\Url::to(['/site/get-routes']));
 
 AppAsset::register($this);
 ?>

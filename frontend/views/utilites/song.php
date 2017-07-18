@@ -39,19 +39,34 @@ use yii\bootstrap\Html;
         </div>
         <div class="d-flex">
             <div class="btn-group btn-group-sm" role="group" aria-label="<?=\Yii::t('site', 'Действия с треком')?>">
-                <?=Html::button(FA::i('play'), ['class' => 'btn btn-secondary btn-xs listenTrack', 'data-id' => $model->id])?>
-                <?=Html::a(
-                    FA::i('download'),
-                    [
-                        '/site/get-track',
-                        'id' => $model->id
-                    ],
-                    [
-                        'class'     => 'btn btn-secondary btn-xs',
-                        'title'     =>  \Yii::t('site', 'Скачать трек "{trackName}"', ['trackName' => $model->title.' - '.$model->artist]),
-                        'data-pjax' =>  'false'
-                    ]
-                );
+                <?php
+                if(!$model->isBig){
+                    echo Html::button(FA::i('play'), ['class' => 'btn btn-secondary btn-xs listenTrack', 'data-id' => $model->id]),
+                    Html::a(
+                        FA::i('download'),
+                        [
+                            '/site/get-track',
+                            'id' => $model->id
+                        ],
+                        [
+                            'class'     => 'btn btn-secondary btn-xs',
+                            'title'     =>  \Yii::t('site', 'Скачать трек "{trackName}"', ['trackName' => $model->title.' - '.$model->artist]),
+                            'data-pjax' =>  'false'
+                        ]
+                    );
+                }else{
+                    echo Html::button(FA::i('play'), ['class' => 'btn btn-secondary btn-xs', 'disabled' => true, 'title' => \Yii::t('site', 'Данный трек невозможно прослушать через сайт из-за ограничений telegram')]),
+                    Html::button(
+                        FA::i('download'),
+                        [
+                            'class'     => 'btn btn-secondary btn-xs',
+                            'title'     =>  \Yii::t('site', 'Данный трек невозможно скачать из-за ограничений telegram'),
+                            'data-pjax' =>  'false',
+                            'type'      =>  'button',
+                            'disabled'  =>  true,
+                        ]
+                    );
+                }
 
                 if(!\Yii::$app->user->isGuest){
                     echo Html::button(

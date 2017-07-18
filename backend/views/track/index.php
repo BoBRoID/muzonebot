@@ -1,7 +1,7 @@
 <?php
 /**
  * @var $dataProvider \yii\data\ActiveDataProvider
- * @var $searchModel \backend\models\SongSearch
+ * @var $searchModel \backend\models\forms\SongSearch
  */
 use rmrevin\yii\fontawesome\FA;
 use yii\bootstrap\Html;
@@ -18,6 +18,12 @@ $js = <<<'JS'
             method: 'POST'
         }).success(function(){
             $.pjax.reload('#tracks-grid');
+        });
+    }).on('pjax:complete', '#trackEditModal [data-pjax-container]', function() {
+        $.pjax.reload('#tracks-grid', {
+            push: false,
+            replace: true,
+            timeout: 10000
         });
     });
    
@@ -42,6 +48,8 @@ $this->title = \Yii::t('manage', 'Список добавленых треков
 
 $this->params['breadcrumbs'][] = ['url' => Url::to(['/site/index']), 'label' => \Yii::t('manage', 'Управление системой')];
 $this->params['breadcrumbs'][] = $this->title;
+
+$this->params['afterContent'][] = $this->render('edit-modal');
 ?>
 <div class="card">
     <div class="card-header">
@@ -162,7 +170,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     'class'     =>  \yii\grid\ActionColumn::className(),
                     'buttons'   =>  [
                         'edit'  =>  function($url, $model){
-                            return Html::a(FA::i('pencil'), Url::to(['track/edit', 'id' => $model->id]), ['class' => 'btn btn-secondary']);
+                            return Html::button(FA::i('pencil'), ['class' => 'btn btn-secondary editTrack']);
                         },
                         'play'  =>  function($model){
                             return Html::button(FA::i('play'), ['class' => 'btn btn-secondary pull-left']);

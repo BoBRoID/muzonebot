@@ -1,7 +1,6 @@
 <?php
 namespace backend\controllers;
 
-use backend\models\SongSearch;
 use common\models\AdminToken;
 use common\models\Feedback;
 use backend\models\Song;
@@ -113,27 +112,6 @@ class SiteController extends Controller
         ]);
     }
 
-    public function actionTracks(){
-        $searchModel = new SongSearch;
-        $searchModel->load(\Yii::$app->request->get());
-
-        $dataProvider = new ActiveDataProvider([
-            'query' =>  $searchModel->getResults()->with('user'),
-            'sort'  =>  [
-                'defaultOrder'  =>  [
-                    'id'    =>  SORT_DESC
-                ]
-            ]
-        ]);
-
-        Url::remember(\Yii::$app->request->url, 'tracks');
-
-        return $this->render('tracks', [
-            'dataProvider'  =>  $dataProvider,
-            'searchModel'   =>  $searchModel
-        ]);
-    }
-
     public function actionGenres(){
 
     }
@@ -199,7 +177,14 @@ class SiteController extends Controller
         return \Yii::$app->user->isGuest;
     }
 
-    public function actionError(){
+    public function actionGetRoutes(){
+        \Yii::$app->response->format = 'raw';
 
+        return 'var routes = '.json_encode([
+                'tracks'    =>  [
+                    'edit'      =>  Url::to(['/track/edit']),
+                    'get'       =>  Url::to(['/track/get'])
+                ]
+            ]);
     }
 }

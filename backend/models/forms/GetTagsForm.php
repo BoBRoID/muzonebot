@@ -6,7 +6,7 @@
  * Time: 11:35 PM
  */
 
-namespace backend\models;
+namespace backend\models\forms;
 
 use yii\base\Model;
 use yii\web\UploadedFile;
