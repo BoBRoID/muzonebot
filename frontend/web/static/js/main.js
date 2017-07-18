@@ -51,12 +51,14 @@ $(document).ready(function(){
 
             wavesurfer.on('finish', function(){
                 var nextId = null,
-                    item = undefined;
+                    item = $(wavesurfer.container).closest('[data-key]');
 
                 while(nextId === null){
-                    item = item !== undefined ? item.next() : $(wavesurfer.container).closest('[data-key]').next();
+                    item = item.next();
 
-                    if(item !== undefined && item.find('button[disabled]') === 0){
+                    if(item === undefined){
+                        break;
+                    }else if(item.find('button[disabled]') === 0){
                         nextId = $(item).data('key');
                         break;
                     }
