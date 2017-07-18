@@ -36,11 +36,7 @@ $(document).ready(function(){
                     .removeClass('listenTrack');
             });
 
-            wavesurfer.on('loading', function(percents, object){
-                console.log('loading');
-                console.log(percents);
-                console.log(object);
-
+            wavesurfer.on('loading', function(){
                 $(wavesurfer.container).closest('[data-key]')
                     .find('button.listenTrack')
                     .html(icon('pause'))
@@ -64,9 +60,7 @@ $(document).ready(function(){
                     }
                 }
 
-                console.log(pleer.container);
                 pleer.destroy();
-                console.log(pleer.container);
                 setPreloaderToListenTrackButton(nextId);
                 createPlayer(nextId);
             });
