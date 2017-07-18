@@ -103,7 +103,7 @@ $(document).ready(function(){
             });
 
             wavesurfer.on('finish', function(){
-                console.log($(this).closest('[data-key]'));
+                console.log($(wavesurfer.container).closest('[data-key]').next());
             });
 
             pleer = wavesurfer;
