@@ -83,21 +83,27 @@ $(document).ready(function(){
                 $(wavesurfer.container).toggleClass('pt-3');
             });
 
-            wavesurfer.on('pause', function(){
-                $(this).closest('[data-key]')
+            wavesurfer.on('pause', function(e){
+                console.log(this);
+                console.log(e);
+
+                /*$(this).closest('[data-key]')
                     .find('button.listenTrack')
                     .html(icon('play'))
                     .addClass('listenTrack')
-                    .removeClass('pauseTrack');
+                    .removeClass('pauseTrack');*/
             });
 
             wavesurfer.on('play', function(){
-                $(this).closest('[data-key]')
+                console.log(this);
+                console.log(e);
+
+                /*$(this).closest('[data-key]')
                     .find('button.listenTrack')
                     .html(icon('pause'))
                     .prop('disabled', false)
                     .addClass('pauseTrack')
-                    .removeClass('listenTrack');
+                    .removeClass('listenTrack');*/
             });
 
             wavesurfer.on('finish', function(){
