@@ -86,16 +86,14 @@ $(document).ready(function(){
             });
 
             wavesurfer.on('pause', function(){
-                console.log('pause');
                 $(wavesurfer.container).closest('[data-key]')
-                    .find('button.listenTrack')
+                    .find('button.pauseTrack')
                     .html(icon('play'))
                     .addClass('listenTrack')
                     .removeClass('pauseTrack');
             });
 
             wavesurfer.on('play', function(){
-                console.log('play');
                 $(wavesurfer.container).closest('[data-key]')
                     .find('button.listenTrack')
                     .html(icon('pause'))
