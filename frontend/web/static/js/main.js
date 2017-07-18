@@ -46,6 +46,16 @@ $(document).ready(function(){
             });
 
             wavesurfer.on('finish', function(){
+                $(pleer.container)
+                    .toggleClass('pt-3');
+
+                $(pleer.container).closest('[data-key]')
+                    .find('button.listenTrack')
+                    .html(icon('pause'))
+                    .prop('disabled', false)
+                    .addClass('pauseTrack')
+                    .removeClass('listenTrack');
+
                 var nextId = null,
                     item = $(wavesurfer.container).closest('[data-key]');
 
