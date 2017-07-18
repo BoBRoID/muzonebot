@@ -38,6 +38,15 @@ $(document).ready(function(){
                     .removeClass('listenTrack');
             });
 
+            wavesurfer.on('loading', function(){
+                $(wavesurfer.container).closest('[data-key]')
+                    .find('button.listenTrack')
+                    .html(icon('pause'))
+                    .prop('disabled', false)
+                    .addClass('pauseTrack')
+                    .removeClass('listenTrack');
+            });
+
             wavesurfer.on('finish', function(){
                 var nextId = null,
                     item = undefined;
@@ -53,6 +62,11 @@ $(document).ready(function(){
 
                 pleer.destroy();
                 createPlayer(nextId);
+                
+                $(pleer.container).closest('[data-key]')
+                    .find('button.listenTrack')
+                    .html(preloader())
+                    .prop('disabled', true);
             });
 
             pleer = wavesurfer;
@@ -103,7 +117,6 @@ $(document).ready(function(){
         console.log($(this));
     }).on('click', '.listenTrack', function(){
         var id = $(this).closest('[data-key]').attr('data-key'),
-            button = $(this),
             currentTrack = pleer!== undefined ? $(pleer.container).closest('[data-key]') : undefined;
 
         if(currentTrack !== undefined && $(currentTrack).attr('data-key') === id){
@@ -117,11 +130,6 @@ $(document).ready(function(){
                 pleer.pause();
                 pleer.destroy();
             }
-
-
-            $(button)
-                .html(preloader())
-                .prop('disabled', true);
 
             createPlayer(id);
         }
