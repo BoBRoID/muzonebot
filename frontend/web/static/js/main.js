@@ -14,8 +14,6 @@ $(document).ready(function(){
                 hideScrollbar: true
             });
 
-            wavesurfer.load(routes.tracks.get + '?id=' + id);
-
             wavesurfer.on('ready', function () {
                 wavesurfer.play();
                 $(wavesurfer.container).toggleClass('pt-3');
@@ -38,7 +36,11 @@ $(document).ready(function(){
                     .removeClass('listenTrack');
             });
 
-            wavesurfer.on('loading', function(){
+            wavesurfer.on('loading', function(percents, object){
+                console.log('loading');
+                console.log(percents);
+                console.log(object);
+
                 $(wavesurfer.container).closest('[data-key]')
                     .find('button.listenTrack')
                     .html(icon('pause'))
@@ -62,12 +64,14 @@ $(document).ready(function(){
 
                 pleer.destroy();
                 createPlayer(nextId);
-                
+
                 $(pleer.container).closest('[data-key]')
                     .find('button.listenTrack')
                     .html(preloader())
                     .prop('disabled', true);
             });
+            
+            wavesurfer.load(routes.tracks.get + '?id=' + id);
 
             pleer = wavesurfer;
         };
