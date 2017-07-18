@@ -62,7 +62,6 @@ $(document).ready(function(){
                     }
                 }
 
-                console.log(pleer);
                 console.log(pleer.container);
                 pleer.destroy();
                 console.log(pleer.container);
