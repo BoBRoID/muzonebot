@@ -6,6 +6,7 @@
  * Time: 17:27
  * @var $model \frontend\models\forms\TrackForm
  */
+use yii\bootstrap\ActiveForm;
 use yii\bootstrap\Html;
 
 $this->title = \Yii::t('site', 'Редактирование трека');
@@ -19,7 +20,9 @@ $this->params['breadcrumbs'][] = $this->title;
 $formOptions = ['layout' => 'horizontal'];
 
 if(\Yii::$app->request->isAjax){
-    $formOptions['options'] = ['data-pjax' => true];
+    $formOptions['options']['data-pjax'] = 1;
+    $formOptions['fieldConfig']['horizontalCssClasses']['label'] = 'col-sm-4 offset-sm-1';
+    $formOptions['fieldConfig']['horizontalCssClasses']['wrapper'] = 'col-sm-6';
 }
 
 if(\Yii::$app->session->getFlash('messages', false)){
@@ -33,7 +36,7 @@ if(\Yii::$app->session->getFlash('messages', false)){
     }
 }
 
-$form = \yii\bootstrap\ActiveForm::begin($formOptions);
+$form = ActiveForm::begin($formOptions);
 
 echo $form->field($model, 'title'),
     $form->field($model, 'artist');

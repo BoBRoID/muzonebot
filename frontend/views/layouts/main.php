@@ -157,7 +157,8 @@ NavBar::end();
                 'header'    =>  \Yii::t('site', 'Редактирование трека')
             ]);
             \yii\widgets\Pjax::begin([
-                'enablePushState'   =>  false
+                'enablePushState'   =>  false,
+                'timeout'           =>  10000
             ]);
             \yii\widgets\Pjax::end();
             Modal::end();
