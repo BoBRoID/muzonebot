@@ -50,11 +50,10 @@ $(document).ready(function(){
                     .toggleClass('pt-3');
 
                 $(pleer.container).closest('[data-key]')
-                    .find('button.listenTrack')
-                    .html(icon('pause'))
-                    .prop('disabled', false)
-                    .addClass('pauseTrack')
-                    .removeClass('listenTrack');
+                    .find('button.pauseTrack')
+                    .html(icon('play'))
+                    .addClass('listenTrack')
+                    .removeClass('pauseTrack');
 
                 var nextId = null,
                     item = $(wavesurfer.container).closest('[data-key]');
