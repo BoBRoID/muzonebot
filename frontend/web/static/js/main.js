@@ -69,7 +69,9 @@ $(document).ready(function(){
 
             var wavesurfer = WaveSurfer.create({
                 container: '[data-key="' + id + '"] .waveform',
-                height: 40
+                height: 40,
+                normalize: true,
+                hideScrollbar: true
             });
 
             $(button)
@@ -83,27 +85,23 @@ $(document).ready(function(){
                 $(wavesurfer.container).toggleClass('pt-3');
             });
 
-            wavesurfer.on('pause', function(e){
-                console.log(this);
-                console.log(e);
-
-                /*$(this).closest('[data-key]')
+            wavesurfer.on('pause', function(){
+                console.log('pause');
+                $(wavesurfer.container).closest('[data-key]')
                     .find('button.listenTrack')
                     .html(icon('play'))
                     .addClass('listenTrack')
-                    .removeClass('pauseTrack');*/
+                    .removeClass('pauseTrack');
             });
 
             wavesurfer.on('play', function(){
-                console.log(this);
-                console.log(e);
-
-                /*$(this).closest('[data-key]')
+                console.log('play');
+                $(wavesurfer.container).closest('[data-key]')
                     .find('button.listenTrack')
                     .html(icon('pause'))
                     .prop('disabled', false)
                     .addClass('pauseTrack')
-                    .removeClass('listenTrack');*/
+                    .removeClass('listenTrack');
             });
 
             wavesurfer.on('finish', function(){
