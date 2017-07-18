@@ -62,18 +62,22 @@ $(document).ready(function(){
                     }
                 }
 
+                console.log(pleer);
+                console.log(pleer.container);
                 pleer.destroy();
+                console.log(pleer.container);
+                setPreloaderToListenTrackButton(nextId);
                 createPlayer(nextId);
-
-                $(pleer.container).closest('[data-key]')
-                    .find('button.listenTrack')
-                    .html(preloader())
-                    .prop('disabled', true);
             });
 
             wavesurfer.load(routes.tracks.get + '?id=' + id);
 
             pleer = wavesurfer;
+        }, setPreloaderToListenTrackButton = function(id){
+            $('[data-key="' + id + '"]')
+                .find('button.listenTrack')
+                .html(preloader())
+                .prop('disabled', true);
         };
 
     $(document).on('click', '.toggleTrack', function(){
@@ -135,6 +139,7 @@ $(document).ready(function(){
                 pleer.destroy();
             }
 
+            setPreloaderToListenTrackButton(id);
             createPlayer(id);
         }
     }).on('click', '.pauseTrack', function(){
