@@ -70,7 +70,7 @@ $(document).ready(function(){
                     .html(preloader())
                     .prop('disabled', true);
             });
-            
+
             wavesurfer.load(routes.tracks.get + '?id=' + id);
 
             pleer = wavesurfer;
