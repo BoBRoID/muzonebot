@@ -8,16 +8,19 @@
  * @var $searchModel \frontend\models\forms\SongSearch
  */
 
+use nirvana\infinitescroll\InfiniteScrollPager;
+use yii\helpers\Html;
+
 $this->title = \Yii::t('site', 'Мои треки');
 $this->params['breadcrumbs'][] = $this->title;
 
-echo \yii\helpers\Html::tag('h1', $this->title);
-
+echo Html::tag('h1', $this->title);
 echo \yii\widgets\ListView::widget([
     'dataProvider'  =>  $dataProvider,
     'options'       =>  [
-        'class' =>  'list-group'
+        'class' =>  'list-group',
     ],
+    'id'    =>  'my-tracks-list',
     'itemOptions'   =>  ['class' => 'list-group-item'],
     'itemView'      =>  function($model) use($searchModel){
         return $this->render('../utilites/song.php', [
@@ -27,18 +30,20 @@ echo \yii\widgets\ListView::widget([
         ]);
     },
     'pager'     =>  [
-        'options'           =>  [
-            'class' =>  'pagination mx-auto mt-3 d-inline-flex'
+        'class'         =>  InfiniteScrollPager::className(),
+        'itemsCssClass' =>  'list-group-content',
+        'widgetId'      =>  'my-tracks-list',
+        'linkOptions'   =>  [
+            'class' =>  'page-link',
         ],
-        'linkOptions'       =>  [
-            'class'             =>  'page-link',
+        'pluginOptions' => [
+            'history'   =>  false,
+            'button'    =>  false,
+            'loading' => [
+                'msgText'       =>  Html::tag('div', \Yii::t('site', 'Загружается следующая страница. Пожалуйста, подождите'), ['class' => 'text-center']),
+                'finishedMsg'   =>  Html::tag('div', \Yii::t('site', 'Вы достигли конца'), ['class' => 'text-center']),
+            ],
         ],
-        'pageCssClass'      =>  'page-item',
-        'prevPageCssClass'  =>  'page-item',
-        'nextPageCssClass'  =>  'page-item',
-        'disabledListItemSubTagOptions' =>  [
-            'class' =>  'page-link'
-        ]
     ],
-    'layout'    =>  '{items} '.\yii\helpers\Html::tag('div', '{pager}', ['class' => 'text-center'])
+    'layout'    =>  Html::tag('div', '{items}', ['class' => 'list-group-content']).' '. Html::tag('div', '{pager}', ['class' => 'text-center pagination-wrap']),
 ]);
