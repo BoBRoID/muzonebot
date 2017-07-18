@@ -5,6 +5,44 @@ $(document).ready(function(){
         },
         preloader = function(){
             return '<div class="text-center"><i class="fa fa-spinner fa-spin fa-fw"></i></div>';
+        },
+        createPlayer = function(id){
+            var wavesurfer = WaveSurfer.create({
+                container: '[data-key="' + id + '"] .waveform',
+                height: 40,
+                normalize: true,
+                hideScrollbar: true
+            });
+
+            wavesurfer.load(routes.tracks.get + '?id=' + id);
+
+            wavesurfer.on('ready', function () {
+                wavesurfer.play();
+                $(wavesurfer.container).toggleClass('pt-3');
+            });
+
+            wavesurfer.on('pause', function(){
+                $(wavesurfer.container).closest('[data-key]')
+                    .find('button.pauseTrack')
+                    .html(icon('play'))
+                    .addClass('listenTrack')
+                    .removeClass('pauseTrack');
+            });
+
+            wavesurfer.on('play', function(){
+                $(wavesurfer.container).closest('[data-key]')
+                    .find('button.listenTrack')
+                    .html(icon('pause'))
+                    .prop('disabled', false)
+                    .addClass('pauseTrack')
+                    .removeClass('listenTrack');
+            });
+
+            wavesurfer.on('finish', function(){
+                createPlayer($(wavesurfer.container).closest('[data-key]').next().data('key'));
+            });
+
+            pleer = wavesurfer;
         };
 
     $(document).on('click', '.toggleTrack', function(){
@@ -67,46 +105,12 @@ $(document).ready(function(){
                 pleer.destroy();
             }
 
-            var wavesurfer = WaveSurfer.create({
-                container: '[data-key="' + id + '"] .waveform',
-                height: 40,
-                normalize: true,
-                hideScrollbar: true
-            });
 
             $(button)
                 .html(preloader())
                 .prop('disabled', true);
 
-            wavesurfer.load(routes.tracks.get + '?id=' + id);
-
-            wavesurfer.on('ready', function () {
-                wavesurfer.play();
-                $(wavesurfer.container).toggleClass('pt-3');
-            });
-
-            wavesurfer.on('pause', function(){
-                $(wavesurfer.container).closest('[data-key]')
-                    .find('button.pauseTrack')
-                    .html(icon('play'))
-                    .addClass('listenTrack')
-                    .removeClass('pauseTrack');
-            });
-
-            wavesurfer.on('play', function(){
-                $(wavesurfer.container).closest('[data-key]')
-                    .find('button.listenTrack')
-                    .html(icon('pause'))
-                    .prop('disabled', false)
-                    .addClass('pauseTrack')
-                    .removeClass('listenTrack');
-            });
-
-            wavesurfer.on('finish', function(){
-                console.log($(wavesurfer.container).closest('[data-key]').next());
-            });
-
-            pleer = wavesurfer;
+            createPlayer(id);
         }
     }).on('click', '.pauseTrack', function(){
         pleer.playPause();
