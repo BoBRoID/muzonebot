@@ -39,7 +39,20 @@ $(document).ready(function(){
             });
 
             wavesurfer.on('finish', function(){
-                createPlayer($(wavesurfer.container).closest('[data-key]').next().data('key'));
+                var nextId = null,
+                    item = undefined;
+
+                while(nextId === null){
+                    item = item !== undefined ? item.next() : $(wavesurfer.container).closest('[data-key]').next();
+
+                    if(item !== undefined && item.find('button[disabled]') === 0){
+                        nextId = $(item).data('key');
+                        break;
+                    }
+                }
+
+                pleer.destroy();
+                createPlayer(nextId);
             });
 
             pleer = wavesurfer;
