@@ -3,8 +3,14 @@ $(document).ready(function(){
         icon = function(name){
             return '<i class="fa fa-' + name + '"></i>';
         },
-        preloader = function(){
-            return '<div class="text-center"><i class="fa fa-spinner fa-spin fa-fw"></i></div>';
+        preloader = function(size){
+            var classes = 'fa fa-spinner fa-spin fa-fw';
+
+            if(size !== undefined){
+                classes += ' fa-' + size + 'x';
+            }
+
+            return '<div class="text-center"><i class="' + classes + '"></i><span class="sr-only">Loading...</span></div>';
         },
         createPlayer = function(id){
             var wavesurfer = WaveSurfer.create({
@@ -96,11 +102,11 @@ $(document).ready(function(){
             }
         }).success(function(data){
             if(data.result === 'success'){
-                var btnClass = 'fa-heart' + (data.state === 'added' ? '' : '-o');
+                var btnClass = 'heart' + (data.state === 'added' ? '' : '-o');
 
                 $(button)
                     .attr('title', data.message)
-                    .html('<i class="fa ' + btnClass+ '"></i>');
+                    .html(icon(btnClass));
             }
         });
     }).on('click', 'button.editTrack', function(){
@@ -111,20 +117,20 @@ $(document).ready(function(){
         $.ajax({
             url: routes.tracks.edit + '?id=' + id
         }).success(function(data){
-            $('#trackEditModal .modal-body div').html(data);
+            $('#trackEditModal .modal-body [data-pjax-container]').html(data);
         })
     }).on('show.bs.modal', '.modal', function(){
         if($(this).data('static')){
             return;
         }
 
-        var modal = $(this).find('.modal-body');
+        var modal = $(this).find('.modal-body [data-pjax-container]');
 
         if(modal === undefined){
             modal = $(this).find('.modal-body');
         }
 
-        modal.html('<div class="text-center"><i class="fa fa-spinner fa-spin fa-3x fa-fw"></i><span class="sr-only">Loading...</span></div>');
+        modal.html(preloader());
     }).on('submit', '.modal [data-pjax-container] form', function(){
         console.log($(this));
     }).on('click', '.listenTrack', function(){
@@ -148,5 +154,8 @@ $(document).ready(function(){
         }
     }).on('click', '.pauseTrack', function(){
         pleer.playPause();
+    }).on('click', '[data-pjax-container] form button[type="submit"]', function(){
+        $(this).prop('disabled', true);
+        $(this).html(preloader());
     });
 });

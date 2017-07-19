@@ -26,7 +26,7 @@ if(\Yii::$app->request->isAjax){
 }
 
 if(\Yii::$app->session->getFlash('messages', false)){
-    foreach(\Yii::$app->session->getFlash('messages') as $message){
+    foreach(\Yii::$app->session->getFlash('messages', []) as $message){
         echo \yii\bootstrap\Alert::widget([
             'options'   =>  [
                 'class' =>  'alert-'.$message['type']

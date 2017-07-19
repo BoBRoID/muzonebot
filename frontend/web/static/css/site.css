@@ -118,3 +118,16 @@ a.desc:after {
     overflow: hidden;
     white-space: nowrap;
 }
+
+.btn{
+    cursor: pointer;
+}
+
+#infscr-loading{
+    text-align: center;
+    margin-top: 10px;
+}
+
+#infscr-loading > div{
+    display: none;
+}

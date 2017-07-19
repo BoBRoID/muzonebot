@@ -33,17 +33,21 @@ echo \yii\widgets\ListView::widget([
         'class'         =>  InfiniteScrollPager::className(),
         'itemsCssClass' =>  'list-group-content',
         'widgetId'      =>  'my-tracks-list',
+        'nextPageLabel' =>  \Yii::t('site', 'Загрузить ещё'),
         'linkOptions'   =>  [
-            'class' =>  'page-link',
+            'class' =>  'page-link btn mx-auto mt-3 w-100',
         ],
+        'nextPageCssClass'  =>  'next',
         'pluginOptions' => [
             'history'   =>  false,
-            'button'    =>  false,
+            'button'    =>  '.pagination .page-link.btn',
+            'append'    =>  '.list-group-item',
+            'scrollThreshold'    =>  false,
             'loading' => [
                 'msgText'       =>  Html::tag('div', \Yii::t('site', 'Загружается следующая страница. Пожалуйста, подождите'), ['class' => 'text-center']),
                 'finishedMsg'   =>  Html::tag('div', \Yii::t('site', 'Вы достигли конца'), ['class' => 'text-center']),
             ],
         ],
     ],
-    'layout'    =>  Html::tag('div', '{items}', ['class' => 'list-group-content']).' '. Html::tag('div', '{pager}', ['class' => 'text-center pagination-wrap']),
+    'layout'    =>  Html::tag('div', '{items} ', ['class' => 'list-group-content']).' '. Html::tag('div', '{pager}', ['class' => 'text-center pagination-wrap']),
 ]);
