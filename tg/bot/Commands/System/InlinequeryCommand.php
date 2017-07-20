@@ -53,9 +53,11 @@ class InlinequeryCommand extends BaseSystemCommand
 
             if($myTracks){
                 $query = trim(mb_substr($query, strlen($myTracksText) + 1));
+                \Yii::info('query has trimmed to '.$query);
             }
 
             if($query){
+                \Yii::info('has query '.$query);
                 $songs->andWhere(['or', ['like', 'songs.title', $query], ['like', 'songs.artist', $query]]);
             }
         }else{

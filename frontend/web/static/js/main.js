@@ -115,7 +115,8 @@ $(document).ready(function(){
         $('#trackEditModal').modal('show');
 
         $.ajax({
-            url: routes.tracks.edit + '?id=' + id
+            url: routes.tracks.edit + '?id=' + id,
+            async: true
         }).success(function(data){
             $('#trackEditModal .modal-body [data-pjax-container]').html(data);
         })
