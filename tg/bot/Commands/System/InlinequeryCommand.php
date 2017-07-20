@@ -52,9 +52,7 @@ class InlinequeryCommand extends BaseSystemCommand
             $myTracks = preg_match('/^'.$myTracksText.'/', $query);
 
             if($myTracks){
-                \Yii::info('query '.$query.' prepare to trim');
-                $query = trim(mb_substr($query, strlen($myTracksText) + 1));
-                \Yii::info('query has trimmed to '.$query);
+                $query = trim(mb_substr($query, mb_strlen($myTracksText) + 1));
             }
 
             if($query){
