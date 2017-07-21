@@ -3,6 +3,7 @@ namespace Longman\TelegramBot\Commands\SystemCommands;
 
 use common\models\Song;
 use common\models\UserSongs;
+use Longman\TelegramBot\Exception\TelegramException;
 use tg\bot\Base\BaseSystemCommand;
 use Longman\TelegramBot\Entities\InlineQuery\InlineQueryResultArticle;
 use Longman\TelegramBot\Entities\InlineQuery\InlineQueryResultCachedAudio;
@@ -34,7 +35,7 @@ class InlinequeryCommand extends BaseSystemCommand
      * Command execute method
      *
      * @return mixed
-     * @throws \Longman\TelegramBot\Exception\TelegramException
+     * @throws TelegramException
      */
     public function execute(){
         $update       = $this->getUpdate();
@@ -56,7 +57,6 @@ class InlinequeryCommand extends BaseSystemCommand
             }
 
             if($query){
-                \Yii::info('has query '.$query);
                 $songs->andWhere(['or', ['like', 'songs.title', $query], ['like', 'songs.artist', $query]]);
             }
         }else{

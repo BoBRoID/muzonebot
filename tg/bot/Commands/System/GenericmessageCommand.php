@@ -3,7 +3,10 @@
 
 namespace Longman\TelegramBot\Commands\SystemCommands;
 
+use app\bot\Entities\InlineKeyboardList;
 use common\models\NotificationSettings;
+use Longman\TelegramBot\Entities\InlineKeyboardButton;
+use Longman\TelegramBot\Entities\Keyboard;
 use tg\bot\Base\BaseSystemCommand;
 use common\helpers\TagExtractor;
 use common\helpers\TrackDownloader;
@@ -40,6 +43,7 @@ class GenericmessageCommand extends BaseSystemCommand
      * Execution if MySQL is required but not available
      *
      * @return \Longman\TelegramBot\Entities\ServerResponse
+     * @throws \Longman\TelegramBot\Exception\TelegramException
      */
     public function execute(){
         $message = $this->getMessage();
@@ -50,14 +54,14 @@ class GenericmessageCommand extends BaseSystemCommand
 
         if($audio = $message->getAudio()){
             if($song = Song::findOne(['fileId' => $audio->getFileId()])){
-                if($message->getChat()->isPrivateChat() && $this->botUser->getNotificationSettingValue(NotificationSettings::TYPE_WHEN_EXISTS, true)){
+                if($message->getChat()->isPrivateChat()){
                     return Request::sendMessage([
-                        'text'                  => \Yii::t('general', 'Данный трек уже есть в нашей базе!'),
+                        'reply_markup'          =>  new InlineKeyboardList([new InlineKeyboardButton(['text' => \Yii::t('general', 'Добавить в мои')])]),
                         'reply_to_message_id'   =>  $message->getMessageId()
                     ] + $data);
-                }else{
-                    return Request::emptyResponse();
                 }
+
+                return Request::emptyResponse();
             }
 
             if($this->botUser->getNotificationSettingValue(NotificationSettings::TYPE_WHEN_RECEIVED, true)){
