@@ -31,7 +31,6 @@ class Settings extends BaseAction{
         $chat_id = $message->getChat()->getId();
 
         $data = [
-            'chat_id'       =>  $chat_id,
             'text'          =>  \Yii::t('general', 'Доступные настройки:'),
             'reply_markup'  =>  self::getMainKeyboard()
         ];
@@ -40,7 +39,9 @@ class Settings extends BaseAction{
             $this->updateCallbackQuery($data);
         }
 
-        return Request::sendMessage($data);
+        return Request::sendMessage($data + [
+            'chat_id'       =>  $chat_id,
+        ]);
     }
 
     /**
