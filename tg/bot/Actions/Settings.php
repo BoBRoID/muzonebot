@@ -31,12 +31,9 @@ class Settings extends BaseAction{
         ];
 
         if($this->update->getCallbackQuery()){
-            \Yii::trace($data);
-            return parent::run();
             return $this->updateCallbackQuery($data);
         }
 
-        return parent::run();
         return Request::sendMessage($data + [
             'chat_id'       =>  $chat_id,
         ]);

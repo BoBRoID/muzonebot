@@ -103,13 +103,16 @@ class BaseAction
         $data = array_merge($data, $coordinates);
 
         if(array_key_exists('caption', $data)){
+            \Yii::trace('editMessageCaption');
             return Request::editMessageCaption($data);
         }
 
         if(array_key_exists('reply_markup', $data) && !array_key_exists('text', $data)){
+            \Yii::trace('editMessageReplyMarkup');
             return Request::editMessageReplyMarkup($data);
         }
 
+        \Yii::trace('editMessageText');
         return Request::editMessageText($data);
     }
 
