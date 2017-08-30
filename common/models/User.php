@@ -137,12 +137,35 @@ class User extends ActiveRecord
      */
     public function getNotificationSettingValue($type, $default = false){
         foreach($this->notificationSettings as $notificationSetting){
-            if($notificationSetting->type == $type){
+            if($notificationSetting->type === $type){
                 return $notificationSetting->value;
             }
         }
 
         return $default;
+    }
+
+    public function setNotificationSettingValue($type, $value){
+        $notification = new NotificationSettings([
+            'type'      =>  $type,
+            'value'     =>  $value,
+            'user_id'   =>  $this->id
+        ]);
+
+        foreach($this->notificationSettings as $notificationSetting){
+            if($notificationSetting->type === $type){
+                $notification = $notificationSetting;
+                break;
+            }
+        }
+
+        if(!$notification->save()){
+            return false;
+        }
+
+        $this->notificationSettings[] = $notification;
+
+        return true;
     }
 
 }

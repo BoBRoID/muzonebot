@@ -20,7 +20,9 @@ class ManageNotifications extends BaseAction
 
     public function run(){
         if(isset($this->queryData->t)){
+            $val = $this->botUser->getNotificationSettingValue($this->queryData->t) ? false : true;
 
+            $this->botUser->setNotificationSettingValue($this->queryData->t, (int)$val);
         }
 
         return $this->runIndex();
