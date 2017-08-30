@@ -139,10 +139,14 @@ class User extends ActiveRecord
         return array_merge($this->notificationSettings, $this->notificationSettingsArray);
     }
 
+    /**
+     * @param int $type
+     * @return NotificationSettings
+     */
     public function getNotificationSettingByType(int $type){
         foreach($this->getNotificationSettingsArray() as $notificationSetting){
             if($notificationSetting->type === $type){
-                return $notificationSetting->value;
+                return $notificationSetting;
             }
         }
 
@@ -150,18 +154,18 @@ class User extends ActiveRecord
     }
 
     /**
-     * @param $type
+     * @param int $type
      * @param bool $default
      * @return bool|int
      */
-    public function getNotificationSettingValue($type, $default = false){
-        foreach($this->getNotificationSettingsArray() as $notificationSetting){
-            if($notificationSetting->type === $type){
-                return $notificationSetting->value;
-            }
+    public function getNotificationSettingValue(int $type, bool $default = false): bool{
+        $notification = $this->getNotificationSettingByType($type);
+
+        if(!$notification){
+            return $default;
         }
 
-        return $default;
+        return (bool)$notification->value;
     }
 
     public function setNotificationSettingValue($type, $value){
