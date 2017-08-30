@@ -54,7 +54,7 @@ class ManageNotifications extends BaseAction
             $buttons[] = new InlineKeyboardButton([
                 'text'  =>  \Yii::t('general', '{reason} {state}', [
                     'reason'        =>  $description,
-                    'state'         =>  $this->botUser->getNotificationSettingValue($type) ? Emoji::render('bell') : Emoji::render('bell_cancel')
+                    'state'         =>  $this->botUser->getNotificationSettingValue($type) ? Emoji::render(Emoji::BELL) : Emoji::render(Emoji::BELL_CANCEL)
                 ]),
                 'callback_data' =>  json_encode(['action' => 'manageNotifications', 'data' => ['t' => $type]])
             ]);
