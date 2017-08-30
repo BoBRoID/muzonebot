@@ -30,17 +30,17 @@ class ManageNotifications extends BaseAction
 
     public function runIndex(){
         $data = [
-            'text'          =>  'Настройки уведомлений',
+            'text'          =>  \Yii::t('general', 'Настройки уведомлений'),
             'reply_markup'  =>  $this->getMainKeyboard()
         ];
 
-        if($this->update->getCallbackQuery()){
-            return $this->updateCallbackQuery($data);
+        if(!$this->update->getCallbackQuery()){
+            return Request::sendMessage($data + [
+                'chat_id'   =>  $this->update->getMessage()->getChat()->getId()
+            ]);
         }
 
-        return Request::sendMessage($data + [
-            'chat_id'   =>  $this->update->getMessage()->getChat()->getId()
-        ]);
+        return $this->updateCallbackQuery($data);
     }
 
     /**
