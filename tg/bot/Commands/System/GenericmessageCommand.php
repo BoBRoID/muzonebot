@@ -5,6 +5,7 @@ namespace Longman\TelegramBot\Commands\SystemCommands;
 
 use app\bot\Entities\InlineKeyboardList;
 use common\models\NotificationSettings;
+use common\models\UserSongs;
 use Longman\TelegramBot\Entities\InlineKeyboardButton;
 use Longman\TelegramBot\Entities\Keyboard;
 use tg\bot\Actions\ManageMy;
@@ -56,7 +57,9 @@ class GenericmessageCommand extends BaseSystemCommand
         if($audio = $message->getAudio()){
             if($song = Song::findOne(['fileId' => $audio->getFileId()])){
                 if($message->getChat()->isPrivateChat()){
-                    if($song->userSong){
+                    $userSong = (boolean)UserSongs::findOne(['song_id' => $song->id, 'user_id' => $this->botUser->id]);
+
+                    if($userSong){
                         $button = new InlineKeyboardButton([
                             'text'          =>  \Yii::t('general', 'Удалить из моих'),
                             'callback_data' =>  json_encode(['action' => 'manageMy', 'data' => ['a' => ManageMy::ACTION_REMOVE, 'id' => $song->id]])
