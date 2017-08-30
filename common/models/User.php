@@ -170,10 +170,11 @@ class User extends ActiveRecord
         if($notification === null){
             $notification = new NotificationSettings([
                 'type'      =>  $type,
-                'value'     =>  $value,
                 'user_id'   =>  $this->id
             ]);
         }
+
+        $notification->value = $value;
 
         if(!$notification->save()){
             return false;
