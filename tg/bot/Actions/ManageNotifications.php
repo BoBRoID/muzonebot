@@ -10,11 +10,10 @@ namespace tg\bot\Actions;
 
 
 use app\bot\Entities\InlineKeyboardList;
-use common\helpers\Emoji;
 use common\models\NotificationSettings;
-use common\models\User;
 use Longman\TelegramBot\Entities\InlineKeyboardButton;
 use Longman\TelegramBot\Request;
+use Spatie\Emoji\Emoji;
 
 class ManageNotifications extends BaseAction
 {
@@ -54,7 +53,7 @@ class ManageNotifications extends BaseAction
             $buttons[] = new InlineKeyboardButton([
                 'text'  =>  \Yii::t('general', '{reason} {state}', [
                     'reason'        =>  $description,
-                    'state'         =>  $this->botUser->getNotificationSettingValue($type) ? Emoji::render(Emoji::BELL) : Emoji::render(Emoji::BELL_CANCEL)
+                    'state'         =>  $this->botUser->getNotificationSettingValue($type) ? Emoji::bell() : Emoji::bellWithCancellationStroke()
                 ]),
                 'callback_data' =>  json_encode(['action' => 'manageNotifications', 'data' => ['t' => $type]])
             ]);
