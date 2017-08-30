@@ -69,6 +69,7 @@ class GenericmessageCommand extends BaseSystemCommand
                     }
 
                     return Request::sendMessage([
+                        'text'                  =>  \Yii::t('general', 'Доступны действия с треком:'),
                         'reply_markup'          =>  new InlineKeyboardList([
                             $button
                         ]),
