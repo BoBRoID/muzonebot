@@ -36,7 +36,7 @@ class Settings extends BaseAction{
         ];
 
         if($this->update->getCallbackQuery()){
-            $this->updateCallbackQuery($data);
+            return $this->updateCallbackQuery($data);
         }
 
         return Request::sendMessage($data + [
