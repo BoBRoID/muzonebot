@@ -53,7 +53,7 @@ class SettingsCommand extends BaseUserCommand
      */
     public function execute(){
         $settingsAction = new Settings($this);
-        return $settingsAction->runIndex();
+        return $settingsAction->run();
     }
 
 }
