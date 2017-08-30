@@ -93,17 +93,20 @@ class SiteController extends Controller
         $newMembersToday = User::find()->where(['>=', 'created_at', $todayDate])->count();
 
         $activeMembersToday = Message::find()
+            ->distinct()
+            ->select('user_id')
             ->where(['>=', 'date', $todayDate])
+            ->andWhere(['not', ['user_id' => null]])
             ->andWhere(['or', ['not', ['audio' => null]], ['not', ['entities' => null]]])
-            ->groupBy('user_id')
-            ->count();
+            ->asArray()
+            ->all();
 
         $newTracksToday = Song::find()->where(['>=', 'added', strtotime($todayDate)])->count();
         $lastAddedTrack = Song::find()->orderBy('added DESC')->limit(1)->one();
 
         return $this->render('index', [
             'newMembersToday'   =>  $newMembersToday,
-            'activeMembersToday'=>  $activeMembersToday,
+            'activeMembersToday'=>  count($activeMembersToday),
             'newTracksToday'    =>  $newTracksToday,
             'lastAddedTrack'    =>  $lastAddedTrack
         ]);
