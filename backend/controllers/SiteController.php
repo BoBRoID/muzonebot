@@ -91,7 +91,13 @@ class SiteController extends Controller
     public function actionIndex(){
         $todayDate = date('Y-m-d').' 00:00:00';
         $newMembersToday = User::find()->where(['>=', 'created_at', $todayDate])->count();
-        $activeMembersToday = Message::find()->where(['>=', 'date', $todayDate])->andWhere(['or', ['not', ['audio' => null]], ['not', ['entities' => 'null']]])->count();
+        
+        $activeMembersToday = Message::find()
+            ->where(['>=', 'date', $todayDate])
+            ->andWhere(['or', ['not', ['audio' => null]], ['not', ['entities' => 'null']]])
+            ->groupBy('user_id')
+            ->count();
+
         $newTracksToday = Song::find()->where(['>=', 'added', strtotime($todayDate)])->count();
         $lastAddedTrack = Song::find()->orderBy('added DESC')->limit(1)->one();
 
