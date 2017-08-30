@@ -27,13 +27,17 @@ class Settings extends BaseAction{
             'reply_markup'  =>  self::getMainKeyboard()
         ];
 
-        if($this->update->getCallbackQuery()){
+        if(!$this->update->getCallbackQuery()){
+            return Request::sendMessage($data + [
+                    'chat_id'   =>  $this->update->getMessage()->getChat()->getId()
+                ]);
+
             return $this->updateCallbackQuery($data);
         }
 
-        return Request::sendMessage($data + [
-            'chat_id'   =>  $this->update->getMessage()->getChat()->getId()
-        ]);
+        \Yii::trace($data);
+
+        return Request::emptyResponse();
     }
 
     /**
