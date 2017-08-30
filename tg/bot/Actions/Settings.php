@@ -33,8 +33,6 @@ class Settings extends BaseAction{
             ]);
         }
 
-        \Yii::trace($data);
-
         return $this->updateCallbackQuery($data);
     }
 
