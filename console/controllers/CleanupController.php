@@ -43,16 +43,17 @@ class CleanupController extends Controller
          */
         foreach(Song::find()->where(['deleted' => 0, 'isBig' => 0])->andWhere(['<=', 'last_update', time() - 3600])->each() as $song){
             $total++;
+
             try{
                 TrackDownloader::getUrl($song->fileId);
             }catch (NotFoundHttpException $e){
                 $deleted++;
                 $song->deleted = 1;
-                $song->save(false);
             }catch (BadRequestHttpException $e){
                 $song->isBig = 1;
-                $song->save(false);
             }
+
+            $song->save(false);
         }
 
         echo 'Total worked with '.$total.' tracks, deleted '.$deleted;
