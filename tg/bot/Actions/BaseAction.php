@@ -100,7 +100,7 @@ class BaseAction
             'message_id'=>  $callback_query->getMessage()->getMessageId(),
         ];
 
-        $data = array_merge($coordinates, $data);
+        $data = array_merge($data, $coordinates);
 
         if(array_key_exists('caption', $data)){
             return Request::editMessageCaption($data);
