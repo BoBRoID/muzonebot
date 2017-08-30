@@ -22,9 +22,6 @@ class Settings extends BaseAction{
      */
     public function run(): ServerResponse
     {
-        $message = $this->update->getMessage();
-        $chat_id = $message->getChat()->getId();
-
         $data = [
             'text'          =>  \Yii::t('general', 'Доступные настройки:'),
             'reply_markup'  =>  self::getMainKeyboard()
@@ -35,7 +32,7 @@ class Settings extends BaseAction{
         }
 
         return Request::sendMessage($data + [
-            'chat_id'       =>  $chat_id,
+            'chat_id'   =>  $this->update->getMessage()->getChat()->getId()
         ]);
     }
 
