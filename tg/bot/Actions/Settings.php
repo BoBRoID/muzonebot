@@ -29,15 +29,13 @@ class Settings extends BaseAction{
 
         if(!$this->update->getCallbackQuery()){
             return Request::sendMessage($data + [
-                    'chat_id'   =>  $this->update->getMessage()->getChat()->getId()
-                ]);
-
-            return $this->updateCallbackQuery($data);
+                'chat_id'   =>  $this->update->getMessage()->getChat()->getId()
+            ]);
         }
 
         \Yii::trace($data);
 
-        return Request::emptyResponse();
+        return $this->updateCallbackQuery($data);
     }
 
     /**
