@@ -4,6 +4,7 @@ namespace backend\controllers;
 use common\models\AdminToken;
 use common\models\Feedback;
 use backend\models\Song;
+use common\models\Message;
 use common\models\User;
 use Yii;
 use yii\data\ActiveDataProvider;
@@ -90,7 +91,7 @@ class SiteController extends Controller
     public function actionIndex(){
         $todayDate = date('Y-m-d').' 00:00:00';
         $newMembersToday = User::find()->where(['>=', 'created_at', $todayDate])->count();
-        $activeMembersToday = User::find()->where(['>=', 'updated_at', $todayDate])->count();
+        $activeMembersToday = Message::find()->where(['>=', 'date', $todayDate])->andWhere(['or', ['not', ['audio' => null]], ['not', ['entities' => 'null']]])->count();
         $newTracksToday = Song::find()->where(['>=', 'added', strtotime($todayDate)])->count();
         $lastAddedTrack = Song::find()->orderBy('added DESC')->limit(1)->one();
 
