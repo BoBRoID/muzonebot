@@ -139,7 +139,7 @@ class User extends ActiveRecord
         return array_merge($this->notificationSettings, $this->notificationSettingsArray);
     }
 
-    public function getNotificationSettingByType(int $type): ?NotificationSettings{
+    public function getNotificationSettingByType(int $type){
         foreach($this->getNotificationSettingsArray() as $notificationSetting){
             if($notificationSetting->type === $type){
                 return $notificationSetting->value;
