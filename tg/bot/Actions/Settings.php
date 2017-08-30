@@ -30,15 +30,16 @@ class Settings extends BaseAction{
             'reply_markup'  =>  self::getMainKeyboard()
         ];
 
-        \Yii::trace($data);
-
-        try{
-            return Request::sendMessage($data + [
-                    'chat_id'       =>  $chat_id,
-                ]);
-        }catch (\Exception $exception){
-            \Yii::trace($exception);
+        if($this->update->getCallbackQuery()){
+            \Yii::trace($data);
+            return parent::run();
+            return $this->updateCallbackQuery($data);
         }
+
+        return parent::run();
+        return Request::sendMessage($data + [
+            'chat_id'       =>  $chat_id,
+        ]);
     }
 
     /**
