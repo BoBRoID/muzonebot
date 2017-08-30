@@ -9,6 +9,7 @@
 namespace tg\bot\Actions;
 
 
+use app\bot\Entities\InlineKeyboardList;
 use common\models\Song;
 use common\models\UserSongs;
 use Longman\TelegramBot\Entities\InlineKeyboardButton;
@@ -75,7 +76,9 @@ class ManageMy extends BaseAction
 
         return $this->updateCallbackQuery([
             'reply_markup'  =>  [
-                $button
+                new InlineKeyboardList([
+                    $button
+                ])
             ]
         ]);
     }
