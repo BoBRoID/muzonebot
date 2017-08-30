@@ -77,7 +77,7 @@ class NotificationSettings extends \yii\db\ActiveRecord
     /**
      * @return array
      */
-    public function getTypesDescriptions(){
+    public static function getTypesDescriptions(){
         return [
             self::TYPE_WHEN_EXISTS          =>  \Yii::t('general', 'трек уже существует'),
             self::TYPE_WHEN_SYSTEM_ERROR    =>  \Yii::t('general', 'произошла системная ошибка'),
@@ -90,10 +90,10 @@ class NotificationSettings extends \yii\db\ActiveRecord
      * @return string|null
      */
     public function getTypeDescription(){
-        if(!array_key_exists($this->type, $this->getTypesDescriptions())){
+        if(!array_key_exists($this->type, self::getTypesDescriptions())){
             return null;
         }
 
-        return $this->getTypesDescriptions()[$this->type];
+        return self::getTypesDescriptions()[$this->type];
     }
 }

@@ -62,22 +62,26 @@ class ManageMy extends BaseAction
                 break;
         }
 
-        if($userSong){
+        return $this->updateCallbackQuery([
+            'reply_markup'  =>  self::getKeyboard($track->id, (bool)$userSong)
+        ]);
+    }
+
+    public static function getKeyboard(int $trackId, bool $isUserSong): InlineKeyboardList{
+        if($isUserSong){
             $button = new InlineKeyboardButton([
                 'text'          =>  \Yii::t('general', 'Удалить из моих'),
-                'callback_data' =>  json_encode(['action' => 'manageMy', 'data' => ['a' => self::ACTION_REMOVE, 'id' => $track->id]])
+                'callback_data' =>  json_encode(['action' => 'manageMy', 'data' => ['a' => self::ACTION_REMOVE, 'id' => $trackId]])
             ]);
         }else{
             $button = new InlineKeyboardButton([
                 'text'          =>  \Yii::t('general', 'Добавить в мои'),
-                'callback_data' =>  json_encode(['action' => 'manageMy', 'data' => ['a' => self::ACTION_ADD, 'id' => $track->id]])
+                'callback_data' =>  json_encode(['action' => 'manageMy', 'data' => ['a' => self::ACTION_ADD, 'id' => $trackId]])
             ]);
         }
 
-        return $this->updateCallbackQuery([
-            'reply_markup'  =>  new InlineKeyboardList([
-                $button
-            ])
+        return new InlineKeyboardList([
+            $button
         ]);
     }
 

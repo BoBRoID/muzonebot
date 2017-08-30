@@ -46,7 +46,7 @@ class BaseAction
      */
     public function __construct($command, $queryData = null)
     {
-        if(empty($command) || $command instanceof Command == false){
+        if(null === $command || $command instanceof Command === false){
             throw new Exception('wrong use of action! $command must be an instance of Longman\TelegramBot\Commands\Command!');
         }
 
@@ -59,8 +59,8 @@ class BaseAction
             \Yii::$app->language = $this->botUser->language_id;
         }
 
-        if(!is_null($queryData)){
-            if($queryData instanceof \stdClass == false){
+        if(null !== $queryData){
+            if($queryData instanceof \stdClass === false){
                 $queryData = new \stdClass($queryData);
             }
 

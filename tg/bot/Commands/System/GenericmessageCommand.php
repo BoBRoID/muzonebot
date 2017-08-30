@@ -131,7 +131,7 @@ class GenericmessageCommand extends BaseSystemCommand
                     $fileNameParts = explode('-', $fileName);
 
                     if(empty($song->title)){
-                        if(count($fileNameParts) == 1){
+                        if(count($fileNameParts) === 1){
                             $song->title = trim($fileNameParts[0]);
                         }else{
                             $song->title = trim($fileNameParts[1]);
@@ -173,31 +173,31 @@ class GenericmessageCommand extends BaseSystemCommand
                             'title'     => $song->title
                         ]),
                     ] + $data);
-                }else{
-                    return Request::emptyResponse();
                 }
-            }else{
-                \Yii::info($song->toArray());
 
-                if($this->botUser->getNotificationSettingValue(NotificationSettings::TYPE_WHEN_CANT_SAVE, true)){
-                    return Request::sendMessage([
+                return Request::emptyResponse();
+            }
+
+            if($this->botUser->getNotificationSettingValue(NotificationSettings::TYPE_WHEN_CANT_SAVE, true)){
+                return Request::sendMessage([
                         'text'      =>  \Yii::t('general', 'Произошла ошибка при попытке сохранить в базу трек. {errors}', [
                             'errors'    => $this->telegram->isAdmin() ? ' Ошибки: '.json_encode($song->getErrors(), JSON_UNESCAPED_UNICODE) : null
                         ]),
                         'reply_to_message_id'   =>  $message->getMessageId()
                     ] + $data);
-                }else{
-                    return Request::emptyResponse();
-                }
             }
-        }else if($message->getText(true) && $message->getChat()->isPrivateChat()){
+
+            return Request::emptyResponse();
+        }
+
+        if($message->getText(true) && $message->getChat()->isPrivateChat()){
             return Request::sendMessage([
-                'text'                  =>  \Yii::t('general', 'Вы хотели найти трек? Для этого воспользуйтесь inline режимом работы бота. Введите @MuzOneBot <название трека или исполнитель> (например, `@MuzOneBot {content}`), и выберите во всплывающем окне нужный вам трек.', [
-                    'content' => $message->getText(true)
-                ]),
-                'parse_mode'            =>  'Markdown',
-                'reply_to_message_id'   =>  $message->getMessageId()
-            ] + $data);
+                    'text'                  =>  \Yii::t('general', 'Вы хотели найти трек? Для этого воспользуйтесь inline режимом работы бота. Введите @MuzOneBot <название трека или исполнитель> (например, `@MuzOneBot {content}`), и выберите во всплывающем окне нужный вам трек.', [
+                        'content' => $message->getText(true)
+                    ]),
+                    'parse_mode'            =>  'Markdown',
+                    'reply_to_message_id'   =>  $message->getMessageId()
+                ] + $data);
         }
 
         return Request::emptyResponse();
