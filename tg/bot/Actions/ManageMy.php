@@ -1,0 +1,84 @@
+<?php
+/**
+ * Created by PhpStorm.
+ * User: gilko.nikolai
+ * Date: 30.08.2017
+ * Time: 11:41
+ */
+
+namespace tg\bot\Actions;
+
+
+use common\models\Song;
+use common\models\UserSongs;
+use Longman\TelegramBot\Entities\InlineKeyboardButton;
+
+class ManageMy extends BaseAction
+{
+
+    const ACTION_ADD = 'add';
+    const ACTION_REMOVE = 'rem';
+
+    public function run(){
+        $track = Song::findOne(['id' => $this->queryData->id]);
+        $currentlyAdded = $track->userSong ? true : false;
+
+        if(!$track){
+            return $this->answerCallbackQuery([
+                'text'          =>  \Yii::t('general', 'Трек не найден!'),
+                'show_alert'    =>  true
+            ]);
+        }
+
+        switch($this->queryData->a){
+            case self::ACTION_ADD:
+                if(!$track->userSong){
+                    $currentlyAdded = true;
+                    $userSong = new UserSongs([
+                        'user_id'   =>  $this->botUser->id,
+                        'song_id'   =>  $track->id
+                    ]);
+
+                    if(!$userSong->save()){
+                        return $this->answerCallbackQuery([
+                            'text'          =>  \Yii::t('general', 'Произошла ошибка при попытке добавить трек в мои!'),
+                            'show_alert'    =>  true
+                        ]);
+                    }
+                }
+                break;
+            case self::ACTION_REMOVE:
+                if($track->userSong){
+                    $currentlyAdded = false;
+
+                    if(!$track->userSong->delete()){
+                        return $this->answerCallbackQuery([
+                            'text'          =>  \Yii::t('general', 'Произошла ошибка при попытке удалить трек из моих!'),
+                            'show_alert'    =>  true
+                        ]);
+                    }
+                }
+                break;
+        }
+
+        if($currentlyAdded){
+            $button = new InlineKeyboardButton([
+                'text'          =>  \Yii::t('general', 'Удалить из моих'),
+                'callback_data' =>  json_encode(['action' => 'manageMy', 'data' => ['a' => self::ACTION_REMOVE, 'id' => $track->id]])
+            ]);
+        }else{
+            $button = new InlineKeyboardButton([
+                'text'          =>  \Yii::t('general', 'Добавить в мои'),
+                'callback_data' =>  json_encode(['action' => 'manageMy', 'data' => ['a' => self::ACTION_ADD, 'id' => $track->id]])
+            ]);
+        }
+
+        return $this->updateCallbackQuery([
+            'reply_markup'  =>  [
+                $button
+            ]
+        ]);
+    }
+
+
+}

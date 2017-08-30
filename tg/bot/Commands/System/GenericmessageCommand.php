@@ -7,6 +7,7 @@ use app\bot\Entities\InlineKeyboardList;
 use common\models\NotificationSettings;
 use Longman\TelegramBot\Entities\InlineKeyboardButton;
 use Longman\TelegramBot\Entities\Keyboard;
+use tg\bot\Actions\ManageMy;
 use tg\bot\Base\BaseSystemCommand;
 use common\helpers\TagExtractor;
 use common\helpers\TrackDownloader;
@@ -55,8 +56,22 @@ class GenericmessageCommand extends BaseSystemCommand
         if($audio = $message->getAudio()){
             if($song = Song::findOne(['fileId' => $audio->getFileId()])){
                 if($message->getChat()->isPrivateChat()){
+                    if($song->userSong){
+                        $button = new InlineKeyboardButton([
+                            'text'          =>  \Yii::t('general', 'Удалить из моих'),
+                            'callback_data' =>  json_encode(['action' => 'manageMy', 'data' => ['a' => ManageMy::ACTION_REMOVE, 'id' => $song->id]])
+                        ]);
+                    }else{
+                        $button = new InlineKeyboardButton([
+                            'text'          =>  \Yii::t('general', 'Добавить в мои'),
+                            'callback_data' =>  json_encode(['action' => 'manageMy', 'data' => ['a' => ManageMy::ACTION_ADD, 'id' => $song->id]])
+                        ]);
+                    }
+
                     return Request::sendMessage([
-                        'reply_markup'          =>  new InlineKeyboardList([new InlineKeyboardButton(['text' => \Yii::t('general', 'Добавить в мои')])]),
+                        'reply_markup'          =>  new InlineKeyboardList([
+                            $button
+                        ]),
                         'reply_to_message_id'   =>  $message->getMessageId()
                     ] + $data);
                 }

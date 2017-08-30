@@ -144,4 +144,5 @@ class User extends ActiveRecord
 
         return $default;
     }
+
 }
