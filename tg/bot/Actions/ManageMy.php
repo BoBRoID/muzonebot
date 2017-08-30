@@ -75,6 +75,7 @@ class ManageMy extends BaseAction
         }
 
         return $this->updateCallbackQuery([
+            'text'          =>  $this->update->getMessage()->getText(true),
             'reply_markup'  =>  new InlineKeyboardList([
                 $button
             ])
