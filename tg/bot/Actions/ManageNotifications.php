@@ -57,7 +57,7 @@ class ManageNotifications extends BaseAction
 
         $buttons[] = new InlineKeyboardButton([
             'text'          =>  \Yii::t('general', 'Назад'),
-            'callback_data' =>  \GuzzleHttp\json_encode(['action' => 'settings'])
+            'callback_data' =>  json_encode(['action' => 'settings'])
         ]);
 
         return new InlineKeyboardList($buttons);
