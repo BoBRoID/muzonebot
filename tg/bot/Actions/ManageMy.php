@@ -30,9 +30,11 @@ class ManageMy extends BaseAction
             ]);
         }
 
+        $userSong = UserSongs::findOne(['song_id' => $track->id, 'user_id' => $this->botUser->id]);
+
         switch($this->queryData->a){
             case self::ACTION_ADD:
-                if(!$track->userSong){
+                if(!$userSong){
                     $currentlyAdded = true;
                     $userSong = new UserSongs([
                         'user_id'   =>  $this->botUser->id,
@@ -48,10 +50,10 @@ class ManageMy extends BaseAction
                 }
                 break;
             case self::ACTION_REMOVE:
-                if($track->userSong){
+                if($userSong){
                     $currentlyAdded = false;
 
-                    if(!$track->userSong->delete()){
+                    if(!$userSong->delete()){
                         return $this->answerCallbackQuery([
                             'text'          =>  \Yii::t('general', 'Произошла ошибка при попытке удалить трек из моих!'),
                             'show_alert'    =>  true
