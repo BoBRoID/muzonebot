@@ -16,6 +16,11 @@ use Longman\TelegramBot\Request;
 
 class Settings extends BaseAction{
 
+    public function run()
+    {
+        return $this->runIndex();
+    }
+
     /**
      * @return \Longman\TelegramBot\Entities\ServerResponse
      * @throws \Longman\TelegramBot\Exception\TelegramException
@@ -25,11 +30,17 @@ class Settings extends BaseAction{
         $message = $this->update->getMessage();
         $chat_id = $message->getChat()->getId();
 
-        return Request::sendMessage([
+        $data = [
             'chat_id'       =>  $chat_id,
             'text'          =>  \Yii::t('general', 'Доступные настройки:'),
             'reply_markup'  =>  self::getMainKeyboard()
-        ]);
+        ];
+
+        if($this->update->getCallbackQuery()){
+            $this->updateCallbackQuery($data);
+        }
+
+        return Request::sendMessage($data);
     }
 
     /**
