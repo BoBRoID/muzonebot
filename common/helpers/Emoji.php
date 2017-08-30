@@ -20,12 +20,12 @@ class Emoji
     /**
      * 🔔
      */
-    const BELL = '\u1F514';
+    const BELL = '\u1f514';
 
     /**
      * 🔕
      */
-    const BELL_CANCEL = '\u1F515';
+    const BELL_CANCEL = '\u1f515';
 
     private static $constants = [
         'zzz'           => self::ZZZ,
