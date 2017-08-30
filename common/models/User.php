@@ -25,6 +25,8 @@ class User extends ActiveRecord
      */
     protected static $relatedUsers = [];
 
+    protected $notificationSettingsArray = [];
+
     public static function tableName()
     {
         return 'user';
@@ -131,12 +133,19 @@ class User extends ActiveRecord
     }
 
     /**
+     * @return array
+     */
+    public function getNotificationSettingsArray(): array{
+        return array_merge($this->notificationSettings, $this->notificationSettingsArray);
+    }
+
+    /**
      * @param $type
      * @param bool $default
      * @return bool|int
      */
     public function getNotificationSettingValue($type, $default = false){
-        foreach($this->notificationSettings as $notificationSetting){
+        foreach($this->getNotificationSettingsArray() as $notificationSetting){
             if($notificationSetting->type === $type){
                 return $notificationSetting->value;
             }
@@ -152,7 +161,7 @@ class User extends ActiveRecord
             'user_id'   =>  $this->id
         ]);
 
-        foreach($this->notificationSettings as $notificationSetting){
+        foreach($this->getNotificationSettingsArray() as $notificationSetting){
             if($notificationSetting->type === $type){
                 $notification = $notificationSetting;
                 break;
@@ -163,7 +172,7 @@ class User extends ActiveRecord
             return false;
         }
 
-        $this->notificationSettings[] = $notification;
+        $this->notificationSettingsArray[] = $notification;
 
         return true;
     }
