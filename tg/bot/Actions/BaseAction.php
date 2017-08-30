@@ -95,10 +95,22 @@ class BaseAction
 
         $callback_query    = $this->update->getCallbackQuery();
 
-        return Request::editMessageText(array_merge([
+        $coordinates = [
             'chat_id'   =>  $callback_query->getMessage()->getChat()->getId(),
             'message_id'=>  $callback_query->getMessage()->getMessageId(),
-        ], $data));
+        ];
+
+        $data = array_merge($coordinates, $data);
+
+        if(array_key_exists('caption', $data)){
+            return Request::editMessageCaption($data);
+        }
+
+        if(array_key_exists('reply_markup', $data) && !array_key_exists('text', $data)){
+            return Request::editMessageReplyMarkup($data);
+        }
+
+        return Request::editMessageText($data);
     }
 
     /**

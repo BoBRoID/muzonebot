@@ -75,7 +75,6 @@ class ManageMy extends BaseAction
         }
 
         return $this->updateCallbackQuery([
-            'text'          =>  \Yii::t('general', 'Доступные действия с треком:'),
             'reply_markup'  =>  new InlineKeyboardList([
                 $button
             ])
