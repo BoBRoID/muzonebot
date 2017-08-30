@@ -21,7 +21,6 @@ class ManageMy extends BaseAction
 
     public function run(){
         $track = Song::findOne(['id' => $this->queryData->id]);
-        $currentlyAdded = $track->userSong ? true : false;
 
         if(!$track){
             return $this->answerCallbackQuery([
@@ -35,7 +34,6 @@ class ManageMy extends BaseAction
         switch($this->queryData->a){
             case self::ACTION_ADD:
                 if(!$userSong){
-                    $currentlyAdded = true;
                     $userSong = new UserSongs([
                         'user_id'   =>  $this->botUser->id,
                         'song_id'   =>  $track->id
@@ -51,19 +49,19 @@ class ManageMy extends BaseAction
                 break;
             case self::ACTION_REMOVE:
                 if($userSong){
-                    $currentlyAdded = false;
-
                     if(!$userSong->delete()){
                         return $this->answerCallbackQuery([
                             'text'          =>  \Yii::t('general', 'Произошла ошибка при попытке удалить трек из моих!'),
                             'show_alert'    =>  true
                         ]);
                     }
+
+                    $userSong = null;
                 }
                 break;
         }
 
-        if($currentlyAdded){
+        if($userSong){
             $button = new InlineKeyboardButton([
                 'text'          =>  \Yii::t('general', 'Удалить из моих'),
                 'callback_data' =>  json_encode(['action' => 'manageMy', 'data' => ['a' => self::ACTION_REMOVE, 'id' => $track->id]])
