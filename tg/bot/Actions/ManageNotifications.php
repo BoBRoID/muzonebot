@@ -49,9 +49,9 @@ class ManageNotifications extends BaseAction
             $buttons[] = new InlineKeyboardButton([
                 'text'  =>  \Yii::t('general', 'Уведомлять, когда {reason} {state}', [
                     'reason'        =>  $description,
-                    'state'         =>  '',
-                    'callback_data' =>  json_encode(['action' => 'manageNotifications', 'data' => ['t' => $type]])
-                ])
+                    'state'         =>  ''
+                ]),
+                'callback_data' =>  json_encode(['action' => 'manageNotifications', 'data' => ['t' => $type]])
             ]);
         }
 
