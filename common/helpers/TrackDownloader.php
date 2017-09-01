@@ -21,13 +21,15 @@ class TrackDownloader
     /**
      * @param $telegramFileId string
      * @return bool|string
+     * @throws \yii\web\BadRequestHttpException
+     * @throws \Longman\TelegramBot\Exception\TelegramException
      * @throws NotFoundHttpException
      */
     public static function get($telegramFileId){
         $opts = [
             'https'=>[
-                'method'=>"GET",
-                'header'=>"Accept-language: en\r\n" .
+                'method'    => 'GET',
+                'header'    =>  "Accept-language: en\r\n".
                     "Cookie: foo=bar\r\n"
             ],
             'ssl' =>[
@@ -46,7 +48,8 @@ class TrackDownloader
      * @throws BadRequestHttpException
      * @throws NotFoundHttpException
      */
-    public static function getUrl($telegramFileId){
+    public static function getUrl($telegramFileId): string
+    {
         new Telegram(\Yii::$app->params['apiKey'], \Yii::$app->params['botName']);
 
         $fileRequest = Request::getFile(['file_id' => $telegramFileId]);
