@@ -145,7 +145,7 @@ if(!\Yii::$app->user->isGuest){
                             ],
                             [
                                 'label'     =>  Html::tag('i', null, ['class' => 'icon-flag']).\Yii::t('manage', 'Переводы'),
-                                'url'       =>  Url::to(['/translatemanager/language/list'])
+                                'url'       =>  Url::to(['/translations/default/index'])
                             ],
                             '<li class="nav-title">'.\Yii::t('manage', 'Сервисные штуки').'</li>',
                             [

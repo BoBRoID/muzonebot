@@ -1,4 +1,6 @@
 <?php
+use backend\modules\translations\Module;
+
 $params = array_merge(
     require(__DIR__ . '/../../common/config/params.php'),
     require(__DIR__ . '/../../common/config/params-local.php'),
@@ -72,6 +74,9 @@ return [
         'rbac' => [
             'class'     =>  'dektrium\rbac\RbacWebModule',
             'admins'    =>  ['SomeWho']
+        ],
+        'translations'  =>  [
+            'class'         => Module::class,
         ],
     ],
     'params' => $params,
