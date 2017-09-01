@@ -51,15 +51,19 @@ class Language extends \yii\db\ActiveRecord
     public function attributeLabels()
     {
         return [
-            'language_id' => 'Language ID',
-            'language' => 'Language',
-            'country' => 'Country',
-            'name' => 'Name',
-            'name_ascii' => 'Name Ascii',
-            'status' => 'Status',
-            'flag' => 'Flag',
-            'default' => 'Default',
+            'language_id' => \Yii::t('manage', 'ID языка'),
+            'language' => \Yii::t('manage', 'Код языка'),
+            'country' => \Yii::t('manage', 'Код страны'),
+            'name' => \Yii::t('manage', 'Название'),
+            'name_ascii' => \Yii::t('manage', 'Название на английском'),
+            'status' => \Yii::t('manage', 'Состояние'),
+            'flag' => \Yii::t('manage', 'Флаг'),
+            'default' => \Yii::t('manage', 'По умолчанию'),
         ];
+    }
+
+    public function getMessages(){
+        return $this->hasMany(LanguageTranslate::className(), ['language' => 'language_id']);
     }
 
 }

@@ -3,6 +3,10 @@
  * @var $dataProvider \yii\data\ActiveDataProvider
  */
 
+use rmrevin\yii\fontawesome\FA;
+use Spatie\Emoji\Emoji;
+use yii\helpers\Html;
+
 $this->title = \Yii::t('manage', 'Список языков');
 $this->params['breadcrumbs'][] = [
     'url'   =>  '/translations/default/index',
@@ -36,11 +40,23 @@ $this->params['breadcrumbs'][] = $this->title;
                 [
                     'attribute' =>  'default',
                     'value'     =>  function($model, $value){
-                        return (int)$value === 1 ? \Spatie\Emoji\Emoji::whiteHeavyCheckMark() : \Spatie\Emoji\Emoji::crossMark();
+                        return (int)$value === 1 ? Emoji::whiteHeavyCheckMark() : Emoji::crossMark();
                     },
                 ],
                 [
-                    'class' =>  \yii\grid\ActionColumn::className()
+                    'class'     =>  \yii\grid\ActionColumn::className(),
+                    'buttons'   =>  [
+                        'edit'          =>  function($key, $model){
+                            return Html::a(FA::i('pencil'), ['/translations/default/edit', 'id' => $model->language_id], ['class' => 'btn btn-secondary btn-sm']);
+                        },
+                        'translations'  =>  function($key, $model){
+                            return Html::a(FA::i('list'), ['/translations/messages/index', 'id' => $model->language_id], ['class' => 'btn btn-secondary btn-sm']);
+                        },
+                        'setDefault'    =>  function($key, $model){
+
+                        }
+                    ],
+                    'template'  =>  Html::tag('div', '{edit} {translations} {setDefault}', ['class' => 'btn-group btn-group-sm'])
                 ]
             ]
         ])?>
