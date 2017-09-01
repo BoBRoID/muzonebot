@@ -27,7 +27,7 @@ class LanguagePicker extends \yii\base\Widget
         $currentLanguage = null;
 
         foreach($languagesList as $language){
-            if(\Yii::$app->language == $language['language_id']){
+            if((string)\Yii::$app->language === (string)$language['language_id']){
                 $currentLanguage = $language;
             }
 

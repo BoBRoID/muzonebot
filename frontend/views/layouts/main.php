@@ -4,7 +4,7 @@
 /* @var $content string */
 
 use common\widgets\Modal;
-use frontend\widgets\NavBar;
+use yii\bootstrap\NavBar;
 use yii\bootstrap\Dropdown;
 use yii\helpers\Html;
 use yii\bootstrap\Nav;
@@ -72,7 +72,7 @@ NavBar::begin([
     'brandLabel'        => 'MuzOne',
     'brandUrl'          => Yii::$app->homeUrl,
     'options'           => [
-        'class'             =>  'navbar-light navbar-toggleable-sm bd-navbar bg-faded',
+        'class'             =>  'navbar-light bg-light navbar-expand-lg',
         'tag'               =>  'header'
     ],
     'containerOptions'  =>  [
