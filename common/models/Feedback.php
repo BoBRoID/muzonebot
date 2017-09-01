@@ -3,6 +3,7 @@
 namespace common\models;
 
 use Yii;
+use yii\db\ActiveQuery;
 
 /**
  * This is the model class for table "feedbacks".
@@ -14,6 +15,8 @@ use Yii;
  * @property string $message
  * @property integer $viewed
  * @property bool       $archived
+ *
+ * @property User $user
  */
 class Feedback extends \yii\db\ActiveRecord
 {
@@ -31,9 +34,11 @@ class Feedback extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['created'], 'required'],
             [['created', 'userId', 'viewed', 'archived'], 'integer'],
             [['username', 'message'], 'string'],
+            [['created'], 'default', 'value' => time()],
+            [['viewed', 'archived'], 'default', 'value' => 0],
+            [['message'], 'required'],
         ];
     }
 
@@ -51,6 +56,14 @@ class Feedback extends \yii\db\ActiveRecord
             'viewed' => 'Viewed',
             'archived' => 'Archived',
         ];
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getUser(): ActiveQuery
+    {
+        return $this->hasOne(User::className(), ['id' => 'userId']);
     }
 
     public function beforeSave($insert)

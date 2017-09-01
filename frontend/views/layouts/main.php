@@ -4,6 +4,7 @@
 /* @var $content string */
 
 use common\widgets\Modal;
+use common\widgets\Alert;
 use yii\bootstrap\NavBar;
 use yii\bootstrap\Dropdown;
 use yii\helpers\Html;
@@ -100,7 +101,8 @@ $items = [
     . '</li>',
     ['label' => Yii::t('site', 'Главная'), 'url' => ['/site/index']],
     ['label' => \Yii::t('site', 'Статистика'), 'url' => ['/site/stats']],
-    ['label' => Yii::t('site', 'О сервисе'), 'url' => ['/site/about']]
+    ['label' => Yii::t('site', 'О сервисе'), 'url' => ['/site/about']],
+    ['label' => Yii::t('site', 'Оставить отзыв'), 'url' => ['/site/feedback']]
 ];
 
 $items[] = Yii::$app->user->isGuest ?
@@ -143,6 +145,7 @@ NavBar::end();
             'itemTemplate'          =>  "<li class=\"breadcrumb-item\">{link}</li>\n",
             'activeItemTemplate'    =>  "<li class=\"breadcrumb-item active\">{link}</li>\n"
         ]) ?>
+        <?= Alert::widget() ?>
         <?= $content ?>
         <?php if(\Yii::$app->user->isGuest){
             $this->registerJs($loginJs);

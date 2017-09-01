@@ -9,7 +9,7 @@ use yii\helpers\Html;
 $this->title = \Yii::t('site', 'Поиск');
 ?>
 <div class="row">
-    <div class="col-12 col-sm-10 offset-sm-1 col-md-8 offset-md-2">
+    <div class="col-12 col-sm-10 col-md-8 mx-auto">
         <div class="jumbotron jumbotron-fluid mb-3 pb-3">
             <div class="container">
                 <h1 class="display-3 pb-2"><?=\Yii::t('site', 'Поиск по базе треков')?></h1>
@@ -35,9 +35,9 @@ $this->title = \Yii::t('site', 'Поиск');
                                 </h5>
                             </div>
 
-                            <div id="filters" class="collapse" role="tabpanel" aria-labelledby="filtersHeading">
+                            <div id="filters" class="collapse<?=$searchModel->filtersFilled() ? ' show' : null?>" role="tabpanel" aria-labelledby="filtersHeading">
                                 <div class="card-block">
-                                    <div class="col-10 offset-1">
+                                    <div class="col-10 mx-auto my-3 my-lg-5">
                                         <?=$form->field($searchModel, 'trackName', [
                                             'horizontalCssClasses'  =>  [
                                                 'label' =>  'form-control-label col-12 col-lg-4 col-xl-3',

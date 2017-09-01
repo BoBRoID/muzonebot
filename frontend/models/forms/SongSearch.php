@@ -39,15 +39,39 @@ class SongSearch extends Model
             $query->andWhere(['or', ['like', 'artist', $this->query], ['like', 'title', $this->query]]);
         }
 
-        if(!empty($this->artist)){
-            $query->andWhere(['like', 'artist', $this->artist]);
-        }
-
-        if(!empty($this->trackName)){
-            $query->andWhere(['like', 'title', $this->trackName]);
+        foreach($this->filtersFields() as $field){
+            if(!empty($this->$field)){
+                $query->andWhere(['like', $field, $this->$field]);
+            }
         }
 
         return $query;
+    }
+
+    /**
+     * @return array
+     */
+    protected function filtersFields(): array
+    {
+        return [
+            'artist', 'trackName'
+        ];
+    }
+
+    /**
+     * @return bool
+     */
+    public function filtersFilled(): bool
+    {
+        $filled = false;
+
+        foreach($this->filtersFields() as $field){
+            if(!empty($this->$field)){
+                $filled = true;
+            }
+        }
+
+        return $filled;
     }
 
 }

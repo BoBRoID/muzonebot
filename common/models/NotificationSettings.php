@@ -70,7 +70,8 @@ class NotificationSettings extends \yii\db\ActiveRecord
             self::TYPE_WHEN_EXISTS,
             self::TYPE_WHEN_SYSTEM_ERROR,
             self::TYPE_WHEN_CANT_SAVE,
-            self::TYPE_WHEN_ADDED
+            self::TYPE_WHEN_ADDED,
+            self::TYPE_WHEN_RECEIVED
         ];
     }
 
@@ -82,7 +83,8 @@ class NotificationSettings extends \yii\db\ActiveRecord
             self::TYPE_WHEN_EXISTS          =>  \Yii::t('general', 'трек уже существует'),
             self::TYPE_WHEN_SYSTEM_ERROR    =>  \Yii::t('general', 'произошла системная ошибка'),
             self::TYPE_WHEN_CANT_SAVE       =>  \Yii::t('general', 'невозможно сохранить трек'),
-            self::TYPE_WHEN_ADDED           =>  \Yii::t('general', 'трек успешно добавлен')
+            self::TYPE_WHEN_ADDED           =>  \Yii::t('general', 'трек успешно добавлен'),
+            self::TYPE_WHEN_RECEIVED        =>  \Yii::t('general', 'трек получен')
         ];
     }
 

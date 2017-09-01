@@ -5,6 +5,7 @@ namespace frontend\controllers;
 
 use common\helpers\TrackDownloader;
 use common\models\User;
+use frontend\models\forms\FeedbackForm;
 use Yii;
 use frontend\models\forms\SongSearch;
 use frontend\models\Song;
@@ -219,6 +220,24 @@ class SiteController extends Controller
             'chatsStats'        =>  $chatsStats,
             'chatsCount'        =>  $chatsCount,
             'topUploaderStats'  =>  $topUploaderStats
+        ]);
+    }
+
+    public function actionFeedback(){
+        $model = new FeedbackForm();
+
+        if(\Yii::$app->request->post($model->formName(), false) && $model->load(\Yii::$app->request->post())){
+            if($model->save()){
+                $model = new FeedbackForm();
+                \Yii::$app->session->addFlash('success', \Yii::t('site', 'Отзыв успешно оставлен!'));
+            }else{
+                \Yii::$app->session->addFlash('danger', \Yii::t('site', 'Произошла ошибка при попытке отправить отзыв!'));
+            }
+        }
+
+
+        return $this->render('feedback', [
+            'model' =>  $model
         ]);
     }
 

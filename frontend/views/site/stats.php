@@ -13,6 +13,9 @@ use dosamigos\chartjs\ChartJs;
 
 $this->title = \Yii::t('site', 'Статистика сервиса');
 $this->params['breadcrumbs'][] = $this->title;
+
+\Yii::trace($chatsStats);
+
 ?>
 <h1><?=$this->title?></h1>
 <div class="row">
@@ -23,13 +26,14 @@ $this->params['breadcrumbs'][] = $this->title;
         <div class="row">
             <div class="col-12 col-md-3">
                 <ul class="list-group">
-                    <li class="list-group-item list-group-item-info">
+                    <li class="list-group-item list-group-item-secondary">
                         <h5 class="list-group-item-heading"><?=\Yii::t('site', 'Кто пользуется ботом?')?></h5>
                     </li>
-                    <?php foreach($chatsStats as $statArray){ ?>
+                    <?php foreach($chatsStats as $statArray){
+                        ?>
                         <li class="list-group-item justify-content-between">
                             <?=$statArray['type']?>
-                            <span class="badge badge-default badge-pill"><?=$statArray['count']?></span>
+                            <span class="badge badge-secondary badge-pill"><?=$statArray['count']?></span>
                         </li>
                     <?php } ?>
                 </ul>
