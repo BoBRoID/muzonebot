@@ -38,7 +38,7 @@ $this->title = \Yii::t('site', 'Поиск');
                             <div id="filters" class="collapse<?=$searchModel->filtersFilled() ? ' show' : null?>" role="tabpanel" aria-labelledby="filtersHeading">
                                 <div class="card-block">
                                     <div class="col-10 mx-auto my-3 my-lg-5">
-                                        <?=$form->field($searchModel, 'trackName', [
+                                        <?=$form->field($searchModel, 'title', [
                                             'horizontalCssClasses'  =>  [
                                                 'label' =>  'form-control-label col-12 col-lg-4 col-xl-3',
                                             ],

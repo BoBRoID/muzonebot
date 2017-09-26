@@ -18,7 +18,7 @@ use yii\bootstrap\Html;
                 $model->title,
                 [
                     $searchLink,
-                    $searchModel->formName() => ['trackName' => $model->title]
+                    $searchModel->formName() => ['title' => $model->title]
                 ],
                 [
                     'title'     => \Yii::t('site', 'Искать треки с названием {name}', ['name' => $model->title]),

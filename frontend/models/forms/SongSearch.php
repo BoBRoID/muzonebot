@@ -19,12 +19,12 @@ class SongSearch extends Model
 
     public $artist;
 
-    public $trackName;
+    public $title;
 
     public function rules()
     {
         return [
-            [['query', 'artist', 'trackName'], 'safe']
+            [['query', 'artist', 'title'], 'safe']
         ];
     }
 
@@ -54,7 +54,7 @@ class SongSearch extends Model
     protected function filtersFields(): array
     {
         return [
-            'artist', 'trackName'
+            'artist', 'title'
         ];
     }
 
