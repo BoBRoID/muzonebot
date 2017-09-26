@@ -36,6 +36,8 @@ return [
             'backend/web/assets',
             'tg/runtime',
             'tg/web/assets',
+            'api/runtime',
+            'api/web/assets',
             'frontend/runtime',
             'frontend/web/assets',
         ],
@@ -47,6 +49,7 @@ return [
             'backend/config/main-local.php',
             'frontend/config/main-local.php',
             'tg/config/main-local.php',
+            'api/config/main-local.php',
         ],
     ],
     'Production' => [
@@ -56,6 +59,8 @@ return [
             'backend/web/assets',
             'tg/runtime',
             'tg/web/assets',
+            'api/runtime',
+            'api/web/assets',
             'frontend/runtime',
             'frontend/web/assets',
         ],
@@ -66,6 +71,7 @@ return [
             'backend/config/main-local.php',
             'frontend/config/main-local.php',
             'tg/config/main-local.php',
+            'api/config/main-local.php',
         ],
     ],
 ];
