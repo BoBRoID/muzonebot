@@ -140,3 +140,7 @@ a.desc:after {
 .jumbotron-form{
     background-color: #f8f9fa !important;
 }
+
+.track-line{
+    line-height: 31px;
+}

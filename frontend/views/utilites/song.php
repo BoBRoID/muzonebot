@@ -13,7 +13,7 @@ use yii\bootstrap\Html;
 ?>
 <div class="d-flex flex-column align-items-stretch w-100 flex-nowrap">
     <div class="d-flex flex-row justify-content-between w-100">
-        <div class="d-flex one-line mr-3">
+        <div class="d-flex one-line mr-3 track-line">
             <?=Html::a(
                 $model->title,
                 [
