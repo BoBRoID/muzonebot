@@ -21,6 +21,8 @@ class GraphqlController extends Controller
 
     public $modelClass = '';
 
+    public $enableCsrfValidation = false;
+
     /**
      * @inheritdoc
      */
@@ -36,8 +38,25 @@ class GraphqlController extends Controller
         return [];
     }
 
+    public function behaviors()
+    {
+        return array_merge(parent::behaviors(), [
+            'corsFilter'    =>  [
+                'class' =>  \yii\filters\Cors::class,
+                'cors'  =>  [
+                    'Origin'    =>  ['*'],
+                    'Access-Control-Request-Method'    => ['POST'],
+                    'Access-Control-Allow-Credentials' => true,
+                    'Access-Control-Max-Age'           => 3600,
+                ]
+            ]
+        ]);
+    }
+
     public function actionIndex(){
         $request = \Yii::$app->request;
+        \Yii::$app->response->format = 'json';
+        \Yii::$app->response->headers->set('Content-Type', 'application/json');
 
         $query = $request->get('query', $request->post('query'));
         $variables = $request->get('variables', $request->post('variables'));
@@ -46,6 +65,11 @@ class GraphqlController extends Controller
         if (empty($query)) {
             $rawInput = file_get_contents('php://input');
             $input = json_decode($rawInput, true);
+
+            if(is_array($input) && !array_key_exists('query', $input) && array_key_exists(0, $input)){
+                $input = array_shift($input);
+            }
+
             $query = $input['query'];
             $variables = isset($input['variables']) ? $input['variables'] : [];
             $operation = isset($input['operation']) ? $input['operation'] : null;

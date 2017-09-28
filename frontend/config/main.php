@@ -72,6 +72,12 @@ return [
                 // route pattern => url pattern
                 '#^site/is-guest#' => '#^site/is-guest#',
             ],
+            'rules' =>  [
+                ''                  =>  'site/index',
+                '/tracks'           =>  'tracks/index',
+                '/tracks/<action>'  =>  'tracks/<action>',
+                '/<action>'         =>  'site/<action>'
+            ]
         ],
     ],
     'params' => $params,

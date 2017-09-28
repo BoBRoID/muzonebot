@@ -8,14 +8,10 @@
 
 namespace api\types;
 
-
 use api\models\TrackSearch;
 use common\models\User;
-use common\models\UserSongs;
-use frontend\models\forms\SongSearch;
 use GraphQL\Type\Definition\ObjectType;
 use GraphQL\Type\Definition\Type;
-use yii\helpers\ArrayHelper;
 
 class QueryType extends ObjectType
 {
@@ -40,11 +36,28 @@ class QueryType extends ObjectType
                             'title'     =>  Type::string(),
                             'artist'    =>  Type::string(),
                             'query'     =>  Type::string(),
+                            'offset'    =>  Type::int(),
+                            'limit'     =>  Type::int(),
+                            'order'     =>  Type::string()
                         ],
                         'resolve'   =>  function($root, $args){
-                            $query = new SongSearch($args);
+                            $query = new TrackSearch();
+                            $query->setAttributes($args);
+                            $query = $query->getResults();
 
-                            return $query->getResults()->all();
+                            if(array_key_exists('limit', $args)){
+                                $query->limit($args['limit']);
+                            }
+
+                            if(array_key_exists('offset', $args)){
+                                $query->offset($args['offset']);
+                            }
+
+                            if(array_key_exists('order', $args)){
+                                $query->addOrderBy($args['order']);
+                            }
+
+                            return $query->all();
                         }
                     ],
                     'userTracks'    =>  [
@@ -53,10 +66,27 @@ class QueryType extends ObjectType
                             'userId'    =>  Type::nonNull(Type::int()),
                             'title'     =>  Type::string(),
                             'artist'    =>  Type::string(),
-                            'query'     =>  Type::string()
+                            'query'     =>  Type::string(),
+                            'offset'    =>  Type::int(),
+                            'limit'     =>  Type::int(),
+                            'order'     =>  Type::string()
                         ],
                         'resolve'   =>  function($root, $args){
-                            return (new TrackSearch($args))->getResults()->all();
+                            $query = (new TrackSearch($args))->getResults();
+
+                            if(array_key_exists('limit', $args)){
+                                $query->limit($args['limit']);
+                            }
+
+                            if(array_key_exists('offset', $args)){
+                                $query->offset($args['offset']);
+                            }
+
+                            if(array_key_exists('order', $args)){
+                                $query->addOrderBy($args['order']);
+                            }
+
+                            return $query->all();
                         }
                     ],
                 ];
