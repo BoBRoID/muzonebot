@@ -13,7 +13,7 @@ import router from './router'
 Vue.config.productionTip = false
 
 const networkInterface = createNetworkInterface({
-  uri: 'http://api.tgmuzone.dev/graphQL',
+  uri: 'https://api.tgmuzone.com.ua/graphQL',
   opts: {
     credentials: 'same-origin',
     mode: 'no-cors'
