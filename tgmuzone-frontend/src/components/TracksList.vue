@@ -54,7 +54,10 @@
     apollo: {
       tracks: {
         query: tracksQuery,
-        loadingKey: 'loading'
+        loadingKey: 'loading',
+        error (error) {
+          console.error('We\'ve got an error!', error)
+        }
       }
     }
   }
