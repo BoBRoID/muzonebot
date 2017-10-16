@@ -3,6 +3,10 @@
 namespace common\models;
 
 use Longman\TelegramBot\Commands\Command;
+use Longman\TelegramBot\Entities\ChannelPost;
+use Longman\TelegramBot\Entities\Entity;
+use Longman\TelegramBot\Entities\MessageEntity;
+use yii\behaviors\TimestampBehavior;
 use yii\db\ActiveRecord;
 
 /**
@@ -25,6 +29,11 @@ class User extends ActiveRecord
      */
     protected static $relatedUsers = [];
 
+    /**
+     * @var self
+     */
+    protected static $_botUser = null;
+
     protected $notificationSettingsArray = [];
 
     public static function tableName()
@@ -40,64 +49,97 @@ class User extends ActiveRecord
         ];
     }
 
+    public function behaviors()
+    {
+        return [
+            [
+                'class'                 =>  TimestampBehavior::class,
+                'createdAtAttribute'    =>  'created_at',
+                'updatedAtAttribute'    =>  'updated_at',
+                'value'                 =>  time()
+            ]
+        ];
+    }
+
     /**
      * @param Command $command
      * @return self
      */
     public static function initializeBotUser(Command $command){
-        $entity = null;
-        $update = $command->getUpdate();
+        if(self::$_botUser === null){
+            $update = $command->getUpdate();
 
-        if($update->getMessage()){
-            $entity = $update->getMessage();
-        }else if($update->getCallbackQuery()){
-            $entity = $update->getCallbackQuery();
-        }else if($update->getInlineQuery()){
-            $entity = $update->getInlineQuery();
-        }else if($update->getEditedMessage()){
-            $entity = $update->getEditedMessage();
-        }else if($update->getChannelPost()){
-            $update->getChannelPost();
-        }else if($update->getChosenInlineResult()){
-            $update->getChosenInlineResult();
-        }
+            $entity = $update->getMessage()
+                ?? $update->getCallbackQuery()
+                ?? $update->getInlineQuery()
+                ?? $update->getChannelPost()
+                ?? $update->getEditedMessage()
+                ?? $update->getChosenInlineResult()
+                ?? null;
 
-        if($entity){
-            $userID = $entity->getFrom()->getId();
-            $language_code = $entity->getFrom()->getLanguageCode();
-        }else{
-            return null;
-        }
+            \Yii::trace($entity);
 
-        $botUser = self::findByTelegramId($userID);
-
-        if(is_null($botUser)){
-            $botUser = new User([
-                'id'            =>  $entity->getFrom()->getId(),
-                'first_name'    =>  $entity->getFrom()->getFirstName(),
-                'last_name'     =>  $entity->getFrom()->getLastName(),
-                'username'      =>  $entity->getFrom()->getUsername(),
-                'language_code' =>  $entity->getFrom()->getLanguageCode(),
-                'created_at'    =>  time(),
-                'updated_at'    =>  time()
-            ]);
-        }
-
-        if(!is_null($language_code) && empty($botUser->language_code)){
-            $language = Language::findOne(['language' => $language_code, 'status' => 1]);
-
-            if(!$language){
-                $language = Language::findOne(['default' => 1]);
+            if($entity === null){
+                return null;
             }
 
-            if($language){
-                $botUser->language_id = $language->language_id;
+            \Yii::trace($entity->toJson());
+
+            $botUserData = [];
+
+            try{
+                $userID = $entity->getFrom()->getId();
+                $botUserData['id']  =  $userID;
+            }catch (\Exception $e){
+                return null;
             }
 
-            $botUser->save(false);
+            $language_code = null;
+
+            try{
+                $language_code = $entity->getFrom()->getLanguageCode();
+            }catch (\Exception $e){};
+
+            $botUser = self::findByTelegramId($userID);
+
+            if($botUser === null){
+                try{
+                    $botUserData['first_name'] = $entity->getFrom()->getFirstName();
+                }catch (\Exception $e){}
+
+                try{
+                    $botUserData['last_name'] = $entity->getFrom()->getLastName();
+                }catch (\Exception $e){}
+
+                try{
+                    $botUserData['username'] = $entity->getFrom()->getUsername();
+                }catch (\Exception $e){}
+
+                if($language_code !== null){
+                    $botUserData['language_code'] = $language_code;
+                }
+
+                $botUser = new self($botUserData);
+            }
+
+            if($language_code !== null && empty($botUser->language_code)){
+                $language = Language::findOne(['language' => $language_code, 'status' => 1]);
+
+                if(!$language){
+                    $language = Language::findOne(['default' => 1]);
+                }
+
+                if($language){
+                    $botUser->language_id = $language->language_id;
+                }
+
+                $botUser->save(false);
+            }
+
+            self::$_botUser = $botUser;
         }
 
-        return $botUser;
+        return self::$_botUser;
     }
 
     /**

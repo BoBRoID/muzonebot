@@ -106,7 +106,7 @@ class ChannelpostCommand extends BaseSystemCommand
             $song->title = $song->title ? : \Yii::t('general', 'Неизвестная композиция');
             $song->artist = $song->artist ? : \Yii::t('general', 'Неизвестный исполнитель');
 
-            if($song->save()){
+            if($song->save() && $this->botUser !== null){
                 $this->botUser->addTrack($song);
             }
         }
