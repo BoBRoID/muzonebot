@@ -19,7 +19,7 @@ class User extends \common\models\User
      * @param Command $command
      * @return self
      */
-    public static function initializeBotUser(Command $command): ?self
+    public static function initializeBotUser(Command $command)
     {
         if(self::$_botUser === null){
             $update = $command->getUpdate();
