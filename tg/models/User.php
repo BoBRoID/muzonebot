@@ -24,24 +24,13 @@ class User extends \common\models\User
         if(self::$_botUser === null){
             $update = $command->getUpdate();
 
-            \Yii::trace($update->getUpdateContent());
-            \Yii::trace($update->getUpdateType());
-
-            $entity = $update->getMessage()
-                ?? $update->getCallbackQuery()
-                ?? $update->getInlineQuery()
-                ?? $update->getChannelPost()
-                ?? $update->getEditedMessage()
-                ?? $update->getChosenInlineResult()
-                ?? null;
+            $entity = $update->getUpdateContent();
 
             \Yii::trace($entity);
 
             if($entity === null){
                 return null;
             }
-
-            \Yii::trace($entity->toJson());
 
             $botUserData = [];
 
