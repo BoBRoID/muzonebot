@@ -8,7 +8,7 @@
 
 namespace tg\bot\Base;
 
-use common\models\User;
+use tg\models\User;
 use Longman\TelegramBot\Commands\SystemCommand;
 use Longman\TelegramBot\Entities\Update;
 use Longman\TelegramBot\Telegram;
