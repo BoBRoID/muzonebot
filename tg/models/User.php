@@ -32,11 +32,15 @@ class User extends \common\models\User
             $entity = $update->getUpdateContent();
             $from = null;
 
+            \Yii::trace('getting from');
+
             try{
                 $from = $entity->getFrom();
             }catch (\Exception $e){
                 return null;
             }
+
+            \Yii::trace($from);
 
             /**
              * @var $from \Longman\TelegramBot\Entities\User
@@ -50,8 +54,6 @@ class User extends \common\models\User
             $language_code = $from->getLanguageCode();
 
             $botUser = self::findByTelegramId($userID);
-
-            \Yii::trace('$botUser === null ? '.(string)$botUser === null);
 
             if($botUser === null){
                 $botUser = new self([
@@ -79,6 +81,8 @@ class User extends \common\models\User
 
             self::$_botUser = $botUser;
         }
+
+        \Yii::trace(self::$_botUser);
 
         return self::$_botUser;
     }
