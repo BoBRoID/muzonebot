@@ -74,7 +74,7 @@ class User extends ActiveRecord
      * @param string $telegramId
      * @return self|null
      */
-    public static function findByTelegramId($telegramId): ?self
+    public static function findByTelegramId($telegramId)
     {
         foreach(self::$relatedUsers as $user){
             if($user->id == $telegramId){
@@ -120,7 +120,7 @@ class User extends ActiveRecord
      * @param int $type
      * @return NotificationSettings
      */
-    public function getNotificationSettingByType(int $type): ?NotificationSettings
+    public function getNotificationSettingByType(int $type)
     {
         foreach($this->getNotificationSettingsArray() as $notificationSetting){
             if($notificationSetting->type === $type){
