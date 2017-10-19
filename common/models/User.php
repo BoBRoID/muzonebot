@@ -27,11 +27,6 @@ class User extends ActiveRecord
     protected static $relatedUsers = [];
 
     /**
-     * @var self
-     */
-    protected static $_botUser = null;
-
-    /**
      * @var array
      */
     protected $notificationSettingsArray = [];

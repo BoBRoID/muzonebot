@@ -16,12 +16,17 @@ class User extends \common\models\User
 {
 
     /**
+     * @var self
+     */
+    protected static $_botUser = false;
+
+    /**
      * @param Command $command
      * @return self
      */
     public static function initializeBotUser(Command $command)
     {
-        if(self::$_botUser === null){
+        if(self::$_botUser === false){
             $update = $command->getUpdate();
 
             $entity = $update->getUpdateContent();
@@ -33,51 +38,29 @@ class User extends \common\models\User
                 return null;
             }
 
-            \Yii::trace($from);
+            /**
+             * @var $from \Longman\TelegramBot\Entities\User
+             */
 
-            if($from === null){
+            if($from === null || $from instanceof \Longman\TelegramBot\Entities\User){
                 return null;
             }
 
-            $botUserData = [];
-
-            try{
-                $userID = $from->getId();
-                $botUserData['id']  =  $userID;
-            }catch (\Exception $e){
-                return null;
-            }
-
-            $language_code = null;
-
-            try{
-                $language_code = $from->getLanguageCode();
-            }catch (\Exception $e){};
+            $userID = $from->getId();
+            $language_code = $from->getLanguageCode();
 
             $botUser = self::findByTelegramId($userID);
 
             \Yii::trace('$botUser === null ? '.(string)$botUser === null);
 
             if($botUser === null){
-                try{
-                    $botUserData['first_name'] = $from->getFirstName();
-                }catch (\Exception $e){}
-
-                try{
-                    $botUserData['last_name'] = $from->getLastName();
-                }catch (\Exception $e){}
-
-                try{
-                    $botUserData['username'] = $from->getUsername();
-                }catch (\Exception $e){}
-
-                if($language_code !== null){
-                    $botUserData['language_code'] = $language_code;
-                }
-
-                \Yii::trace($botUserData);
-
-                $botUser = new self($botUserData);
+                $botUser = new self([
+                    'id'            =>  $userID,
+                    'first_name'    =>  $from->getFirstName(),
+                    'last_name'     =>  $from->getLastName(),
+                    'username'      =>  $from->getUsername(),
+                    'language_code' =>  $language_code
+                ]);
             }
 
             if($language_code !== null && empty($botUser->language_code)){

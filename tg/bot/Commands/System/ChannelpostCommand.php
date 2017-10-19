@@ -101,7 +101,6 @@ class ChannelpostCommand extends BaseSystemCommand
                 }
             }
 
-
             $song->user_id = 0;
             $song->title = $song->title ? : \Yii::t('general', 'Неизвестная композиция');
             $song->artist = $song->artist ? : \Yii::t('general', 'Неизвестный исполнитель');
