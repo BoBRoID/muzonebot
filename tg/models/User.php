@@ -28,8 +28,6 @@ class User extends \common\models\User
      */
     public static function initializeBotUser(Command $command)
     {
-        file_put_contents(\Yii::getAlias('@app/runtime/bot_logs/commands.php'), serialize($command)."\r\n\r\n", FILE_APPEND);
-
         if(self::$_botUser === false){
             $update = $command->getUpdate();
 
