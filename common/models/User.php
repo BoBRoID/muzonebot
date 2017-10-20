@@ -60,7 +60,7 @@ class User extends ActiveRecord
                 'class'                 =>  TimestampBehavior::class,
                 'createdAtAttribute'    =>  'created_at',
                 'updatedAtAttribute'    =>  'updated_at',
-                'value'                 =>  time()
+                'value'                 =>  date('Y-m-d H:i:s')
             ]
         ];
     }
