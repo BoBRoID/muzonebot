@@ -6,7 +6,7 @@
  * Time: 13:02
  */
 
-namespace frontend\tests\unit\models;
+namespace tg\tests\unit\models;
 
 
 use tg\models\TgUserData;

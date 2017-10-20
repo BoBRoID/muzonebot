@@ -10,83 +10,75 @@ namespace tg\models;
 
 
 use common\models\Language;
-use Longman\TelegramBot\Commands\Command;
 use Longman\TelegramBot\Entities\ChannelPost;
 use Longman\TelegramBot\Entities\EditedChannelPost;
+use Longman\TelegramBot\Entities\Update;
 
 class User extends \common\models\User
 {
 
     /**
-     * @var self
+     * @var self[]
      */
-    protected static $_botUser = false;
+    protected static $_botUser = [];
 
     /**
-     * @param Command $command
+     * @param Update $update
      * @return self
      */
-    public static function initializeBotUser(Command $command)
+    public static function initializeBotUser(Update $update)
     {
-        if(self::$_botUser === false){
-            $update = $command->getUpdate();
+        $entity = $update->getUpdateContent();
 
-            $entity = $update->getUpdateContent();
+        $language_code = null;
 
-            $language_code = null;
+        if($entity instanceof ChannelPost || $entity instanceof EditedChannelPost){
+            $tgUserData = self::getUserDataFromChannelPost($entity);
+        }else{
+            $from = $entity->getFrom();
 
-            if($entity instanceof ChannelPost || $entity instanceof EditedChannelPost){
-                $tgUserData = self::getUserDataFromChannelPost($entity);
-            }else{
-                $from = null;
+            /**
+             * @var $from \Longman\TelegramBot\Entities\User
+             */
 
-                try{
-                    $from = $entity->getFrom();
-                }catch (\Exception $e){
-                    return null;
-                }
-
-                /**
-                 * @var $from \Longman\TelegramBot\Entities\User
-                 */
-
-                if($from === null || $from instanceof \Longman\TelegramBot\Entities\User){
-                    return null;
-                }
-
-                $tgUserData = self::getUserDataFromUserEntity($from);
+            if($from === null || $from instanceof \Longman\TelegramBot\Entities\User === false){
+                return null;
             }
 
+            $tgUserData = self::getUserDataFromUserEntity($from);
+        }
+
+        if(array_key_exists($tgUserData->getId(), self::$_botUser) === false) {
             $botUser = $tgUserData->getId() !== null ? self::findByTelegramId($tgUserData->getId()) : null;
 
-            if($botUser === null){
+            if ($botUser === null) {
                 $botUser = new self([
-                    'id'            =>  $tgUserData->getId(),
-                    'first_name'    =>  $tgUserData->getFirstName(),
-                    'last_name'     =>  $tgUserData->getLastName(),
-                    'username'      =>  $tgUserData->getUsername(),
-                    'language_code' =>  $tgUserData->getLanguageCode()
+                    'id' => $tgUserData->getId(),
+                    'first_name' => $tgUserData->getFirstName(),
+                    'last_name' => $tgUserData->getLastName(),
+                    'username' => $tgUserData->getUsername(),
+                    'language_code' => $tgUserData->getLanguageCode()
                 ]);
             }
 
-            if($tgUserData->getLanguageCode() !== null && empty($botUser->language_code)){
+            if ($tgUserData->getLanguageCode() !== null && empty($botUser->language_code)) {
                 $language = Language::findOne(['language' => $tgUserData->getLanguageCode(), 'status' => 1]);
 
-                if(!$language){
+                if (!$language) {
                     $language = Language::findOne(['default' => 1]);
                 }
 
-                if($language){
+                if ($language) {
                     $botUser->language_id = $language->language_id;
                 }
 
                 $botUser->save(false);
             }
 
-            self::$_botUser = $botUser;
+            self::$_botUser[$tgUserData->getId()] = $botUser;
         }
 
-        return self::$_botUser;
+        return self::$_botUser[$tgUserData->getId()];
     }
 
     /**
@@ -99,7 +91,6 @@ class User extends \common\models\User
             'firstName' =>  $channelPost->getChat()->getTitle()
         ]);
     }
-
 
     /**
      * @param $userEntity \Longman\TelegramBot\Entities\User

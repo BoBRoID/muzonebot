@@ -31,7 +31,7 @@ abstract class BaseSystemCommand extends SystemCommand
         parent::__construct($telegram, $update);
 
         if($this->botUser === false){
-            $this->botUser = User::initializeBotUser($this);
+            $this->botUser = User::initializeBotUser($update);
         }
 
         if($this->botUser !== null && !empty($this->botUser->language_id)){

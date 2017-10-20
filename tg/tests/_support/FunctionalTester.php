@@ -1,5 +1,5 @@
 <?php
-namespace frontend\tests;
+namespace tg\tests;
 
 /**
  * Inherited Methods
