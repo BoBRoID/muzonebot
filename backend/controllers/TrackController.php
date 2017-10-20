@@ -9,6 +9,7 @@
 namespace backend\controllers;
 
 
+use backend\models\FileToChatForm;
 use backend\models\forms\SongSearch;
 use common\helpers\TrackDownloader;
 use backend\models\Song;
@@ -57,6 +58,18 @@ class TrackController extends Controller
         return $this->render('index', [
             'dataProvider'  =>  $dataProvider,
             'searchModel'   =>  $searchModel
+        ]);
+    }
+
+    public function actionSendTo(){
+        $form = new FileToChatForm();
+
+        if(\Yii::$app->request->post($form->formName()) && $form->load(\Yii::$app->request->post())){
+            \Yii::trace($form->send());
+        }
+
+        return $this->render('send-to', [
+            'model'  =>  $form
         ]);
     }
 
