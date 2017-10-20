@@ -92,7 +92,15 @@ class User extends ActiveRecord
      */
     public function addTrack(Song $song): bool
     {
-        return (new UserSongs(['user_id' => $this->id, 'song_id' => $song->id]))->save();
+        $us = (new UserSongs(['user_id' => $this->id, 'song_id' => $song->id]));
+
+        $s = $us->save();
+
+        if($s === false){
+            \Yii::trace($us->getErrors());
+        }
+
+        return $s;
     }
 
     /**
