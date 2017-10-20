@@ -71,9 +71,9 @@ class User extends \common\models\User
                 if ($language) {
                     $botUser->language_id = $language->language_id;
                 }
-
-                $botUser->save(false);
             }
+
+            $botUser->save(false);
 
             self::$_botUser[$tgUserData->getId()] = $botUser;
         }
