@@ -53,7 +53,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     <br>
                     <span class="one-line"><?=\Yii::t('manage', 'Добавил: {username} {date}', [
                             'date'      =>  \Yii::$app->formatter->asRelativeTime($lastAddedTrack->added),
-                            'username'  =>  $lastAddedTrack->user->username
+                            'username'  =>  $lastAddedTrack->user ? $lastAddedTrack->user->username : null
                         ])?></span>
                 </p>
                 <?php } ?>
