@@ -39,10 +39,12 @@ debconf-set-selections <<< 'mysql-server-5.7 mysql-server/root_password_again pa
 echo "Done!"
 
 info "Update OS software"
+sudo apt install -y language-pack-en-base
+sudo LC_ALL=en_US.UTF-8 add-apt-repository -y ppa:ondrej/php
 apt-get update
 
 info "Install additional software"
-apt-get install -y git php7.0 php7.0-mbstring php7.0-curl php7.0-xml php7.0-intl php7.0-fpm php7.0-zip php7.0-mysql php7.0-cli php7.0-gd php7.0-json nginx mysql-server mysql-client --force-yes
+apt-get install -y git php7.1 php7.1-mbstring php7.1-curl php7.1-xml php7.1-intl php7.1-fpm php7.1-zip php7.1-mysql php7.1-cli php7.1-gd php7.1-json nginx mysql-server mysql-client --force-yes
 
 info "Configure MySQL"
 mysql -u root -ppassword -e "use mysql; UPDATE user SET authentication_string=PASSWORD('') WHERE User='root'; flush privileges;"
@@ -51,9 +53,9 @@ sed -i "s/.*bind-address.*/bind-address = 0.0.0.0\
 echo "Done!"
 
 info "Configure PHP-FPM"
-sed -i 's/user = www-data/user = vagrant/g' /etc/php/7.0/fpm/pool.d/www.conf
-sed -i 's/group = www-data/group = vagrant/g' /etc/php/7.0/fpm/pool.d/www.conf
-sed -i 's/owner = www-data/owner = vagrant/g' /etc/php/7.0/fpm/pool.d/www.conf
+sed -i 's/user = www-data/user = vagrant/g' /etc/php/7.1/fpm/pool.d/www.conf
+sed -i 's/group = www-data/group = vagrant/g' /etc/php/7.1/fpm/pool.d/www.conf
+sed -i 's/owner = www-data/owner = vagrant/g' /etc/php/7.1/fpm/pool.d/www.conf
 echo "Done!"
 
 info "Configure NGINX"
