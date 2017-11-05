@@ -9,8 +9,11 @@ $params = array_merge(
 return [
     'id' => 'Muz',
     'basePath' => dirname(__DIR__),
-    'bootstrap' => ['log'],
+    'bootstrap' => ['log', 'channels'],
     'controllerNamespace' => 'frontend\controllers',
+    'modules'  =>   [
+        'channels'  =>  \frontend\modules\channels\Module::class
+    ],
     'components' => [
         'i18n' => [
             'translations' => [
