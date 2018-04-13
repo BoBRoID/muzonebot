@@ -18,6 +18,8 @@ use yii\web\NotFoundHttpException;
 class TrackDownloader
 {
 
+    private static $fileIdCacheDuration = (50 * 60);
+
     /**
      * @param $telegramFileId string
      * @return bool|string
@@ -52,17 +54,21 @@ class TrackDownloader
     {
         new Telegram(\Yii::$app->params['apiKey'], \Yii::$app->params['botName']);
 
-        $fileRequest = Request::getFile(['file_id' => $telegramFileId]);
+        $filePath = \Yii::$app->cache->getOrSet('tg:'.$telegramFileId, function() use ($telegramFileId){
+            $fileRequest = Request::getFile(['file_id' => $telegramFileId]);
 
-        if($fileRequest->getOk() === false){
-            if((int)$fileRequest->getErrorCode() === 400){
-                throw new BadRequestHttpException($fileRequest->getResult());
+            if($fileRequest->getOk() === false){
+                if((int)$fileRequest->getErrorCode() === 400){
+                    throw new BadRequestHttpException($fileRequest->getResult());
+                }
+
+                throw new NotFoundHttpException();
             }
 
-            throw new NotFoundHttpException();
-        }
+            return $fileRequest->getResult()->getFilePath();
+        }, self::$fileIdCacheDuration);
 
-        return 'https://api.telegram.org/file/bot'.\Yii::$app->params['apiKey'].'/'.preg_replace("/ /", "%20", $fileRequest->getResult()->getFilePath());
+        return 'https://api.telegram.org/file/bot'.\Yii::$app->params['apiKey'].'/'.preg_replace("/ /", "%20", $filePath);
     }
 
 }

@@ -2,7 +2,7 @@
 
 namespace common\models;
 
-use Longman\TelegramBot\Commands\Command;
+use yii\behaviors\TimestampBehavior;
 use yii\db\ActiveRecord;
 
 /**
@@ -20,19 +20,29 @@ use yii\db\ActiveRecord;
  */
 class User extends ActiveRecord
 {
+
     /**
      * @var self[]
      */
     protected static $relatedUsers = [];
 
+    /**
+     * @var array
+     */
     protected $notificationSettingsArray = [];
 
-    public static function tableName()
+    /**
+     * @return string
+     */
+    public static function tableName(): string
     {
         return 'user';
     }
 
-    public function rules()
+    /**
+     * @return array
+     */
+    public function rules(): array
     {
         return [
             [['id'], 'integer'],
@@ -41,70 +51,26 @@ class User extends ActiveRecord
     }
 
     /**
-     * @param Command $command
-     * @return self
+     * @return array
      */
-    public static function initializeBotUser(Command $command){
-        $entity = null;
-        $update = $command->getUpdate();
-
-        if($update->getMessage()){
-            $entity = $update->getMessage();
-        }else if($update->getCallbackQuery()){
-            $entity = $update->getCallbackQuery();
-        }else if($update->getInlineQuery()){
-            $entity = $update->getInlineQuery();
-        }else if($update->getEditedMessage()){
-            $entity = $update->getEditedMessage();
-        }else if($update->getChannelPost()){
-            $update->getChannelPost();
-        }else if($update->getChosenInlineResult()){
-            $update->getChosenInlineResult();
-        }
-
-        if($entity){
-            $userID = $entity->getFrom()->getId();
-            $language_code = $entity->getFrom()->getLanguageCode();
-        }else{
-            return null;
-        }
-
-        $botUser = self::findByTelegramId($userID);
-
-        if(is_null($botUser)){
-            $botUser = new User([
-                'id'            =>  $entity->getFrom()->getId(),
-                'first_name'    =>  $entity->getFrom()->getFirstName(),
-                'last_name'     =>  $entity->getFrom()->getLastName(),
-                'username'      =>  $entity->getFrom()->getUsername(),
-                'language_code' =>  $entity->getFrom()->getLanguageCode(),
-                'created_at'    =>  time(),
-                'updated_at'    =>  time()
-            ]);
-        }
-
-        if(!is_null($language_code) && empty($botUser->language_code)){
-            $language = Language::findOne(['language' => $language_code, 'status' => 1]);
-
-            if(!$language){
-                $language = Language::findOne(['default' => 1]);
-            }
-
-            if($language){
-                $botUser->language_id = $language->language_id;
-            }
-
-            $botUser->save(false);
-        }
-
-        return $botUser;
+    public function behaviors(): array
+    {
+        return [
+            [
+                'class'                 =>  TimestampBehavior::class,
+                'createdAtAttribute'    =>  'created_at',
+                'updatedAtAttribute'    =>  'updated_at',
+                'value'                 =>  date('Y-m-d H:i:s')
+            ]
+        ];
     }
 
     /**
      * @param string $telegramId
      * @return self|null
      */
-    public static function findByTelegramId($telegramId){
+    public static function findByTelegramId($telegramId)
+    {
         foreach(self::$relatedUsers as $user){
             if($user->id == $telegramId){
                 return $user;
@@ -113,7 +79,7 @@ class User extends ActiveRecord
 
         $relatedUser = self::findOne(['id' => $telegramId]);
 
-        if(!is_null($relatedUser)){
+        if($relatedUser !== null){
             self::$relatedUsers[] = $relatedUser;
         }
 
@@ -124,18 +90,32 @@ class User extends ActiveRecord
      * @param Song $song
      * @return bool
      */
-    public function addTrack(Song $song){
-        return (new UserSongs(['user_id' => $this->id, 'song_id' => $song->id]))->save();
+    public function addTrack(Song $song): bool
+    {
+        $us = (new UserSongs(['user_id' => $this->id, 'song_id' => $song->id]));
+
+        $s = $us->save();
+
+        if($s === false){
+            \Yii::trace($us->getErrors());
+        }
+
+        return $s;
     }
 
-    public function getNotificationSettings(){
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getNotificationSettings()
+    {
         return $this->hasMany(NotificationSettings::className(), ['user_id' => 'id']);
     }
 
     /**
      * @return array
      */
-    public function getNotificationSettingsArray(): array{
+    public function getNotificationSettingsArray(): array
+    {
         return array_merge($this->notificationSettings, $this->notificationSettingsArray);
     }
 
@@ -143,7 +123,8 @@ class User extends ActiveRecord
      * @param int $type
      * @return NotificationSettings
      */
-    public function getNotificationSettingByType(int $type){
+    public function getNotificationSettingByType(int $type)
+    {
         foreach($this->getNotificationSettingsArray() as $notificationSetting){
             if($notificationSetting->type === $type){
                 return $notificationSetting;
@@ -158,7 +139,8 @@ class User extends ActiveRecord
      * @param bool $default
      * @return bool|int
      */
-    public function getNotificationSettingValue(int $type, bool $default = false): bool{
+    public function getNotificationSettingValue(int $type, bool $default = false): bool
+    {
         $notification = $this->getNotificationSettingByType($type);
 
         if(!$notification){
@@ -168,7 +150,13 @@ class User extends ActiveRecord
         return (bool)$notification->value;
     }
 
-    public function setNotificationSettingValue($type, $value){
+    /**
+     * @param $type
+     * @param $value
+     * @return bool
+     */
+    public function setNotificationSettingValue($type, $value): bool
+    {
         $notification = $this->getNotificationSettingByType($type);
 
         if($notification === null){
