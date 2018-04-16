@@ -1,10 +1,13 @@
 // The Vue build version to load with the `import` command
 // (runtime-only or standalone) has been set in webpack.base.conf with an alias.
 
-import { ApolloClient, createBatchingNetworkInterface } from 'apollo-client'
 import Vue from 'vue'
 
+import { ApolloClient } from 'apollo-client'
+import { HttpLink } from 'apollo-link-http'
+import { InMemoryCache } from 'apollo-cache-inmemory'
 import VueApollo from 'vue-apollo'
+
 import BootstrapVue from 'bootstrap-vue'
 
 import App from './App'
@@ -12,16 +15,14 @@ import router from './router'
 
 Vue.config.productionTip = false
 
-const networkInterface = createBatchingNetworkInterface({
+const httpLink = new HttpLink({
   uri: 'https://api.tgmuzone.com.ua/graphQL',
-  opts: {
-    credentials: 'same-origin',
-    mode: 'no-cors'
-  }
+  credentials: 'include'
 })
 
 const apolloClient = new ApolloClient({
-  networkInterface,
+  link: httpLink,
+  cache: new InMemoryCache(),
   connectToDevTools: true
 })
 
@@ -38,7 +39,7 @@ const apolloProvider = new VueApollo({
 /* eslint-disable no-new */
 new Vue({
   el: '#app',
-  apolloProvider,
+  provide: apolloProvider.provide(),
   router,
   template: '<App/>',
   components: { App }
