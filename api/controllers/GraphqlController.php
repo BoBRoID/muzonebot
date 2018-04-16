@@ -45,7 +45,6 @@ class GraphqlController extends Controller
                 'class' =>  \yii\filters\Cors::class,
                 'cors'  =>  [
                     'Origin'    =>  ['*'],
-                    'Access-Control-Request-Method'    => ['POST'],
                     'Access-Control-Allow-Credentials' => true,
                     'Access-Control-Max-Age'           => 3600,
                 ]
