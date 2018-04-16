@@ -29,7 +29,7 @@ class GraphqlController extends Controller
     protected function verbs()
     {
         return [
-            'index' => ['POST'],
+            'index' => ['POST', 'GET', 'HEAD', 'OPTIONS'],
         ];
     }
 
@@ -46,6 +46,7 @@ class GraphqlController extends Controller
                 'cors'  =>  [
                     'Origin'    =>  ['*'],
                     'Access-Control-Allow-Credentials' => true,
+                    'Access-Control-Request-Headers'   => ['content-type'],
                     'Access-Control-Max-Age'           => 3600,
                 ]
             ]
