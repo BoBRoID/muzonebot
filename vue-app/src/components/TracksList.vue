@@ -15,12 +15,12 @@
                     <div class="d-flex">
                         <b-button-group size="sm" aria-label="Действия с треком">
                             <b-button :data-id="track.id" variant="secondary" size="xs" class="listenTrack">
-                                <i class="fa fa-play"></i>
+                                <font-awesome-icon icon="play" />
                             </b-button>
                             <b-button variant="secondary" size="xs"
                                       :href="'/en-us/get-track?id=' + track.id"
                                       :title="'Download track &quot;' + track.title + ' - ' + track.artist +'&quot;'">
-                                <i class="fa fa-download"></i>
+                                <font-awesome-icon icon="download" />
                             </b-button>
                         </b-button-group>
                     </div>
@@ -36,29 +36,37 @@
 <script>
   import gql from 'graphql-tag'
 
-  const tracksQuery = gql`
-    {
-        tracks(limit: 10, order: "added DESC") {
-            id
-            title
-            artist
-        }
+  const request = gql`query getTracks($limit: Int, $order: String, $query: String){
+    tracks(limit: $limit, order: $order, query: $query) {
+        id
+        title
+        artist
     }
-  `
+  }`
 
   export default {
     name: 'tracksList',
     data: () => ({
-      tracks: []
+      tracks: [],
     }),
+    props: {
+        searchQuery: String
+    },
     apollo: {
       tracks: {
-        query: tracksQuery,
+        query: request,
+        variables() {
+            return {
+                query: this.searchQuery,
+                limit: 10,
+                order: '`added` DESC'
+            }
+        },
         loadingKey: 'loading',
         error (error) {
           console.error('We\'ve got an error!', error)
         }
       }
-    }
+    },
   }
 </script>
