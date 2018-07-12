@@ -3,7 +3,7 @@ import App from './App.vue'
 import router from './router'
 import BootstrapVue from 'bootstrap-vue'
 import { library } from '@fortawesome/fontawesome-svg-core'
-import { faDownload, faPlay } from '@fortawesome/free-solid-svg-icons'
+import { faDownload, faPlay, faSpinner } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import { ApolloClient } from 'apollo-client'
 import { HttpLink } from 'apollo-link-http'
@@ -27,7 +27,7 @@ const apolloClient = new ApolloClient({
 
 Vue.use(VueApollo)
 
-library.add(faDownload, faPlay)
+library.add(faDownload, faPlay, faSpinner)
 
 Vue.component('font-awesome-icon', FontAwesomeIcon)
 

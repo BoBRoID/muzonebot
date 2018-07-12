@@ -9,15 +9,28 @@
               <input id="songsearch-query" class="form-control form-control-lg text-center" v-model="searchQuery" placeholder="Track title, album, or artist" type="text">
               <div class="help-block"></div>
             </div>
-            <div class="text-center">
-              <button type="submit" class="btn btn-success">Search</button>
-            </div>
           </form>
         </div>
       </div>
     </div>
-    <h3 class="text-center">Last 10 added songs</h3>
-    <tracks-list></tracks-list>
+    <div v-if="searchQuery">
+      <div class="clearfix">
+        <div class="float-left"><h5 class="mt-2">Search results for "{{ searchQuery }}":</h5></div>
+        <div class="float-right">
+          <select v-model="limit">
+            <option value="10">10</option>
+            <option value="25">25</option>
+            <option value="50">50</option>
+            <option value="100">100</option>
+          </select>
+        </div>
+      </div>
+      <tracks-list v-bind:searchQuery="searchQuery" v-bind:searchLimit="limit"></tracks-list>
+    </div>
+    <div v-else>
+      <h3 class="text-center">Last 10 added songs</h3>
+      <tracks-list></tracks-list>
+    </div>
     </div>
 </template>
 
@@ -32,7 +45,8 @@
       data () {
           return {
               tracks: [],
-              searchQuery: null
+              searchQuery: null,
+              limit: 10
           }
       },
   }
