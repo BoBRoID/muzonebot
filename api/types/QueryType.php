@@ -9,9 +9,11 @@
 namespace api\types;
 
 use api\models\TrackSearch;
+use common\models\Song;
 use common\models\User;
 use GraphQL\Type\Definition\ObjectType;
 use GraphQL\Type\Definition\Type;
+use yii\db\Expression;
 
 class QueryType extends ObjectType
 {
@@ -58,6 +60,12 @@ class QueryType extends ObjectType
                             }
 
                             return $query->all();
+                        }
+                    ],
+                    'lastListenedTrack'     =>  [
+                        'type'      =>  Types::track(),
+                        'resolve'   =>  function($root, $args) {
+                            return Song::find()->orderBy(new Expression('RAND()'))->one();
                         }
                     ],
                     'userTracks'    =>  [
