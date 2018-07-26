@@ -17,6 +17,9 @@
     </b-navbar>
     <div class="wrap mt-6">
       <router-view></router-view>
+      <slide-panel>
+        <MusicPlayer></MusicPlayer>
+      </slide-panel>
     </div>
     <footer class="footer">
       <div class="container">
@@ -28,10 +31,14 @@
 </template>
 
 <script>
+    import SlidePanel from "./components/SlidePanel";
+    import MusicPlayer from "./components/MusicPlayer";
     export default {
         name: 'app',
+        components: {MusicPlayer, SlidePanel},
         data () {
             return {
+                playingSong: {},
                 menuItems: [
                     {
                         label: 'Главная',
@@ -72,6 +79,23 @@
                     ]
                 }
             }
-        }
+        },
+        apollo: {
+            tracks: {
+                query: request,
+                variables() {
+                    return {
+                        query: this.searchQuery,
+                        limit: this.searchLimit ? parseInt(this.searchLimit) : 10,
+                        order: '`added` DESC'
+                    }
+                },
+                loadingKey: 'loading',
+                pollInterval: 1500,
+                error (error) {
+                    console.error('We\'ve got an error!', error)
+                }
+            }
+        },
     }
 </script>
