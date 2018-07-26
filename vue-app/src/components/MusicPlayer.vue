@@ -3,7 +3,7 @@
         <div class="row">
             <div class="col">
                 <img src="http://via.placeholder.com/800x800" class="img-fluid w-100">
-                <h4 class="text-center">Track name <small class="w-100 d-block">Track artist</small></h4>
+                <h4 class="text-center mt-2 px-1">{{ title }}<small class="w-100 d-block">{{ artist }}</small></h4>
             </div>
         </div>
         <div class="row">

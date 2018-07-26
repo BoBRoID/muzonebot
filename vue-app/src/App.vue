@@ -18,7 +18,7 @@
     <div class="wrap mt-6">
       <router-view></router-view>
       <slide-panel>
-        <MusicPlayer :title="playingSong.title" :artist="playingSong.artist"></MusicPlayer>
+        <MusicPlayer :title="lastListenedTrack.title" :artist="lastListenedTrack.artist"></MusicPlayer>
       </slide-panel>
     </div>
     <footer class="footer">
@@ -36,18 +36,23 @@
     import gql from 'graphql-tag'
 
 
-    const request = gql`query lastListenedTrack {
-        id
-        title
-        artist
-      }`
+    const request = gql`query {
+        lastListenedTrack {
+          id
+          title
+          artist
+        }
+    }`
 
     export default {
         name: 'app',
         components: {MusicPlayer, SlidePanel},
         data () {
             return {
-                playingSong: {},
+                lastListenedTrack: {
+                    title: 'Sample title',
+                    artist: 'Sample artist'
+                },
                 menuItems: [
                     {
                         label: 'Главная',
@@ -90,7 +95,7 @@
             }
         },
         apollo: {
-            tracks: {
+            lastListenedTrack: {
                 query: request,
                 loadingKey: 'loading',
                 error (error) {
