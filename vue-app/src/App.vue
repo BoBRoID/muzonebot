@@ -18,7 +18,7 @@
     <div class="wrap mt-6">
       <router-view></router-view>
       <slide-panel>
-        <MusicPlayer></MusicPlayer>
+        <MusicPlayer :title="playingSong.title" :artist="playingSong.artist"></MusicPlayer>
       </slide-panel>
     </div>
     <footer class="footer">
@@ -33,6 +33,15 @@
 <script>
     import SlidePanel from "./components/SlidePanel";
     import MusicPlayer from "./components/MusicPlayer";
+    import gql from 'graphql-tag'
+
+
+    const request = gql`query lastListenedTrack {
+        id
+        title
+        artist
+      }`
+
     export default {
         name: 'app',
         components: {MusicPlayer, SlidePanel},
@@ -83,15 +92,7 @@
         apollo: {
             tracks: {
                 query: request,
-                variables() {
-                    return {
-                        query: this.searchQuery,
-                        limit: this.searchLimit ? parseInt(this.searchLimit) : 10,
-                        order: '`added` DESC'
-                    }
-                },
                 loadingKey: 'loading',
-                pollInterval: 1500,
                 error (error) {
                     console.error('We\'ve got an error!', error)
                 }

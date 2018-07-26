@@ -14,7 +14,11 @@
 
 <script>
     export default {
-        name: "MusicPlayer"
+        name: "MusicPlayer",
+        props: {
+            title: String,
+            artist: String
+        }
     }
 </script>
 
