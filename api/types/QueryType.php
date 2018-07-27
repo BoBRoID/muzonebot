@@ -14,6 +14,7 @@ use common\models\User;
 use GraphQL\Type\Definition\ObjectType;
 use GraphQL\Type\Definition\Type;
 use yii\db\Expression;
+use yii\helpers\Url;
 
 class QueryType extends ObjectType
 {
@@ -66,6 +67,15 @@ class QueryType extends ObjectType
                         'type'      =>  Types::track(),
                         'resolve'   =>  function($root, $args) {
                             return Song::find()->orderBy(new Expression('RAND()'))->one();
+                        }
+                    ],
+                    'trackLink'     =>  [
+                        'type'      =>  Type::string(),
+                        'args'      =>  [
+                            'id'    =>  Type::nonNull(Type::int()),
+                        ],
+                        'resolve'   =>  function($root, $args) {
+                            return Url::to(['/site/get-track', 'id' => $args['id']]);
                         }
                     ],
                     'userTracks'    =>  [
