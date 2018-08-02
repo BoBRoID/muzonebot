@@ -9,6 +9,8 @@ import { ApolloClient } from 'apollo-client'
 import { HttpLink } from 'apollo-link-http'
 import { InMemoryCache } from 'apollo-cache-inmemory'
 import VueApollo from 'vue-apollo'
+import Player from './player'
+import gql from 'graphql-tag'
 
 import 'bootstrap/dist/css/bootstrap.css'
 import 'bootstrap-vue/dist/bootstrap-vue.css'
@@ -24,6 +26,9 @@ const apolloClient = new ApolloClient({
     cache: new InMemoryCache(),
     connectToDevTools: true,
 })
+
+const player = new Player([]);
+
 
 Vue.use(VueApollo)
 

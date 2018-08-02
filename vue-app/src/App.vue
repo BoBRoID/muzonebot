@@ -18,7 +18,7 @@
     <div class="wrap mt-6">
       <router-view></router-view>
       <slide-panel>
-        <MusicPlayer :title="lastListenedTrack.title" :artist="lastListenedTrack.artist"></MusicPlayer>
+        <MusicPlayer :id="lastListenedTrack.id"></MusicPlayer>
       </slide-panel>
     </div>
     <footer class="footer">
@@ -34,25 +34,37 @@
     import SlidePanel from "./components/SlidePanel";
     import MusicPlayer from "./components/MusicPlayer";
     import gql from 'graphql-tag'
-
+    import Vue from 'vue'
 
     const request = gql`query {
         lastListenedTrack {
           id
           title
           artist
+          url
         }
-    }`
+    }`;
+
+    Vue.mixin({
+        methods: {
+            playTrack: function(a) {
+                let id = a.target.getAttribute('data-id');
+
+
+
+                console.log(this);
+                console.log(this.lastListenedTrack);
+                console.log(player);
+            }
+        }
+    });
 
     export default {
         name: 'app',
         components: {MusicPlayer, SlidePanel},
         data () {
             return {
-                lastListenedTrack: {
-                    title: 'Sample title',
-                    artist: 'Sample artist'
-                },
+                lastListenedTrack: {id: null},
                 menuItems: [
                     {
                         label: 'Главная',
@@ -104,4 +116,6 @@
             }
         },
     }
+
+
 </script>

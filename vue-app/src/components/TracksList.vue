@@ -19,11 +19,11 @@
                             </div>
                             <div class="d-flex">
                                 <b-button-group size="sm" aria-label="Действия с треком">
-                                    <b-button :data-id="track.id" variant="secondary" size="xs" class="listenTrack">
+                                    <b-button :data-id="track.id" variant="secondary" v-on:click="playTrack" size="xs" class="listenTrack">
                                         <font-awesome-icon icon="play" />
                                     </b-button>
                                     <b-button variant="secondary" size="xs"
-                                              :href="'/en-us/get-track?id=' + track.id"
+                                              :href="track.url"
                                               :title="'Download track &quot;' + track.title + ' - ' + track.artist +'&quot;'">
                                         <font-awesome-icon icon="download" />
                                     </b-button>
@@ -51,6 +51,7 @@
         id
         title
         artist
+        url
     }
   }`
 
