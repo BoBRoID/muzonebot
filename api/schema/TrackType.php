@@ -5,6 +5,7 @@ use api\types\Types;
 use common\models\Song;
 use GraphQL\Type\Definition\ObjectType;
 use GraphQL\Type\Definition\Type;
+use yii\helpers\Url;
 
 class TrackType extends ObjectType
 {
@@ -85,6 +86,13 @@ class TrackType extends ObjectType
                     'last_update'    =>  [
                         'type'  =>  Type::int(),
                         'description'   =>  \Yii::t('api', 'Последнее изменение')
+                    ],
+                    'url' => [
+                        'type' => Type::string(),
+                        'description' => \Yii::t('api', 'Ссылка на трек'),
+                        'resolve' => function(Song $song, $args){
+                            return \Yii::$app->params['frontend_url'].'site/get-track?id='.$song->id;
+                        }
                     ],
                     /*
                     'userSong'    =>  [

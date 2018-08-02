@@ -33,6 +33,15 @@ class QueryType extends ObjectType
                             return User::findOne(['id' => $args['id']]);
                         }
                     ],
+                    'track' => [
+                        'type' => Types::track(),
+                        'args' => [
+                            'id' => Type::nonNull(Type::int())
+                        ],
+                        'resolve' => function ($root, $args) {
+                            return Song::findOne(['id' => $args['id']]);
+                        }
+                    ],
                     'tracks'    =>  [
                         'type'  =>  Type::listOf(Types::track()),
                         'args'  =>  [
@@ -67,15 +76,6 @@ class QueryType extends ObjectType
                         'type'      =>  Types::track(),
                         'resolve'   =>  function($root, $args) {
                             return Song::find()->orderBy(new Expression('RAND()'))->one();
-                        }
-                    ],
-                    'trackLink'     =>  [
-                        'type'      =>  Type::string(),
-                        'args'      =>  [
-                            'id'    =>  Type::nonNull(Type::int()),
-                        ],
-                        'resolve'   =>  function($root, $args) {
-                            return Url::to(['/site/get-track', 'id' => $args['id']]);
                         }
                     ],
                     'userTracks'    =>  [
