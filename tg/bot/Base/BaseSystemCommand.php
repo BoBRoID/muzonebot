@@ -8,7 +8,7 @@
 
 namespace tg\bot\Base;
 
-use common\models\User;
+use tg\models\User;
 use Longman\TelegramBot\Commands\SystemCommand;
 use Longman\TelegramBot\Entities\Update;
 use Longman\TelegramBot\Telegram;
@@ -19,7 +19,7 @@ abstract class BaseSystemCommand extends SystemCommand
     /**
      * @var User|null
      */
-    public $botUser = null;
+    public $botUser = false;
 
     /**
      * UserCommand constructor.
@@ -30,11 +30,11 @@ abstract class BaseSystemCommand extends SystemCommand
     {
         parent::__construct($telegram, $update);
 
-        if(!$this->botUser){
-            $this->botUser = User::initializeBotUser($this);
+        if($this->botUser === false){
+            $this->botUser = User::initializeBotUser($update);
         }
 
-        if($this->botUser && !empty($this->botUser->language_id)){
+        if($this->botUser !== null && !empty($this->botUser->language_id)){
             \Yii::$app->language = $this->botUser->language_id;
         }
     }

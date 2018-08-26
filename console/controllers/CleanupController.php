@@ -41,6 +41,23 @@ class CleanupController extends Controller
         /**
          * @var $song Song
          */
+        foreach(Song::find()->where(['deleted' => 0, 'isBig' => 0])->andWhere(['like', 'title', 'file_%', false])->andWhere(['<=', 'last_update', time() - 3600])->each(5) as $song){
+            $total++;
+
+            try{
+                TrackDownloader::getUrl($song->fileId);
+            }catch (NotFoundHttpException $e){
+                $deleted++;
+                $song->deleted = 1;
+            }catch (BadRequestHttpException $e){
+                $song->isBig = 1;
+            }
+
+            $song->save(false);
+        }
+        /**
+         * @var $song Song
+         */
         foreach(Song::find()->where(['deleted' => 0, 'isBig' => 0])->andWhere(['<=', 'last_update', time() - 3600])->each(5) as $song){
             $total++;
 

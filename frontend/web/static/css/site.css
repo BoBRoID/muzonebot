@@ -144,3 +144,7 @@ a.desc:after {
 .track-line{
     line-height: 31px;
 }
+
+.mt-6{
+    margin-top: 5rem;
+}

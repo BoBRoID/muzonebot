@@ -73,7 +73,7 @@ NavBar::begin([
     'brandLabel'        => 'MuzOne',
     'brandUrl'          => Yii::$app->homeUrl,
     'options'           => [
-        'class'             =>  'navbar-light bg-light navbar-expand-lg',
+        'class'             =>  'navbar-light bg-light navbar-expand-lg fixed-top',
         'tag'               =>  'header'
     ],
     'containerOptions'  =>  [
@@ -138,7 +138,7 @@ echo Nav::widget([
 ]);
 NavBar::end();
 ?>
-<div class="wrap">
+<div class="wrap mt-6">
     <div class="container pt-3">
         <?= Breadcrumbs::widget([
             'links'                 =>  isset($this->params['breadcrumbs']) ? $this->params['breadcrumbs'] : [],

@@ -14,3 +14,8 @@
  * \Codeception\Util\Fixtures::get('user1');
  * ```
  */
+use Codeception\Util\Fixtures;
+use tg\tests\unit\fixtures\ChannelPost;
+
+Fixtures::add('channelPost', (new ChannelPost())->load());
+Fixtures::add('message', (new \tg\tests\unit\fixtures\Message())->load());

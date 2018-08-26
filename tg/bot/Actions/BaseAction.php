@@ -8,7 +8,7 @@
 
 namespace tg\bot\Actions;
 
-use common\models\User;
+use tg\models\User;
 use Longman\TelegramBot\Commands\Command;
 use Longman\TelegramBot\Entities\Update;
 use Longman\TelegramBot\Request;
@@ -70,11 +70,13 @@ class BaseAction
         }
     }
 
-    public function run(){
+    public function run()
+    {
         return $this->answerCallbackQuery('do nothing');
     }
 
-    protected function answerCallbackQuery($data){
+    protected function answerCallbackQuery($data)
+    {
         if(!is_array($data)){
             $data = ['text' => $data];
         }
@@ -88,7 +90,8 @@ class BaseAction
         ], $data));
     }
 
-    protected function updateCallbackQuery($data){
+    protected function updateCallbackQuery($data)
+    {
         if(!is_array($data)){
             $data = ['text' => $data];
         }
@@ -120,7 +123,8 @@ class BaseAction
      * @param User $botUser
      * @return $this
      */
-    public function setBotUser(User $botUser){
+    public function setBotUser(User $botUser): self
+    {
         $this->botUser = $botUser;
 
         return $this;
