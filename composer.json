@@ -29,7 +29,6 @@
         "codemix/yii2-localeurls": "^1.4",
         "nex/yii2-datepicker": "dev-master",
         "sammaye/yii2-audittrail": "^1.2",
-        "nirvana-msu/yii2-infinite-scroll": "1.0.*@dev",
         "spatie/emoji": "^1.0"
     },
     "require-dev": {
