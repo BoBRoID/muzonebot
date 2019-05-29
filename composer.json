@@ -27,7 +27,6 @@
         "mistic100/randomcolor": "^1.0",
         "rmrevin/yii2-fontawesome": "^2.17",
         "codemix/yii2-localeurls": "^1.4",
-        "nex/yii2-datepicker": "dev-master",
         "sammaye/yii2-audittrail": "^1.2",
         "spatie/emoji": "^1.0"
     },
