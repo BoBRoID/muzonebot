@@ -20,9 +20,10 @@
     ],
     "minimum-stability": "stable",
     "require": {
-        "php": ">=5.4.0",
-        "yiisoft/yii2": "~2.0.6",
-        "yiisoft/yii2-bootstrap": "~2.0.0",
+        "php": ">=7.2",
+        "ext-curl": "*",
+        "yiisoft/yii2": ">=2.0.14",
+        "yiisoft/yii2-bootstrap": "*",
         "bower-asset/bootstrap": "^4",
         "yiisoft/yii2-swiftmailer": "~2.0.0",
         "longman/telegram-bot": "~0.45",
