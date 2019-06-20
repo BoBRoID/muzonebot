@@ -26,7 +26,7 @@
         "yiisoft/yii2-bootstrap": "*",
         "bower-asset/bootstrap": "^4",
         "yiisoft/yii2-swiftmailer": "~2.0.0",
-        "longman/telegram-bot": "~0.45",
+        "longman/telegram-bot": "0.54.0",
         "james-heinrich/getid3": "^1.9",
         "lajax/yii2-translate-manager": "^1.7",
         "dektrium/yii2-rbac": "1.0.0-alpha@dev",
