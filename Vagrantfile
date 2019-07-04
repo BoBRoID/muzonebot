@@ -79,8 +79,8 @@ Vagrant.configure("2") do |config|
 
   # provisioners
   config.vm.provision 'shell', path: './vagrant/provision/once-as-root.sh', args: [options['timezone']]
-  config.vm.provision 'shell', path: './vagrant/provision/as-root-mariadb-install.sh'
-  config.vm.provision 'shell', path: './vagrant/provision/as-root-php7-install.sh'
+  config.vm.provision 'shell', path: './vagrant/provision/once-as-vagrant.sh', args: [options['github_token']], privileged: false
+  config.vm.provision 'shell', path: './vagrant/provision/always-as-root.sh', run: 'always'
 
   config.vm.post_up_message = "Dev app URL: http://#{domains[:frontend]}\nAdmin URL: http://#{domains[:backend]}\nTelegram URL: http://#{domains[:tg]}"
 end
