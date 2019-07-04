@@ -4,7 +4,7 @@
  * @var $searchModel \backend\models\forms\SongSearch
  */
 use rmrevin\yii\fontawesome\FA;
-use yii\bootstrap\Html;
+use yii\helpers\Html;
 use yii\helpers\Url;
 
 $js = <<<'JS'

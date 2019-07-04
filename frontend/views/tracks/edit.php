@@ -7,7 +7,7 @@
  * @var $model \frontend\models\forms\TrackForm
  */
 use yii\bootstrap\ActiveForm;
-use yii\bootstrap\Html;
+use yii\helpers\Html;
 
 $this->title = \Yii::t('site', 'Редактирование трека');
 

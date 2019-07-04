@@ -1,7 +1,7 @@
 <?php
 namespace backend\widgets;
 use yii\bootstrap\BootstrapPluginAsset;
-use yii\bootstrap\Html;
+use yii\helpers\Html;
 use yii\helpers\ArrayHelper;
 
 /**
