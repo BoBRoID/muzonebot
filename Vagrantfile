@@ -12,7 +12,8 @@ end
 domains = {
   frontend: 'muzone.local',
   backend: 'adm.muzone.local',
-  tg: 'tg.muzone.local'
+  tg: 'tg.muzone.local',
+  api: 'api.muzone.local'
 }
 
 config = {
@@ -82,5 +83,5 @@ Vagrant.configure("2") do |config|
   config.vm.provision 'shell', path: './vagrant/provision/once-as-vagrant.sh', args: [options['github_token']], privileged: false
   config.vm.provision 'shell', path: './vagrant/provision/always-as-root.sh', run: 'always'
 
-  config.vm.post_up_message = "Dev app URL: http://#{domains[:frontend]}\nAdmin URL: http://#{domains[:backend]}\nTelegram URL: http://#{domains[:tg]}"
+  config.vm.post_up_message = "Dev app URL: http://#{domains[:frontend]}\nAdmin URL: http://#{domains[:backend]}\API URL: http://#{domains[:api]}\nTelegram URL: http://#{domains[:tg]}"
 end
