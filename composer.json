@@ -12,14 +12,21 @@
         "irc": "irc://irc.freenode.net/yii",
         "source": "https://github.com/yiisoft/yii2"
     },
-    "minimum-stability": "stable",
+    "repositories": [
+        {
+            "type": "composer",
+            "url": "https://asset-packagist.org"
+        }
+    ],
+    "minimum-stability": "dev",
     "require": {
-        "php": ">=5.4.0",
-        "yiisoft/yii2": "~2.0.6",
-        "yiisoft/yii2-bootstrap": "~2.1.0@dev",
-        "bower-asset/bootstrap": "~4.0.0@alpha",
+        "php": ">=7.2",
+        "ext-curl": "*",
+        "yiisoft/yii2": ">=2.0.14",
+        "yiisoft/yii2-bootstrap": "*",
+        "bower-asset/bootstrap": "^4",
         "yiisoft/yii2-swiftmailer": "~2.0.0",
-        "longman/telegram-bot": "~0.45",
+        "longman/telegram-bot": "0.54.0",
         "james-heinrich/getid3": "^1.9",
         "lajax/yii2-translate-manager": "^1.7",
         "dektrium/yii2-rbac": "1.0.0-alpha@dev",
@@ -40,6 +47,31 @@
 
         "codeception/base": "^2.2.3",
         "codeception/verify": "~0.3.1"
+    },
+    "scripts": {
+        "post-install-cmd": [
+            "yii\\composer\\Installer::postInstall"
+        ],
+        "post-create-project-cmd": [
+            "yii\\composer\\Installer::postCreateProject",
+            "yii\\composer\\Installer::postInstall"
+        ]
+    },
+    "extra": {
+        "yii\\composer\\Installer::postCreateProject": {
+            "setPermission": [
+                {
+                    "runtime": "0777",
+                    "web/assets": "0777",
+                    "yii": "0755"
+                }
+            ]
+        },
+        "yii\\composer\\Installer::postInstall": {
+            "generateCookieValidationKey": [
+                "config/web.php"
+            ]
+        }
     },
     "config": {
         "process-timeout": 1800,

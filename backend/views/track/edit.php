@@ -3,7 +3,7 @@
  * @var $trackForm \backend\models\forms\TrackForm
  */
 use common\widgets\Alert;
-use yii\bootstrap\Html;
+use yii\helpers\Html;
 
 $this->title = \Yii::t('manage', 'Редактирование трека');
 

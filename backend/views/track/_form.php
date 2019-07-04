@@ -3,7 +3,7 @@
  * @var $trackForm \backend\models\forms\TrackForm
  */
 use yii\bootstrap\ActiveForm;
-use yii\bootstrap\Html;
+use yii\helpers\Html;
 use yii\helpers\Url;
 
 $params = ['layout' => 'horizontal'];

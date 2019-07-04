@@ -1,6 +1,6 @@
 <?php
 use rmrevin\yii\fontawesome\FA;
-use yii\bootstrap\Html;
+use yii\helpers\Html;
 
 $hash = \Yii::$app->session->get('tgAuthToken');
 $url = 'https://telegram.me/muzonebot?start='.$hash;
