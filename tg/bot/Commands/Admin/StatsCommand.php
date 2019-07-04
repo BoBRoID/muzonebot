@@ -47,6 +47,7 @@ class StatsCommand extends AdminCommand
      *
      * @return mixed
      * @throws \Longman\TelegramBot\Exception\TelegramException
+     * @throws \yii\base\InvalidConfigException
      */
     public function execute()
     {
