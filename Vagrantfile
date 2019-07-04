@@ -4,10 +4,15 @@
 require 'yaml'
 require 'fileutils'
 
+required_plugins = %w( vagrant-hostmanager vagrant-vbguest vagrant-bindfs )
+required_plugins.each do |plugin|
+    exec "vagrant plugin install #{plugin}" unless Vagrant.has_plugin? plugin
+end
+
 domains = {
-  frontend: 'muzone.dev',
-  backend: 'adm.muzone.dev',
-  tg: 'tg.muzone.dev'
+  frontend: 'muzone.local',
+  backend: 'adm.muzone.local',
+  tg: 'tg.muzone.local'
 }
 
 config = {
@@ -31,9 +36,23 @@ end
 # backwards compatibility). Please don't change it unless you know what
 # you're doing.
 Vagrant.configure("2") do |config|
-  config.vm.box = "yk0/ubuntu-xenial"
+  config.vm.box = 'centos/7'
 
   config.vm.box_check_update = options['box_check_update']
+
+  config.vm.provider 'libvirt' do |libvirt|
+    config.bindfs.install_bindfs_from_source = true
+    config.bindfs.default_options = {
+      force_user:   'vagrant',
+      force_group:  'vagrant',
+      perms:        'u=rwX:g=rwXD:o=rwXD'
+    }
+
+    # sync: folder 'poster' (host machine) -> folder '/app' (guest machine)
+    config.vm.synced_folder './', '/vagrant-nfs', type: 'nfs',  nfs_udp: false, nfs_version: 4, linux__nfs_options: ['rw','no_subtree_check','all_squash','async']
+  end
+
+  config.bindfs.bind_folder "/vagrant-nfs", "/app"
 
   # machine name (for vagrant console)
   config.vm.define options['machine_name']
@@ -43,9 +62,6 @@ Vagrant.configure("2") do |config|
 
   # network settings
   config.vm.network 'private_network', ip: options['ip']
-
-  # sync: folder 'yii2-app-advanced' (host machine) -> folder '/app' (guest machine)
-  config.vm.synced_folder './', '/app', owner: 'vagrant', group: 'vagrant', type: 'rsync', rsync__auto: true
 
   # disable folder '/vagrant' (guest machine)
   config.vm.synced_folder '.', '/vagrant', disabled: true
@@ -63,6 +79,8 @@ Vagrant.configure("2") do |config|
 
   # provisioners
   config.vm.provision 'shell', path: './vagrant/provision/once-as-root.sh', args: [options['timezone']]
-  config.vm.provision 'shell', path: './vagrant/provision/once-as-vagrant.sh', args: [options['github_token']], privileged: false
-  config.vm.provision 'shell', path: './vagrant/provision/always-as-root.sh', run: 'always'
+  config.vm.provision 'shell', path: './vagrant/provision/as-root-mariadb-install.sh'
+  config.vm.provision 'shell', path: './vagrant/provision/as-root-php7-install.sh'
+
+  config.vm.post_up_message = "Dev app URL: http://#{domains[:frontend]}\nAdmin URL: http://#{domains[:backend]}\nTelegram URL: http://#{domains[:tg]}"
 end

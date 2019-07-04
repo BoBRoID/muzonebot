@@ -16,59 +16,105 @@ function info {
 
 info "Provision-script user: `whoami`"
 
-info "Allocate swap for MySQL 5.6"
-fallocate -l 2048M /swapfile
-chmod 600 /swapfile
-mkswap /swapfile
-swapon /swapfile
-echo '/swapfile none swap defaults 0 0' >> /etc/fstab
-
-info "Configure locales"
-update-locale LC_ALL="C"
-dpkg-reconfigure locales
+export DEBIAN_FRONTEND=noninteractive
 
 info "Configure timezone"
-echo ${timezone} | tee /etc/timezone
-dpkg-reconfigure --frontend noninteractive tzdata
+timedatectl set-timezone ${timezone} --no-ask-password
 
-MYSQL_ROOT_PASSWORD=""
+info "Add MariaDB repo"
+cat > /etc/yum.repos.d/MariaDB.repo <<EOL
+# MariaDB 10.3 CentOS repository list - created 2019-01-10 13:23 UTC
+# http://downloads.mariadb.org/mariadb/repositories/
+[mariadb]
+name = MariaDB
+baseurl = http://yum.mariadb.org/10.3/centos7-amd64
+gpgkey=https://yum.mariadb.org/RPM-GPG-KEY-MariaDB
+gpgcheck=1
+EOL
 
-info "Prepare root password for MySQL"
-debconf-set-selections <<< 'mysql-server-5.7 mysql-server/root_password password password'
-debconf-set-selections <<< 'mysql-server-5.7 mysql-server/root_password_again password password'
-echo "Done!"
+info "Install remi-release 7"
+yum -y install http://rpms.remirepo.net/enterprise/remi-release-7.rpm
 
-info "Update OS software"
-apt-get update
+info "update && disable php 5.4 && enable php 7.3"
+yum -y update
+yum-config-manager --disable remi-php54
+yum-config-manager --enable remi-php73
 
-info "Install additional software"
-apt-get install -y git php7.0 php7.0-mbstring php7.0-curl php7.0-xml php7.0-intl php7.0-fpm php7.0-zip php7.0-mysql php7.0-cli php7.0-gd php7.0-json nginx mysql-server mysql-client --force-yes
+info "Install yum utils"
+yum -y install epel-release yum-utils
+
+info "Update && upgrade"
+yum -y update
+yum -y upgrade
+
+info "Install PHP 7.3"
+yum -y install php-curl php-cli php-intl php-mysqlnd php-gd php-fpm php-mbstring php-xml unzip nginx php-bcmath
+
+info "Install MariaDB"
+yum -y install MariaDB-server expect
 
 info "Configure MySQL"
-mysql -u root -ppassword -e "use mysql; UPDATE user SET authentication_string=PASSWORD('') WHERE User='root'; flush privileges;"
-sed -i "s/.*bind-address.*/bind-address = 0.0.0.0\
-\nsql-mode=\"\"/" /etc/mysql/mysql.conf.d/mysqld.cnf
+service mysql restart
+SECURE_MYSQL=$(expect -c "
+set timeout 10
+spawn mysql_secure_installation
+expect \"Enter current password for root (enter for none):\"
+send \"\r\"
+expect \"Change the root password?\"
+send \"n\r\"
+expect \"Remove anonymous users?\"
+send \"y\r\"
+expect \"Disallow root login remotely?\"
+send \"n\r\"
+expect \"Remove test database and access to it?\"
+send \"y\r\"
+expect \"Reload privilege tables now?\"
+send \"y\r\"
+expect eof
+")
+
+echo "$SECURE_MYSQL"
+yum -y remove expect
+
+sed -i "s/.*bind-address.*/bind-address = 0.0.0.0/" /etc/my.cnf.d/server.cnf
+mysql -uroot <<< "CREATE USER 'root'@'%' IDENTIFIED BY ''"
+mysql -uroot <<< "GRANT ALL PRIVILEGES ON *.* TO 'root'@'%'"
+mysql -uroot <<< "DROP USER 'root'@'localhost'"
+mysql -uroot <<< "FLUSH PRIVILEGES"
 echo "Done!"
 
 info "Configure PHP-FPM"
-sed -i 's/user = www-data/user = vagrant/g' /etc/php/7.0/fpm/pool.d/www.conf
-sed -i 's/group = www-data/group = vagrant/g' /etc/php/7.0/fpm/pool.d/www.conf
-sed -i 's/owner = www-data/owner = vagrant/g' /etc/php/7.0/fpm/pool.d/www.conf
+sed -i 's/user = apache/user = vagrant/g' /etc/php-fpm.d/www.conf
+sed -i 's/group = apache/group = vagrant/g' /etc/php-fpm.d/www.conf
+sed -i 's/owner = apache/owner = vagrant/g' /etc/php-fpm.d/www.conf
+sed -i 's/listen = 127.0.0.1:9000/listen = \/var\/run\/php-fpm\/php-fpm.sock/g' /etc/php-fpm.d/www.conf
+sed -i 's/;listen.owner = nobody/listen.owner = vagrant/g' /etc/php-fpm.d/www.conf
+sed -i 's/;listen.group = nobody/listen.group = vagrant/g' /etc/php-fpm.d/www.conf
+sed -i 's/listen.owner = nobody/listen.owner = vagrant/g' /etc/php-fpm.d/www.conf
+sed -i 's/listen.group = nobody/listen.group = vagrant/g' /etc/php-fpm.d/www.conf
 echo "Done!"
+
+info "Install composer"
+curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 
 info "Configure NGINX"
 sed -i 's/user www-data/user vagrant/g' /etc/nginx/nginx.conf
 echo "Done!"
 
 info "Enabling site configuration"
-ln -s /app/vagrant/nginx/app.conf /etc/nginx/sites-enabled/app.conf
+ln -s /app/vagrant/nginx/app.conf /etc/nginx/conf.d/app.conf
 echo "Done!"
+
+info "Disabling SElinux"
+setenforce 0
+sed -i 's/SELINUX=enforcing/SELINUX=disabled/g' /etc/sysconfig/selinux
+
+info "Change owners"
+chown vagrant:vagrant /var/lib/nginx -R
 
 info "Initailize databases for MySQL"
-mysql -uroot <<< "CREATE USER 'root'@'%'"
-mysql -uroot <<< "GRANT ALL PRIVILEGES ON *.* TO 'root'@'%' WITH GRANT OPTION"
-mysql -uroot <<< "CREATE DATABASE muzone CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci"
+mysql -uroot <<< "CREATE DATABASE muzone"
 echo "Done!"
 
-info "Install composer"
-curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
+chmod 0777 /var/run/php-fpm/php-fpm.sock
+chmod 0777 /var/lib/php/session -R
