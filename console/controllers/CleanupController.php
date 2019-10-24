@@ -52,17 +52,25 @@ class CleanupController extends Controller
         foreach(Song::find()->where(['deleted' => 0, 'isBig' => 0])->andWhere(['<=', 'last_update', time() - 3600])->each(5) as $song){
             $proceed++;
 
-            Messages::pretify("Now checking song ID {$song->id} (#{$proceed} from {$count})...");
+            if ($debug) {
+                Messages::pretify("Now checking song ID {$song->id} (#{$proceed} from {$count})...");
+            }
 
             try{
                 TrackDownloader::getUrl($song->fileId);
             }catch (NotFoundHttpException $e){
                 $deleted++;
                 $song->deleted = 1;
-                Messages::pretify('It seems unreachable, deleting...');
+
+                if ($debug) {
+                    Messages::pretify('It seems unreachable, deleting...');
+                }
             }catch (BadRequestHttpException $e){
                 $song->isBig = 1;
-                Messages::pretify('It seems unreachable, marking as big...');
+
+                if ($debug) {
+                    Messages::pretify('It seems unreachable, marking as big...');
+                }
             }
 
             $song->save(false);
