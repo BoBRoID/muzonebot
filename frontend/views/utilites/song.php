@@ -9,7 +9,7 @@
  */
 $searchLink = isset($searchLink) ? $searchLink : '/site/search';
 use rmrevin\yii\fontawesome\FA;
-use yii\bootstrap\Html;
+use yii\helpers\Html;
 ?>
 <div class="d-flex flex-column align-items-stretch w-100 flex-nowrap">
     <div class="d-flex flex-row justify-content-between w-100">

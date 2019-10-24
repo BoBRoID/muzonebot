@@ -106,16 +106,16 @@ class BaseAction
         $data = array_merge($data, $coordinates);
 
         if(array_key_exists('caption', $data)){
-            \Yii::trace('editMessageCaption');
+            \Yii::debug('editMessageCaption');
             return Request::editMessageCaption($data);
         }
 
         if(array_key_exists('reply_markup', $data) && !array_key_exists('text', $data)){
-            \Yii::trace('editMessageReplyMarkup');
+            \Yii::debug('editMessageReplyMarkup');
             return Request::editMessageReplyMarkup($data);
         }
 
-        \Yii::trace('editMessageText');
+        \Yii::debug('editMessageText');
         return Request::editMessageText($data);
     }
 

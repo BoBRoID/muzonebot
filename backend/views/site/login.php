@@ -4,7 +4,7 @@
 
 use common\widgets\Modal;
 use rmrevin\yii\fontawesome\FA;
-use yii\bootstrap\Html;
+use yii\helpers\Html;
 
 $this->title = 'Login';
 $this->params['breadcrumbs'][] = $this->title;

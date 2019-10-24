@@ -34,7 +34,7 @@ class WebHookAction extends Action
             $telegram->enableAdmins(\Yii::$app->params['adminsId']);
             $telegram->handle();
         }catch (TelegramException $e){
-            \Yii::trace($e->getMessage());
+            \Yii::debug($e->getMessage());
         }
     }
 

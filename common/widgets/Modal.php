@@ -8,11 +8,12 @@
 
 namespace common\widgets;
 
-
-use yii\bootstrap\Html;
+use yii\helpers\Html;
 
 class Modal extends \yii\bootstrap\Modal
 {
+
+    public  $headerOptions = [];
 
     /**
      * Renders the header HTML markup of the modal

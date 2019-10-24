@@ -13,6 +13,10 @@ function info {
 info "Provision-script user: `whoami`"
 
 info "Restart web-stack"
-service php7.0-fpm restart
+setenforce 0
+service php-fpm restart
 service nginx restart
 service mysql restart
+
+chmod 0777 /var/run/php-fpm/php-fpm.sock
+chmod 0777 /var/lib/php/session -R
