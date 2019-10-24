@@ -13,6 +13,7 @@ use common\helpers\TrackDownloader;
 use common\models\AdminToken;
 use common\models\Song;
 use common\models\UserToken;
+use console\helpers\Messages;
 use yii\console\Controller;
 use yii\web\BadRequestHttpException;
 use yii\web\NotFoundHttpException;
@@ -36,44 +37,40 @@ class CleanupController extends Controller
 
     }
 
-    public function actionSongs(){
-        $total = $deleted = 0;
-        /**
-         * @var $song Song
-         */
-        foreach(Song::find()->where(['deleted' => 0, 'isBig' => 0])->andWhere(['like', 'title', 'file_%', false])->andWhere(['<=', 'last_update', time() - 3600])->each(5) as $song){
-            $total++;
+    public function actionSongs(bool $debug = false): void
+    {
+        $proceed = $deleted = 0;
+        $count = Song::find()->where(['deleted' => 0, 'isBig' => 0])->andWhere(['<=', 'last_update', time() - 3600])->count();
 
-            try{
-                TrackDownloader::getUrl($song->fileId);
-            }catch (NotFoundHttpException $e){
-                $deleted++;
-                $song->deleted = 1;
-            }catch (BadRequestHttpException $e){
-                $song->isBig = 1;
-            }
-
-            $song->save(false);
+        if ($debug) {
+            Messages::pretify("Found {$count} songs, let's check them...");
         }
+
         /**
          * @var $song Song
          */
         foreach(Song::find()->where(['deleted' => 0, 'isBig' => 0])->andWhere(['<=', 'last_update', time() - 3600])->each(5) as $song){
-            $total++;
+            $proceed++;
+
+            Messages::pretify("Now checking song ID {$song->id} (#{$proceed} from {$count})...");
 
             try{
                 TrackDownloader::getUrl($song->fileId);
             }catch (NotFoundHttpException $e){
                 $deleted++;
                 $song->deleted = 1;
+                Messages::pretify('It seems unreachable, deleting...');
             }catch (BadRequestHttpException $e){
                 $song->isBig = 1;
+                Messages::pretify('It seems unreachable, marking as big...');
             }
 
             $song->save(false);
         }
 
-        echo 'Total worked with '.$total.' tracks, deleted '.$deleted;
+        if ($debug) {
+            Messages::pretify("Totally proceed {$proceed} songs, removed {$deleted}");
+        }
     }
 
 }
