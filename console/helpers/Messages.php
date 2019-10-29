@@ -9,11 +9,11 @@ class Messages
 
     public static function pretify(string $message, bool $makeNewLine = true, bool $addDate = true): void
     {
-        $str = "\t>>>\t";
+        $str = "\t>>>  ";
 
         if ($addDate) {
             $date = date('H:i:s');
-            $str .= "{$date}\t";
+            $str .= "{$date}  ";
         }
 
         $str .= "\t{$message}";

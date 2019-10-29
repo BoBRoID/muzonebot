@@ -119,11 +119,11 @@ class GenericmessageCommand extends BaseSystemCommand
 
                         if(!empty($fileInfo)){
                             $tags = TagExtractor::getInfo($fileInfo);
-                            \Yii::trace($tags);
+                            \Yii::debug($tags);
                             $song->loadTags($tags);
                         }
                     }catch (ErrorException $e){
-                        \Yii::trace($e->getMessage());
+                        \Yii::debug($e->getMessage());
                     }
 
                     $fileName = preg_replace('/(^(.*)\/|\.\w+$)/', '', urldecode($filepath));

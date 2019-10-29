@@ -9,14 +9,11 @@
 namespace console\controllers;
 
 
-use common\helpers\TrackDownloader;
 use common\models\AdminToken;
 use common\models\Song;
 use common\models\TelegramFile;
 use common\models\UserToken;
 use console\helpers\Messages;
-use Longman\TelegramBot\Request;
-use Longman\TelegramBot\Telegram;
 use yii\console\Controller;
 use yii\web\BadRequestHttpException;
 use yii\web\NotFoundHttpException;
@@ -55,7 +52,7 @@ class CleanupController extends Controller
         /**
          * @var $song Song
          */
-        foreach($query->each(5) as $song){
+        foreach($query->each(20) as $song){
             $proceed++;
 
             if ($debug) {
