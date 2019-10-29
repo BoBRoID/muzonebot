@@ -7,14 +7,25 @@ namespace console\helpers;
 class Messages
 {
 
-    public static function pretify(string $message, bool $makeNewLine = true): void
+    public static function pretify(string $message, bool $makeNewLine = true, bool $addDate = true): void
     {
-        $date = date('Y-m-d H:i:s');
+        $str = "\t>>>\t";
 
-        echo "\t>>>\t[{$date}]\t\t{$message}";
+        if ($addDate) {
+            $date = date('H:i:s');
+            $str .= "{$date}\t";
+        }
 
-        if ($makeNewLine) echo "\r\n";
+        $str .= "\t{$message}";
+
+        if ($makeNewLine) $str .= "\r\n";
+
+        echo $str;
     }
 
+    private static function makeCurlyBrackets(string $string): string
+    {
+
+    }
 
 }

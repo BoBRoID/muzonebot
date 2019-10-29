@@ -45,12 +45,11 @@ class TrackDownloader
 
     /**
      * @param $telegramFileId string
+     * @param int $timeout
      * @return string
      * @throws \Longman\TelegramBot\Exception\TelegramException
-     * @throws BadRequestHttpException
-     * @throws NotFoundHttpException
      */
-    public static function getUrl($telegramFileId): string
+    public static function getUrl(string $telegramFileId, int $timeout = 30): string
     {
         new Telegram(\Yii::$app->params['apiKey'], \Yii::$app->params['botName']);
 

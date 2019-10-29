@@ -37,7 +37,9 @@
         "nex/yii2-datepicker": "dev-master",
         "sammaye/yii2-audittrail": "^1.2",
         "nirvana-msu/yii2-infinite-scroll": "1.0.*@dev",
-        "spatie/emoji": "^1.0"
+        "spatie/emoji": "^1.0",
+        "curl/curl": "dev-master",
+        "ext-json": "*"
     },
     "require-dev": {
         "yiisoft/yii2-debug": "~2.0.0",

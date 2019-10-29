@@ -12,8 +12,11 @@ namespace console\controllers;
 use common\helpers\TrackDownloader;
 use common\models\AdminToken;
 use common\models\Song;
+use common\models\TelegramFile;
 use common\models\UserToken;
 use console\helpers\Messages;
+use Longman\TelegramBot\Request;
+use Longman\TelegramBot\Telegram;
 use yii\console\Controller;
 use yii\web\BadRequestHttpException;
 use yii\web\NotFoundHttpException;
@@ -40,7 +43,10 @@ class CleanupController extends Controller
     public function actionSongs(bool $debug = false): void
     {
         $proceed = $deleted = 0;
-        $count = Song::find()->where(['deleted' => 0, 'isBig' => 0])->andWhere(['<=', 'last_update', time() - 3600])->count();
+
+        $query = Song::find()->where(['deleted' => 0, 'isBig' => 0])->andWhere(['<=', 'last_update', time() - 3600]);
+
+        $count = $query->count();
 
         if ($debug) {
             Messages::pretify("Found {$count} songs, let's check them...");
@@ -49,23 +55,27 @@ class CleanupController extends Controller
         /**
          * @var $song Song
          */
-        foreach(Song::find()->where(['deleted' => 0, 'isBig' => 0])->andWhere(['<=', 'last_update', time() - 3600])->each(5) as $song){
+        foreach($query->each(5) as $song){
             $proceed++;
 
             if ($debug) {
                 Messages::pretify("Now checking song ID {$song->id} (#{$proceed} from {$count})...");
             }
 
-            try{
-                TrackDownloader::getUrl($song->fileId);
-            }catch (NotFoundHttpException $e){
+            try {
+                $file = TelegramFile::getFreshByFileId($song->fileId);
+
+                if (!$file->checkIsAvailable()) {
+                    throw new NotFoundHttpException();
+                }
+            } catch (NotFoundHttpException $e) {
                 $deleted++;
                 $song->deleted = 1;
 
                 if ($debug) {
                     Messages::pretify('It seems unreachable, deleting...');
                 }
-            }catch (BadRequestHttpException $e){
+            } catch (BadRequestHttpException $e) {
                 $song->isBig = 1;
 
                 if ($debug) {
